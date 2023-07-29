@@ -1,0 +1,125 @@
+#+title: Life
+
+* Org-mode Todos
+** TODO Sync Todos/Scheduled Things with Calendar?
+** TODO Auto remove done tasks, move to archive somewhere?
+*** Must be undo-compatible
+** TODO Implement with phone
+** TODO Figure out refiling
+** DONE Get all things in one place/across files
+*** SPC o A t
+**** Gets all (registered: org-agenda-file-to-front) todos in one place
+
+* Weeklies
+** TODO Take out Trash
+SCHEDULED: <2023-08-01 Tue ++2w>
+** TODO Cut nails
+SCHEDULED: <2023-08-02 Wed ++1w>
+:PROPERTIES:
+:LAST_REPEAT: [2023-07-26 Wed 19:54]
+:END:
+- State "DONE"       from "TODO"       [2023-07-26 Wed 19:54]
+- State "DONE"       from "TODO"       [2023-07-18 Tue 16:06]
+** TODO Clean Bathroom
+SCHEDULED: <2023-07-27 Thu ++1w>
+:PROPERTIES:
+:LAST_REPEAT: [2023-07-21 Fri 11:34]
+:END:
+- State "DONE"       from "TODO"       [2023-07-21 Fri 11:34]
+* Tasks
+** TODO [#D] Sweet Memories
+** STRT [#E] Ricochet Robots
+** TODO [#D] Someone Like You
+** DONE [#B] Friends Game Show [3/3]
+DEADLINE: <2023-07-21 Fri>
+- [X] overall script
+- [X] connecting wall example
+- [X] r4 example
+** TODO [#D] Interviews [1/7]
+- [X] Moma
+- [-] Tomoya
+- [-] Helen
+- [-] Janelle
+- [ ] Mom
+- [ ] Dad
+- [ ] Maia
+** KILL [#C] Ion
+** DONE Change Primary Care
+DEADLINE: <2023-07-14 Fri 14:00>
+** TODO [#B] Take Grad Pics [0/4]
+- [ ] get mustard
+- [ ] take pics at vons
+- [ ] take pics at park
+- [ ] post thing
+** STRT [#A] Buy Car
+*** DONE Look at Cars with Parents
+SCHEDULED: <2023-07-14 Fri 9:00>
+** DONE [#B] Buy Trumpet
+** DONE [#A] Send Out Resume
+** STRT [#A] Apply To Jobs
+** STRT [#A] HabitTracker
+- [ ] sorting method for habit events
+** DONE [#E] Statue Game
+** KILL [#E] Put together old vocaloid flipnotes
+***  Have to export to frames for all
+** STRT [#B] Clean Room
+** TODO Therapy
+SCHEDULED: <2023-08-08 Tue 10:00>
+- [ ] confidence
+- [ ] ?
+- [ ] slow person
+- [ ] not react to things
+** DONE [#B] Sleepover Sketch
+** STRT [#C] Danganronpa 2
+** STRT [#D] Talk it Up
+** STRT [#C] Lamp/Be Like This Always
+** STRT [#D] Making an interpreter
+** TODO Clean Keyboard
+SCHEDULED: <2023-08-19 Sat ++1m>
+:PROPERTIES:
+:LAST_REPEAT: [2023-07-19 Wed 18:17]
+:END:
+- State "DONE"       from "TODO"       [2023-07-19 Wed 18:17]
+** STRT [#D] It's Gonna Be Alright
+** DONE Take out Recycling
+SCHEDULED: <2023-07-20 Thu>
+** STRT [#A] Paul Job Stuff
+SCHEDULED: <2023-07-20 Thu>
+** TODO [#B] Ask Victor to play games
+** TODO [#C] Make a Shader
+*** opengl? python?
+** TODO [#B] Play Isaac with Divo
+** DONE [#B] Schedule Get Food with Edison and Brandon
+SCHEDULED: <2023-07-26 Wed>
+** TODO Wings with Edison and Brandon
+SCHEDULED: <2023-07-31 Mon 19:00>
+** TODO Bonfire
+SCHEDULED: <2023-07-27 Thu 19:00>
+** DONE Reach out to people [4/4]
+SCHEDULED: <2023-07-27 Thu>
+- [X] Ian
+- [X] Helen
+- [X] Moma
+- [X] Megan
+** TODO Date
+SCHEDULED: <2023-07-28 Fri>
+** TODO Dinner with Maia's Family
+SCHEDULED: <2023-07-29 Sat 18:00>
+** TODO Hang with Homies
+SCHEDULED: <2023-08-03 Thu 18:00>
+** TODO Ask Chris to play Omega Strikers
+SCHEDULED: <2023-07-31 Mon>
+
+* Habit Tracker Tickets
+** STRT [1/5] GUI: Create an add/modify habit screen
+SCHEDULED: <2023-07-24 Mon>
+- [X] the events carry over on a modified habit
+- [ ] if you press back/exit, it checks if you want to abandon the current edit/addition
+  - not sure if this is necessary, any change made to a habit is very low stakes
+- [ ] Sorting habits
+- [ ] make it pretty
+  - popup thing with more info about invalid things?
+    - hint? built in popup?
+    - popup when nameIsInvalid is true
+- [ ] all tests pass
+- [ ] all files linted
