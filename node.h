@@ -1,4 +1,8 @@
+#ifndef NODE_H
+#define NODE_H
+
 typedef enum NodeType {
+    Head,
     None,
     Todo,
     Done,
@@ -17,3 +21,11 @@ typedef struct Node {
 
 void printNode(Node*, Node*, int);
 void printTree(Node*, Node*, int);
+
+void freeTree(Node*);
+
+Node* goDownVisual(Node*);
+Node* goUpVisual(Node*);
+Node* goNextLogical(Node*);
+Node* goPrevLogical(Node*);
+#endif

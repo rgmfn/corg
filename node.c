@@ -1,18 +1,19 @@
 #include <curses.h>
+#include <stdlib.h>
 
 #include "node.h"
 #include "colors.h"
 
 int getDepthColor(int depth) {
-    switch (depth) {
-        case 1:
+    switch (depth%3) {
+        case 0:
             return BLUE;
-        case 2:
+        case 1:
             return MAGENTA;
-        case 3:
+        case 2:
             return CYAN;
         default:
-            return RED;
+            return WHITE;
     }
 }
 
@@ -54,6 +55,8 @@ int getTypeColor(NodeType type) {
 }
 
 void printNode(Node* node, Node* curr, int depth) {
+    if (node->type == Head) return;
+
     int textColor = getDepthColor(depth);
 
     int typeColor = getTypeColor(node->type);
@@ -64,17 +67,13 @@ void printNode(Node* node, Node* curr, int depth) {
         addstr("  ");
     }
 
-    if (node == curr) {
-        textColor += 15;
-        typeColor += 15;
-    }
-
     if (node->type == Done) {
         textColor = GRAY;
     }
 
-    if (depth == 0) {
-        return; // don't draw anything for head node
+    if (node == curr) {
+        textColor += 15;
+        typeColor += 15;
     }
 
     attrset(COLOR_PAIR(textColor));
@@ -92,13 +91,87 @@ void printNode(Node* node, Node* curr, int depth) {
 }
 
 void printTree(Node* node, Node* curr, int depth) {
+    if (node == NULL) return; // no tree to draw
+
     printNode(node, curr, depth);
 
-    if (node->child != NULL) {
+    if (node->child != NULL)
         printTree(node->child, curr, depth+1);
+
+    if (node->next != NULL)
+        printTree(node->next, curr, depth);
+}
+
+// TODO make sure this is correct
+void freeTree(Node *node) {
+    if (node == NULL) {
+        return;
     }
 
-    if (node->next != NULL) {
-        printTree(node->next, curr, depth);
+    Node *child = node->child;
+    Node *next = node->next;
+
+    node->child = NULL;
+    node->next = NULL;
+
+    freeTree(child);
+    freeTree(next);
+
+    node->parent = NULL;
+
+    free(node);
+}
+
+Node* runDownBack(Node *curr) {
+    if (curr->next != NULL)
+        return runDownBack(curr->next);
+    else if (curr->child != NULL)
+        return runDownBack(curr->child);
+
+    return curr;
+}
+
+Node* goDownVisual(Node *curr) {
+    if (curr->child != NULL)
+        return curr->child;
+    else if (curr->next != NULL)
+        return curr->next;
+
+    Node *parent = curr->parent;
+    while (parent != NULL && parent->next == NULL) {
+        parent = parent->parent;
     }
+
+    if (parent == NULL) {
+        return curr;
+    }
+
+    return parent->next;
+}
+
+Node* goUpVisual(Node *curr) {
+    // TODO fix going from eat->schedule
+
+    if (curr->prev != NULL && curr->prev->child != NULL)
+        return runDownBack(curr->prev->child);
+    else if (curr->prev != NULL)
+        return curr->prev;
+    else if (curr->parent != NULL)
+        return curr->parent;
+
+    return curr;
+}
+
+Node* goNextLogical(Node *curr) {
+    if (curr->next != NULL)
+        return curr->next;
+
+    return curr;
+}
+
+Node* goPrevLogical(Node *curr) {
+    if (curr->parent != NULL)
+        return curr->parent;
+
+    return curr;
 }

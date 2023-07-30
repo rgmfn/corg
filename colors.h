@@ -1,3 +1,6 @@
+#ifndef COLORS_H
+#define COLORS_H
+
 #define RED 1
 #define GREEN 2
 #define YELLOW 3
@@ -23,3 +26,4 @@
 #define MAGENTA_SEL 21
 #define WHITE_SEL 22
 #define GRAY_SEL 23
+#endif
