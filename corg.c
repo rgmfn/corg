@@ -25,18 +25,18 @@ int main(void) {
 
     // Node *head = loadFromFile("test.org");
 
-    Node head = {Head};
-    Node tasks = {None, "Tasks"};
-    Node wings = {Todo, "Get wings"};
-    Node schedule = {Todo, "Schedule wings"};
-    Node eat = {Todo, "Eat"};
-    Node pickup = {Todo, "Pickup"};
-    Node chew = {Todo, "Chew"};
-    Node reach = {Done, "Reach out to people"};
-    Node ian = {None, "Ian"};
-    Node megan = {None, "Megan"};
-    Node helen = {None, "Helen"};
-    Node moma = {None, "Moma"};
+    Node head = {Head, NULL, true};
+    Node tasks = {None, "Tasks", true};
+    Node wings = {Todo, "Get wings", true};
+    Node schedule = {Proj, "Schedule wings", true};
+    Node eat = {Loop, "Eat", true};
+    Node pickup = {Strt, "Pickup", true};
+    Node chew = {Started, "Chew", true};
+    Node reach = {Waiting, "Reach out to people", true};
+    Node ian = {Checked, "Ian", true};
+    Node megan = {Okay, "Megan", true};
+    Node helen = {Yes, "Helen", true};
+    Node moma = {No, "Moma", true};
 
     head.next = &tasks;
     tasks.child = &wings;

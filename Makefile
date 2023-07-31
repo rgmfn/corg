@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 LDLIBS=-lncurses
 OBJECTS=corg.o node.o fileio.o
 

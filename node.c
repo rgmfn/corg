@@ -18,14 +18,12 @@ int getDepthColor(int depth) {
 }
 
 char getBulletChar(NodeType type) {
-    switch (type) {
-        case Todo:
-        case Done:
-        case None:
-            return '*';
-        default:
-            return '\0';
-    }
+    // switch (type) {
+    //     default:
+    //         return '*';
+    // }
+
+    return '*'; // no other types implemented yet
 }
 
 char* getTypeStr(NodeType type) {
@@ -36,8 +34,36 @@ char* getTypeStr(NodeType type) {
             return "";
         case Todo:
             return "TODO ";
+        case Proj:
+            return "PROJ ";
+        case Loop:
+            return "LOOP ";
+        case Strt:
+            return "STRT ";
+        case Wait:
+            return "WAIT ";
+        case Hold:
+            return "HOLD ";
+        case Idea:
+            return "IDEA ";
         case Done:
             return "DONE ";
+        case Kill:
+            return "KILL ";
+        case Unchecked:
+            return "[ ] ";
+        case Started:
+            return "[-] ";
+        case Waiting:
+            return "[?] ";
+        case Checked:
+            return "[X] ";
+        case Okay:
+            return "OKAY ";
+        case Yes:
+            return "YES ";
+        case No:
+            return "NO ";
         default:
             return "ERROR ";
     }
@@ -46,9 +72,26 @@ char* getTypeStr(NodeType type) {
 int getTypeColor(NodeType type) {
     switch (type) {
         case Todo:
+        case Loop:
+        case Idea:
+        case Proj:
+        case Unchecked:
             return GREEN;
         case Done:
+        case Yes:
+        case Okay:
+        case Checked:
             return GRAY;
+        case Wait:
+        case Hold:
+        case Waiting:
+            return YELLOW;
+        case Kill:
+        case No:
+            return RED;
+        case Strt:
+        case Started:
+            return MAGENTA;
         default:
             return 0;
     }
