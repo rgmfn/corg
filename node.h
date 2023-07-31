@@ -49,5 +49,5 @@ Node* goDownVisual(Node*);
 Node* goUpVisual(Node*);
 Node* goNextLogical(Node*);
 Node* goPrevLogical(Node*);
-Node* goToParent(Node*);
+Node* gotoParent(Node*);
 #endif

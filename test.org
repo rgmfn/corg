@@ -1,9 +1,15 @@
 * Tasks
-** Wings
-*** Schedule
-*** Eat
-** Reach out
-*** Ian
-*** Megan
-*** Moma
-*** Helen
+** TODO Wings
+*** PROJ Schedule
+*** LOOP Eat
+**** STRT Pickup
+**** WAIT Chew
+*** WAIT Drive home
+** DONE Reach out to people
+*** [X] Ian
+*** [X] Megan
+*** [X] Helen
+*** [X] Moma
+*** [X] Peter
+*** [X] Chris
+*** [X] Victor

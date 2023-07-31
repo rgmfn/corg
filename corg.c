@@ -12,6 +12,7 @@
 int main(void) {
     initscr();
     noecho();
+    curs_set(0);
 
     if (has_colors()) {
         start_color();
@@ -104,6 +105,7 @@ int main(void) {
                 break;
             case 'H':
                 curr = gotoParent(curr);
+                break;
             case 'l':
                 curr = goNextLogical(curr);
                 break;
