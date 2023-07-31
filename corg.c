@@ -31,12 +31,15 @@ int main(void) {
     Node schedule = {Proj, "Schedule wings", true};
     Node eat = {Loop, "Eat", true};
     Node pickup = {Strt, "Pickup", true};
-    Node chew = {Started, "Chew", true};
-    Node reach = {Waiting, "Reach out to people", true};
+    Node chew = {Wait, "Chew", true};
+    Node reach = {Done, "Reach out to people", true};
     Node ian = {Checked, "Ian", true};
-    Node megan = {Okay, "Megan", true};
-    Node helen = {Yes, "Helen", true};
-    Node moma = {No, "Moma", true};
+    Node megan = {Checked, "Megan", true};
+    Node helen = {Checked, "Helen", true};
+    Node moma = {Checked, "Moma", true};
+    Node peter = {Checked, "Peter", true};
+    Node chris = {Checked, "Chris", true};
+    Node victor = {Checked, "Victor", true};
 
     head.next = &tasks;
     tasks.child = &wings;
@@ -65,11 +68,21 @@ int main(void) {
     moma.prev = &helen;
     helen.parent = &reach;
     moma.parent = &reach;
+    moma.next = &peter;
+    peter.prev = &moma;
+    peter.parent = &reach;
+    peter.next = &chris;
+    chris.prev = &peter;
+    chris.parent = &reach;
+    chris.next = &victor;
+    victor.prev = &chris;
+    victor.parent = &reach;
 
     Node *curr = head.next;
 
     bool run = true;
     while (run) {
+        clear();
         move(0, 0);
         printTree(&head, curr, 0);
         refresh();
@@ -87,6 +100,15 @@ int main(void) {
                 break;
             case 'l':
                 curr = goNextLogical(curr);
+                break;
+            case '\t':
+                toggleSubtree(curr);
+                break;
+            case 'n':
+                nextTodoState(curr);
+                break;
+            case 'p':
+                prevTodoState(curr);
                 break;
             case 'q':
                 run = false;

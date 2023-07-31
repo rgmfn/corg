@@ -40,6 +40,11 @@ void printTree(Node*, Node*, int);
 
 void freeTree(Node*);
 
+void toggleSubtree(Node*);
+
+void nextTodoState(Node*); // temporary testing method
+void prevTodoState(Node*); // temporary testing method
+
 Node* goDownVisual(Node*);
 Node* goUpVisual(Node*);
 Node* goNextLogical(Node*);

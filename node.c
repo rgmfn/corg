@@ -110,7 +110,7 @@ void printNode(Node* node, Node* curr, int depth) {
         addstr("  ");
     }
 
-    if (node->type == Done) {
+    if (typeColor == GRAY) {
         textColor = GRAY;
     }
 
@@ -130,7 +130,11 @@ void printNode(Node* node, Node* curr, int depth) {
     addstr(node->text);
 
     attrset(COLOR_PAIR(0));
-    addch('\n');
+    if (!node->subTreeIsOpen) {
+        addstr(" ...\n");
+    } else {
+        addch('\n');
+    }
 }
 
 void printTree(Node* node, Node* curr, int depth) {
@@ -138,7 +142,7 @@ void printTree(Node* node, Node* curr, int depth) {
 
     printNode(node, curr, depth);
 
-    if (node->child != NULL)
+    if (node->subTreeIsOpen && node->child != NULL)
         printTree(node->child, curr, depth+1);
 
     if (node->next != NULL)
@@ -165,6 +169,23 @@ void freeTree(Node *node) {
     free(node);
 }
 
+void toggleSubtree(Node *subroot) {
+    if (subroot->child == NULL)
+        subroot->subTreeIsOpen = true;
+    else if (subroot != NULL)
+        subroot->subTreeIsOpen = !subroot->subTreeIsOpen;
+}
+
+void nextTodoState(Node *node) {
+    node->type += 1;
+    node->type %= No+1;
+}
+
+void prevTodoState(Node *node) {
+    node->type = node->type + No;
+    node->type %= No+1;
+}
+
 Node* runDownBack(Node *curr) {
     if (curr->next != NULL)
         return runDownBack(curr->next);
@@ -175,8 +196,10 @@ Node* runDownBack(Node *curr) {
 }
 
 Node* goDownVisual(Node *curr) {
-    if (curr->child != NULL)
+    if (curr->child != NULL) {
+        curr->subTreeIsOpen = true;
         return curr->child;
+    }
     else if (curr->next != NULL)
         return curr->next;
 
