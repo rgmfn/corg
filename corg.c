@@ -32,6 +32,7 @@ int main(void) {
     Node eat = {Loop, "Eat", true};
     Node pickup = {Strt, "Pickup", true};
     Node chew = {Wait, "Chew", true};
+    Node drive = { Wait, "Drive home", true};
     Node reach = {Done, "Reach out to people", true};
     Node ian = {Checked, "Ian", true};
     Node megan = {Checked, "Megan", true};
@@ -55,6 +56,9 @@ int main(void) {
     pickup.parent = &eat;
     chew.parent = &eat;
     wings.next = &reach;
+    eat.next = &drive;
+    drive.prev = &eat;
+    drive.parent = &wings;
     reach.prev = &wings;
     reach.child = &ian;
     reach.parent = &tasks;
@@ -98,6 +102,8 @@ int main(void) {
             case 'h':
                 curr = goPrevLogical(curr);
                 break;
+            case 'H':
+                curr = gotoParent(curr);
             case 'l':
                 curr = goNextLogical(curr);
                 break;

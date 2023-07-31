@@ -189,17 +189,16 @@ void prevTodoState(Node *node) {
 Node* runDownBack(Node *curr) {
     if (curr->next != NULL)
         return runDownBack(curr->next);
-    else if (curr->child != NULL)
+    else if (curr->child != NULL) {
         return runDownBack(curr->child);
+    }
 
     return curr;
 }
 
 Node* goDownVisual(Node *curr) {
-    if (curr->child != NULL) {
-        curr->subTreeIsOpen = true;
+    if (curr->subTreeIsOpen && curr->child != NULL)
         return curr->child;
-    }
     else if (curr->next != NULL)
         return curr->next;
 
@@ -216,9 +215,8 @@ Node* goDownVisual(Node *curr) {
 }
 
 Node* goUpVisual(Node *curr) {
-    // TODO fix going from eat->schedule
-
-    if (curr->prev != NULL && curr->prev->child != NULL)
+    if (curr->prev != NULL && curr->prev->child != NULL &&
+        curr->prev->subTreeIsOpen)
         return runDownBack(curr->prev->child);
     else if (curr->prev != NULL)
         return curr->prev;
@@ -232,12 +230,20 @@ Node* goNextLogical(Node *curr) {
     if (curr->next != NULL)
         return curr->next;
 
-    return curr;
+    return goDownVisual(curr);
 }
 
 Node* goPrevLogical(Node *curr) {
-    if (curr->parent != NULL)
+    if (curr->prev != NULL)
+        return curr->prev;
+
+    return goUpVisual(curr);
+}
+
+Node* gotoParent(Node *curr) {
+    if (curr->parent != NULL) {
         return curr->parent;
+    }
 
     return curr;
 }
