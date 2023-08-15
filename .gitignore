@@ -1,2 +1,4 @@
 *.o
 corg
+*.png
+Session.vim

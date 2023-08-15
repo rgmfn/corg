@@ -1,7 +1,7 @@
-CC=gcc
+CC=clang
 CFLAGS=-Wall -g
 LDLIBS=-lncurses
-OBJECTS=corg.o node.o fileio.o
+OBJECTS=corg.o node.o fileio.o input.o windows.o
 
 all: corg
 

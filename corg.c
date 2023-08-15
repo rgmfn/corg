@@ -6,8 +6,9 @@
 #include "node.h"
 #include "colors.h"
 #include "fileio.h"
-
-#define ESCAPE '\027'
+#include "state.h"
+#include "windows.h"
+#include "input.h"
 
 int main(void) {
     initscr();
@@ -83,47 +84,22 @@ int main(void) {
     victor.prev = &chris;
     victor.parent = &reach;
 
-    Node *curr = head.next;
+    state.head = head;
+    state.curr = head.next;
+    state.focus = Document;
 
-    bool run = true;
-    while (run) {
+    state.appIsRunning = true;
+    while (state.appIsRunning) {
         clear();
-        move(0, 0);
-        printTree(&head, curr, 0);
-        refresh();
-        char c = getch();
 
-        switch (c) {
-            case 'j':
-                curr = goDownVisual(curr);
-                break;
-            case 'k':
-                curr = goUpVisual(curr);
-                break;
-            case 'h':
-                curr = goPrevLogical(curr);
-                break;
-            case 'H':
-                curr = gotoParent(curr);
-                break;
-            case 'l':
-                curr = goNextLogical(curr);
-                break;
-            case '\t':
-                toggleSubtree(curr);
-                break;
-            case 'n':
-                nextTodoState(curr);
-                break;
-            case 'p':
-                prevTodoState(curr);
-                break;
-            case 'q':
-                run = false;
-                break;
-            default:
-                break;
+        drawDocument();
+
+        if (state.focus != Document) {
+            drawPopupWindow();
         }
+
+        state.c = getch();
+        parseInput();
     }
 
     // freeTree(&head);
