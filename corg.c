@@ -84,25 +84,28 @@ int main(void) {
     victor.prev = &chris;
     victor.parent = &reach;
 
-    state.head = head;
-    state.curr = head.next;
-    state.focus = Document;
+    app.head = head;
+    app.curr = head.next;
+    app.focus = Document;
 
-    state.appIsRunning = true;
-    while (state.appIsRunning) {
+    input.cursorPos = 0;
+    strncpy(input.string, "", sizeof(input.string));
+
+    app.isRunning = true;
+    while (app.isRunning) {
         clear();
-
         drawDocument();
 
-        if (state.focus != Document) {
+        if (app.popupWin != NULL) {
+            wclear(app.popupWin);
             drawPopupWindow();
         }
 
-        state.c = getch();
+        app.c = getch();
         parseInput();
     }
 
-    // freeTree(&head);
+    // freeTree(&app.head);
     endwin();
 
     return EXIT_SUCCESS;

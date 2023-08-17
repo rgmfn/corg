@@ -6,15 +6,20 @@
 #include "node.h"
 #include "windows.h"
 
-struct ProgramState {
+struct AppState {
     Node head;
     Node *curr;
     AppFocus focus;
     WINDOW *popupWin;
 
-    char c;
+    int c;
 
-    bool appIsRunning;
-} state;
+    bool isRunning;
+} app;
+
+struct InputState {
+    char string[50];
+    int cursorPos;
+} input;
 
 #endif

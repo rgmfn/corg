@@ -1,48 +1,60 @@
+#include <string.h>
+
 #include "input.h"
 #include "state.h"
+#include "windows.h"
 
 void parseInput() {
-    addstr("parseInput");
-    switch (state.focus) {
+    switch (app.focus) {
         case Document:
             parseDocumentInput();
             break;
         case TodoWindow:
             parseTodoInput();
             break;
+        case InputWindow:
+            parseInputInput();
+            break;
         default:
+            app.focus = Document;
             break;
     }
 }
 
 void parseDocumentInput() {
-    addstr("parseDocumentInput");
-    switch (state.c) {
+    switch (app.c) {
         case 'j':
-            state.curr = goDownVisual(state.curr);
+            app.curr = goDownVisual(app.curr);
             break;
         case 'k':
-            state.curr = goUpVisual(state.curr);
+            app.curr = goUpVisual(app.curr);
             break;
         case 'h':
-            state.curr = goPrevLogical(state.curr);
+            app.curr = goPrevLogical(app.curr);
             break;
         case 'H':
-            state.curr = gotoParent(state.curr);
+            app.curr = gotoParent(app.curr);
             break;
         case 'l':
-            state.curr = goNextLogical(state.curr);
+            app.curr = goNextLogical(app.curr);
             break;
         case '\t':
-            toggleSubtree(state.curr);
+            toggleSubtree(app.curr);
             break;
         case 't':
-            state.popupWin = newCenteredWin(12, 30);
+            app.popupWin = getTodoWindow();
             refresh();
-            state.focus = TodoWindow;
+            app.focus = TodoWindow;
+            break;
+        case 'r':
+            app.popupWin = getInputWindow();
+            refresh();
+            strncpy(input.string, app.curr->text, sizeof(input.string));
+            input.cursorPos = strnlen(input.string, sizeof(input.string));
+            app.focus = InputWindow;
             break;
         case 'q':
-            state.appIsRunning = false;
+            app.isRunning = false;
             break;
         default:
             break;
@@ -50,62 +62,84 @@ void parseDocumentInput() {
 }
 
 void parseTodoInput() {
-    switch (state.c) {
+    switch (app.c) {
         case 't':
-            state.curr->type = Todo;
+            app.curr->type = Todo;
             break;
         case 'p':
-            state.curr->type = Proj;
+            app.curr->type = Proj;
             break;
         case 'r':
-            state.curr->type = Loop;
+            app.curr->type = Loop;
             break;
         case 's':
-            state.curr->type = Strt;
+            app.curr->type = Strt;
             break;
         case 'w':
-            state.curr->type = Wait;
+            app.curr->type = Wait;
             break;
         case 'h':
-            state.curr->type = Hold;
+            app.curr->type = Hold;
             break;
         case 'i':
-            state.curr->type = Idea;
+            app.curr->type = Idea;
             break;
         case 'd':
-            state.curr->type = Done;
+            app.curr->type = Done;
             break;
         case 'k':
-            state.curr->type = Kill;
+            app.curr->type = Kill;
             break;
         case 'T':
-            state.curr->type = Unchecked;
+            app.curr->type = Unchecked;
             break;
         case 'S':
-            state.curr->type = Started;
+            app.curr->type = Started;
             break;
         case 'W':
-            state.curr->type = Waiting;
+            app.curr->type = Waiting;
             break;
         case 'D':
-            state.curr->type = Checked;
+            app.curr->type = Checked;
             break;
         case 'o':
-            state.curr->type = Okay;
+            app.curr->type = Okay;
             break;
         case 'y':
-            state.curr->type = Yes;
+            app.curr->type = Yes;
             break;
         case 'n':
-            state.curr->type = No;
+            app.curr->type = No;
             break;
         case 'N':
-            state.curr->type = None;
+            app.curr->type = None;
             break;
         default:
             break;
     }
 
-    state.focus = Document;
-    state.popupWin = NULL;
+    app.focus = Document;
+    app.popupWin = NULL;
+}
+
+void parseInputInput() {
+    switch (app.c) {
+        case ESCAPE:
+            app.focus = Document;
+            break;
+        case ENTER:
+            app.focus = Document;
+            strcpy(app.curr->text, input.string);
+            break;
+        case BACKSPACE:
+            input.string[input.cursorPos] = '\0';
+            input.cursorPos--;
+            break;
+        default:
+            // TODO bound check
+            input.string[input.cursorPos] = app.c;
+            input.cursorPos++;
+            input.string[input.cursorPos] = '\0';
+            break;
+    }
 }

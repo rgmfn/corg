@@ -3,10 +3,13 @@
 
 #include "state.h"
 
-#define ESCAPE '\027'
+#define ESCAPE '\033'
+#define ENTER '\012'
+#define BACKSPACE '\177'
 
 void parseInput();
 void parseDocumentInput();
 void parseTodoInput();
+void parseInputInput();
 
 #endif

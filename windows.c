@@ -1,4 +1,5 @@
 #include <curses.h>
+#include <string.h>
 
 #include "windows.h"
 #include "node.h"
@@ -12,18 +13,29 @@ WINDOW* newCenteredWin(int height, int width) {
     return newwin(height, width, begin_y, begin_x);
 }
 
+WINDOW* getTodoWindow() {
+    return newCenteredWin(12, 30);
+}
+
+WINDOW* getInputWindow() {
+    return newCenteredWin(3, 30);
+}
+
 void drawDocument() {
     move(0, 0);
-    printTree(&state.head, state.curr, 0);
+    printTree(&app.head, app.curr, 0);
     refresh();
 }
 
 void drawPopupWindow() {
-    switch (state.focus) {
+    switch (app.focus) {
         case Document:
             break;
         case TodoWindow:
             drawTodoWindow();
+            break;
+        case InputWindow:
+            drawInputWindow();
             break;
         default:
             drawTempWindow();
@@ -33,112 +45,123 @@ void drawPopupWindow() {
 
 void drawTodoWindow() {
     // --- ROW1 ---
-    mvwprintw(state.popupWin, 1, 1, "[t] ");
-    wattrset(state.popupWin, COLOR_PAIR(GREEN));
-    wprintw(state.popupWin, "TODO  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 1, 1, "[t] ");
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wprintw(app.popupWin, "TODO  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[p] ");
-    wattrset(state.popupWin, COLOR_PAIR(GRAY));
-    wprintw(state.popupWin, "PROJ  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[p] ");
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wprintw(app.popupWin, "PROJ  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[r] ");
-    wattrset(state.popupWin, COLOR_PAIR(GREEN));
-    wprintw(state.popupWin, "LOOP");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[r] ");
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wprintw(app.popupWin, "LOOP");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW2 ---
-    mvwprintw(state.popupWin, 2, 1, "[s] ");
-    wattrset(state.popupWin, COLOR_PAIR(MAGENTA));
-    wprintw(state.popupWin, "STRT  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 2, 1, "[s] ");
+    wattrset(app.popupWin, COLOR_PAIR(MAGENTA));
+    wprintw(app.popupWin, "STRT  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[w] ");
-    wattrset(state.popupWin, COLOR_PAIR(YELLOW));
-    wprintw(state.popupWin, "WAIT  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[w] ");
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wprintw(app.popupWin, "WAIT  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[h] ");
-    wattrset(state.popupWin, COLOR_PAIR(YELLOW));
-    wprintw(state.popupWin, "HOLD");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[h] ");
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wprintw(app.popupWin, "HOLD");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW3 ---
-    mvwprintw(state.popupWin, 3, 1, "[i] ");
-    wattrset(state.popupWin, COLOR_PAIR(GREEN));
-    wprintw(state.popupWin, "IDEA  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 3, 1, "[i] ");
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wprintw(app.popupWin, "IDEA  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[d] ");
-    wattrset(state.popupWin, COLOR_PAIR(GRAY));
-    wprintw(state.popupWin, "DONE  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[d] ");
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wprintw(app.popupWin, "DONE  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[k] ");
-    wattrset(state.popupWin, COLOR_PAIR(RED));
-    wprintw(state.popupWin, "KILL");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[k] ");
+    wattrset(app.popupWin, COLOR_PAIR(RED));
+    wprintw(app.popupWin, "KILL");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW4 ---
-    mvwhline(state.popupWin, 4, 1, 0, COLS);
+    mvwhline(app.popupWin, 4, 1, 0, COLS);
 
     // --- ROW5 ---
-    mvwprintw(state.popupWin, 5, 1, "[T] ");
-    wattrset(state.popupWin, COLOR_PAIR(GREEN));
-    wprintw(state.popupWin, "[ ]   ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 5, 1, "[T] ");
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wprintw(app.popupWin, "[ ]   ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[S] ");
-    wattrset(state.popupWin, COLOR_PAIR(MAGENTA));
-    wprintw(state.popupWin, "[-]   ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[S] ");
+    wattrset(app.popupWin, COLOR_PAIR(MAGENTA));
+    wprintw(app.popupWin, "[-]   ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[W] ");
-    wattrset(state.popupWin, COLOR_PAIR(YELLOW));
-    wprintw(state.popupWin, "[?]");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[W] ");
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wprintw(app.popupWin, "[?]");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW6 ---
-    mvwprintw(state.popupWin, 6, 1, "[D] ");
-    wattrset(state.popupWin, COLOR_PAIR(GRAY));
-    wprintw(state.popupWin, "[X]   ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 6, 1, "[D] ");
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wprintw(app.popupWin, "[X]   ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW7 ---
-    mvwhline(state.popupWin, 7, 1, 0, COLS);
+    mvwhline(app.popupWin, 7, 1, 0, COLS);
 
     // --- ROW8 ---
-    mvwprintw(state.popupWin, 8, 1, "[o] ");
-    wattrset(state.popupWin, COLOR_PAIR(GRAY));
-    wprintw(state.popupWin, "OKAY  ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 8, 1, "[o] ");
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wprintw(app.popupWin, "OKAY  ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[y] ");
-    wattrset(state.popupWin, COLOR_PAIR(GRAY));
-    wprintw(state.popupWin, "YES   ");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[y] ");
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wprintw(app.popupWin, "YES   ");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    wprintw(state.popupWin, "[n] ");
-    wattrset(state.popupWin, COLOR_PAIR(RED));
-    wprintw(state.popupWin, "NO");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "[n] ");
+    wattrset(app.popupWin, COLOR_PAIR(RED));
+    wprintw(app.popupWin, "NO");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW9 ---
-    mvwhline(state.popupWin, 9, 1, 0, COLS);
+    mvwhline(app.popupWin, 9, 1, 0, COLS);
 
     // --- ROW10 ---
-    mvwprintw(state.popupWin, 10, 1, "[N] ");
-    wprintw(state.popupWin, "NONE");
-    wattrset(state.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 10, 1, "[N] ");
+    wprintw(app.popupWin, "NONE");
+    wattrset(app.popupWin, COLOR_PAIR(0));
 
-    box(state.popupWin, 0, 0);
+    box(app.popupWin, 0, 0);
 
-    wrefresh(state.popupWin);
+    wrefresh(app.popupWin);
+}
+
+void drawInputWindow() {
+    box(app.popupWin, 0, 0);
+    mvwprintw(app.popupWin, 1, 1, input.string);
+
+    wattrset(app.popupWin, COLOR_PAIR(WHITE_SEL));
+    mvwaddch(app.popupWin, 1, 1+input.cursorPos, ' ');
+    wattrset(app.popupWin, COLOR_PAIR(0));
+
+    wrefresh(app.popupWin);
 }
 
 void drawTempWindow() {
-    box(state.popupWin, 0, 0);
-    mvwprintw(state.popupWin, 2, 1, "Temp Window");
-    wrefresh(state.popupWin);
+    box(app.popupWin, 0, 0);
+    mvwprintw(app.popupWin, 1, 1, "Temp Window");
+    wrefresh(app.popupWin);
 }

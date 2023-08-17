@@ -25,6 +25,7 @@ typedef enum NodeType {
 typedef struct Node {
     NodeType type;
 
+    /* char text[50]; */
     char* text;
 
     bool subTreeIsOpen;
@@ -41,9 +42,6 @@ void printTree(Node*, Node*, int);
 void freeTree(Node*);
 
 void toggleSubtree(Node*);
-
-void nextTodoState(Node*); // temporary testing method
-void prevTodoState(Node*); // temporary testing method
 
 Node* goDownVisual(Node*);
 Node* goUpVisual(Node*);

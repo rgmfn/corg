@@ -176,16 +176,6 @@ void toggleSubtree(Node *subroot) {
         subroot->subTreeIsOpen = !subroot->subTreeIsOpen;
 }
 
-void nextTodoState(Node *node) {
-    node->type += 1;
-    node->type %= No+1;
-}
-
-void prevTodoState(Node *node) {
-    node->type = node->type + No;
-    node->type %= No+1;
-}
-
 Node* runDownBack(Node *curr) {
     if (curr->next != NULL)
         return runDownBack(curr->next);
