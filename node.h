@@ -49,4 +49,6 @@ Node* goUpVisual(Node*);
 Node* goNextLogical(Node*);
 Node* goPrevLogical(Node*);
 Node* gotoParent(Node*);
+
+NodeType cycleNodeType(NodeType);
 #endif

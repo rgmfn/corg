@@ -237,3 +237,30 @@ Node* gotoParent(Node *curr) {
 
     return curr;
 }
+
+NodeType cycleNodeType(NodeType type) {
+    switch (type) {
+        case Todo:
+            return Strt;
+        case Strt:
+            return Done;
+        case Done:
+            return Todo;
+        case Unchecked:
+            return Started;
+        case Started:
+            return Checked;
+        case Checked:
+            return Unchecked;
+        case Okay:
+            return Yes;
+        case Yes:
+            return No;
+        case No:
+            return Okay;
+        default:
+            break;
+    }
+
+    return type;
+}

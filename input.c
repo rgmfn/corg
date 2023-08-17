@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "input.h"
+#include "node.h"
 #include "state.h"
 #include "windows.h"
 
@@ -52,6 +53,9 @@ void parseDocumentInput() {
             strncpy(input.string, app.curr->name, sizeof(input.string));
             input.cursorPos = strnlen(input.string, sizeof(input.string));
             app.focus = InputWindow;
+            break;
+        case ENTER:
+            app.curr->type = cycleNodeType(app.curr->type);
             break;
         case 'q':
             app.isRunning = false;
