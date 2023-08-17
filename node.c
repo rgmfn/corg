@@ -1,8 +1,10 @@
 #include <curses.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "node.h"
 #include "colors.h"
+#include "windows.h"
 
 int getDepthColor(int depth) {
     switch (depth%3) {
@@ -106,9 +108,7 @@ void printNode(Node* node, Node* curr, int depth) {
     char* typeStr = getTypeStr(node->type);
     char bulletChar = getBulletChar(node->type);
 
-    for (int i = 0; i < depth; i++) {
-        addstr("  ");
-    }
+    indentNTimes(stdscr, depth);
 
     if (typeColor == GRAY) {
         textColor = GRAY;
@@ -132,6 +132,11 @@ void printNode(Node* node, Node* curr, int depth) {
     attrset(COLOR_PAIR(0));
     if (!node->subTreeIsOpen) {
         addstr(" ...\n");
+    } else if (strnlen(node->description, sizeof(node->description)) > 0) {
+        addch('\n');
+        indentNTimes(stdscr, depth+1);
+        addstr(node->description);
+        addch('\n');
     } else {
         addch('\n');
     }
@@ -170,7 +175,9 @@ void freeTree(Node *node) {
 }
 
 void toggleSubtree(Node *subroot) {
-    if (subroot->child == NULL)
+    bool hasSubtree = subroot->child != NULL ||
+        strnlen(subroot->description, sizeof(subroot->description)) > 0;
+    if (!hasSubtree)
         subroot->subTreeIsOpen = true;
     else if (subroot != NULL)
         subroot->subTreeIsOpen = !subroot->subTreeIsOpen;

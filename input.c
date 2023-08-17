@@ -13,8 +13,11 @@ void parseInput() {
         case TodoWindow:
             parseTodoInput();
             break;
-        case InputWindow:
-            parseInputInput();
+        case RenameWindow:
+            parseInputInput(app.curr->name);
+            break;
+        case DescriptionWindow:
+            parseInputInput(app.curr->description);
             break;
         default:
             app.focus = Document;
@@ -52,7 +55,14 @@ void parseDocumentInput() {
             refresh();
             strncpy(input.string, app.curr->name, sizeof(input.string));
             input.cursorPos = strnlen(input.string, sizeof(input.string));
-            app.focus = InputWindow;
+            app.focus = RenameWindow;
+            break;
+        case 'd':
+            app.popupWin = getInputWindow();
+            refresh();
+            strncpy(input.string, app.curr->description, sizeof(input.string));
+            input.cursorPos = strnlen(input.string, sizeof(input.string));
+            app.focus = DescriptionWindow;
             break;
         case ENTER:
             app.curr->type = cycleNodeType(app.curr->type);
@@ -126,14 +136,14 @@ void parseTodoInput() {
     app.popupWin = NULL;
 }
 
-void parseInputInput() {
+void parseInputInput(char *toReplace) {
     switch (app.c) {
         case ESCAPE:
             app.focus = Document;
             break;
         case ENTER:
             app.focus = Document;
-            strncpy(app.curr->name, input.string, sizeof(app.curr->name));
+            strncpy(toReplace, input.string, sizeof(app.curr->name));
             break;
         case BACKSPACE:
             input.cursorPos--;
@@ -145,5 +155,5 @@ void parseInputInput() {
             input.cursorPos++;
             input.string[input.cursorPos] = '\0';
             break;
-    }
+    } 
 }

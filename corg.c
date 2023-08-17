@@ -27,22 +27,22 @@ int main(void) {
 
     // Node *head = loadFromFile("test.org");
 
-    Node head = {Head, "", true};
-    Node tasks = {None, "Tasks", true};
-    Node wings = {Todo, "Get wings", true};
-    Node schedule = {Proj, "Schedule wings", true};
-    Node eat = {Loop, "Eat", true};
-    Node pickup = {Strt, "Pickup", true};
-    Node chew = {Wait, "Chew", true};
-    Node drive = { Wait, "Drive home", true};
-    Node reach = {Done, "Reach out to people", true};
-    Node ian = {Checked, "Ian", true};
-    Node megan = {Checked, "Megan", true};
-    Node helen = {Checked, "Helen", true};
-    Node moma = {Checked, "Moma", true};
-    Node peter = {Checked, "Peter", true};
-    Node chris = {Checked, "Chris", true};
-    Node victor = {Checked, "Victor", true};
+    Node head = {Head, "", "", true};
+    Node tasks = {None, "Tasks", "This is a list of tasks", true};
+    Node wings = {Todo, "Get wings", "", true};
+    Node schedule = {Proj, "Schedule wings", "", true};
+    Node eat = {Loop, "Eat", "", true};
+    Node pickup = {Strt, "Pickup", "Pickup the wings with hands", true};
+    Node chew = {Wait, "Chew", "", true};
+    Node drive = {Wait, "Drive home", "", true};
+    Node reach = {Done, "Reach out to people", "", true};
+    Node ian = {Checked, "Ian", "", true};
+    Node megan = {Checked, "Megan", "", true};
+    Node helen = {Checked, "Helen", "", true};
+    Node moma = {Checked, "Moma", "", true};
+    Node peter = {Checked, "Peter", "", true};
+    Node chris = {Checked, "Chris", "", true};
+    Node victor = {Checked, "Victor", "", true};
 
     head.next = &tasks;
     tasks.child = &wings;

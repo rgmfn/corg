@@ -34,8 +34,11 @@ void drawPopupWindow() {
         case TodoWindow:
             drawTodoWindow();
             break;
-        case InputWindow:
-            drawInputWindow();
+        case RenameWindow:
+            drawInputWindow("Change name");
+            break;
+        case DescriptionWindow:
+            drawInputWindow("Change description");
             break;
         default:
             drawTempWindow();
@@ -149,7 +152,7 @@ void drawTodoWindow() {
     wrefresh(app.popupWin);
 }
 
-void drawInputWindow() {
+void drawInputWindow(char *name) {
     // TODO draw differently when running off the edge
 
     box(app.popupWin, 0, 0);
@@ -159,6 +162,8 @@ void drawInputWindow() {
     mvwaddch(app.popupWin, 1, 1+input.cursorPos, ' ');
     wattrset(app.popupWin, COLOR_PAIR(0));
 
+    mvwaddstr(app.popupWin, 0, 1, name);
+
     wrefresh(app.popupWin);
 }
 
@@ -166,4 +171,10 @@ void drawTempWindow() {
     box(app.popupWin, 0, 0);
     mvwprintw(app.popupWin, 1, 1, "Temp Window");
     wrefresh(app.popupWin);
+}
+
+void indentNTimes(WINDOW *win, int n) {
+    for (int i = 0; i < n; i++) {
+        waddstr(win, "  ");
+    }
 }

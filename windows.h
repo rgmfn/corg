@@ -7,7 +7,8 @@ typedef enum AppFocus {
     Document,
     TodoWindow,
     CalendarWindow,
-    InputWindow,
+    RenameWindow,
+    DescriptionWindow,
 } AppFocus;
 
 WINDOW* newCenteredWin(int, int);
@@ -18,7 +19,9 @@ WINDOW* getInputWindow();
 void drawDocument();
 void drawPopupWindow();
 void drawTodoWindow();
-void drawInputWindow();
+void drawInputWindow(char*);
 void drawTempWindow();
+
+void indentNTimes(WINDOW*, int);
 
 #endif

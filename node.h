@@ -26,6 +26,7 @@ typedef struct Node {
     NodeType type;
 
     char name[50];
+    char description[100];
 
     bool subTreeIsOpen;
 

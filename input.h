@@ -10,6 +10,6 @@
 void parseInput();
 void parseDocumentInput();
 void parseTodoInput();
-void parseInputInput();
+void parseInputInput(char*);
 
 #endif
