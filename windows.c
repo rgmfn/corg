@@ -46,49 +46,49 @@ void drawPopupWindow() {
 void drawTodoWindow() {
     // --- ROW1 ---
     mvwprintw(app.popupWin, 1, 1, "[t] ");
-    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Todo)));
     wprintw(app.popupWin, "TODO  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[p] ");
-    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Proj)));
     wprintw(app.popupWin, "PROJ  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[r] ");
-    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Loop)));
     wprintw(app.popupWin, "LOOP");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW2 ---
     mvwprintw(app.popupWin, 2, 1, "[s] ");
-    wattrset(app.popupWin, COLOR_PAIR(MAGENTA));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Strt)));
     wprintw(app.popupWin, "STRT  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[w] ");
-    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Wait)));
     wprintw(app.popupWin, "WAIT  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[h] ");
-    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Hold)));
     wprintw(app.popupWin, "HOLD");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW3 ---
     mvwprintw(app.popupWin, 3, 1, "[i] ");
-    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Idea)));
     wprintw(app.popupWin, "IDEA  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[d] ");
-    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Done)));
     wprintw(app.popupWin, "DONE  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[k] ");
-    wattrset(app.popupWin, COLOR_PAIR(RED));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Kill)));
     wprintw(app.popupWin, "KILL");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
@@ -97,23 +97,23 @@ void drawTodoWindow() {
 
     // --- ROW5 ---
     mvwprintw(app.popupWin, 5, 1, "[T] ");
-    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Unchecked)));
     wprintw(app.popupWin, "[ ]   ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[S] ");
-    wattrset(app.popupWin, COLOR_PAIR(MAGENTA));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Started)));
     wprintw(app.popupWin, "[-]   ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[W] ");
-    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Waiting)));
     wprintw(app.popupWin, "[?]");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW6 ---
     mvwprintw(app.popupWin, 6, 1, "[D] ");
-    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Checked)));
     wprintw(app.popupWin, "[X]   ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
@@ -122,17 +122,17 @@ void drawTodoWindow() {
 
     // --- ROW8 ---
     mvwprintw(app.popupWin, 8, 1, "[o] ");
-    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Okay)));
     wprintw(app.popupWin, "OKAY  ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[y] ");
-    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(Yes)));
     wprintw(app.popupWin, "YES   ");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "[n] ");
-    wattrset(app.popupWin, COLOR_PAIR(RED));
+    wattrset(app.popupWin, COLOR_PAIR(getTypeColor(No)));
     wprintw(app.popupWin, "NO");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
@@ -150,6 +150,8 @@ void drawTodoWindow() {
 }
 
 void drawInputWindow() {
+    // TODO draw differently when running off the edge
+
     box(app.popupWin, 0, 0);
     mvwprintw(app.popupWin, 1, 1, input.string);
 

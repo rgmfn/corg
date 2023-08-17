@@ -27,7 +27,7 @@ int main(void) {
 
     // Node *head = loadFromFile("test.org");
 
-    Node head = {Head, NULL, true};
+    Node head = {Head, "", true};
     Node tasks = {None, "Tasks", true};
     Node wings = {Todo, "Get wings", true};
     Node schedule = {Proj, "Schedule wings", true};

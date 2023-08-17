@@ -127,7 +127,7 @@ void printNode(Node* node, Node* curr, int depth) {
     addstr(typeStr);
 
     attrset(COLOR_PAIR(textColor));
-    addstr(node->text);
+    addstr(node->name);
 
     attrset(COLOR_PAIR(0));
     if (!node->subTreeIsOpen) {

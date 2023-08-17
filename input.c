@@ -49,7 +49,7 @@ void parseDocumentInput() {
         case 'r':
             app.popupWin = getInputWindow();
             refresh();
-            strncpy(input.string, app.curr->text, sizeof(input.string));
+            strncpy(input.string, app.curr->name, sizeof(input.string));
             input.cursorPos = strnlen(input.string, sizeof(input.string));
             app.focus = InputWindow;
             break;
@@ -129,11 +129,11 @@ void parseInputInput() {
             break;
         case ENTER:
             app.focus = Document;
-            strcpy(app.curr->text, input.string);
+            strncpy(app.curr->name, input.string, sizeof(app.curr->name));
             break;
         case BACKSPACE:
-            input.string[input.cursorPos] = '\0';
             input.cursorPos--;
+            input.string[input.cursorPos] = '\0';
             break;
         default:
             // TODO bound check

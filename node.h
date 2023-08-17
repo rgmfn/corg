@@ -25,8 +25,7 @@ typedef enum NodeType {
 typedef struct Node {
     NodeType type;
 
-    /* char text[50]; */
-    char* text;
+    char name[50];
 
     bool subTreeIsOpen;
 
@@ -35,6 +34,8 @@ typedef struct Node {
     struct Node* child;
     struct Node* parent;
 } Node;
+
+int getTypeColor(NodeType);
 
 void printNode(Node*, Node*, int);
 void printTree(Node*, Node*, int);
