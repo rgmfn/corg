@@ -178,3 +178,25 @@ void indentNTimes(WINDOW *win, int n) {
         waddstr(win, "  ");
     }
 }
+
+void openTodoWindow() {
+    app.popupWin = getTodoWindow();
+    refresh();
+    app.focus = TodoWindow;
+}
+
+void openRenameWindow() {
+    app.popupWin = getInputWindow();
+    refresh();
+    strncpy(input.string, app.curr->name, sizeof(input.string));
+    input.cursorPos = strnlen(input.string, sizeof(input.string));
+    app.focus = RenameWindow;
+}
+
+void openDescriptionWindow() {
+    app.popupWin = getInputWindow();
+    refresh();
+    strncpy(input.string, app.curr->description, sizeof(input.string));
+    input.cursorPos = strnlen(input.string, sizeof(input.string));
+    app.focus = DescriptionWindow;
+}

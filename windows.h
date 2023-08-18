@@ -24,4 +24,8 @@ void drawTempWindow();
 
 void indentNTimes(WINDOW*, int);
 
+void openTodoWindow();
+void openRenameWindow();
+void openDescriptionWindow();
+
 #endif
