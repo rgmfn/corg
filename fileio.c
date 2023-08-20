@@ -4,7 +4,9 @@
 #include <curses.h>
 #include <regex.h>
 
+#include "fileio.h"
 #include "node.h"
+#include "state.h"
 
 #define BUF_SIZE 1000
 #define ERRBUFF_SIZE 100
@@ -78,6 +80,12 @@ Node* loadFromFile(char* filename) {
 
     FILE *fp = fopen(filename, "r");
 
+    if (fp == NULL) {
+        endwin();
+        printf("ERROR: %s does not exist\n", filename);
+        exit(EXIT_FAILURE);
+    }
+
     char buffer[BUF_SIZE];
 
     Node *head = malloc(sizeof (Node));
@@ -120,4 +128,32 @@ Node* loadFromFile(char* filename) {
     fclose(fp);
 
     return head;
+}
+
+void printNodeToFile(Node *node, FILE *fp) {
+    if (node == NULL)
+        return;
+
+    int depth = getDepth(node);
+
+    for (int i = 0; i < depth; i++) {
+        fprintf(fp, "*");
+    };
+
+    fprintf(fp, " %s%s\n", getTypeStr(node->type), node->name);
+
+    if (strnlen(node->description, sizeof(node->description)) > 0) {
+        fprintf(fp, "%s\n", node->description);
+    }
+
+    printNodeToFile(node->child, fp);
+    printNodeToFile(node->next, fp);
+}
+
+void writeToFile(Node *node, char *filename) {
+    FILE *fp = fopen(filename, "w");
+
+    printNodeToFile(node, fp);
+
+    fclose(fp);
 }

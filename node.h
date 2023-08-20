@@ -38,6 +38,7 @@ typedef struct Node {
     struct Node* parent;
 } Node;
 
+char* getTypeStr(NodeType);
 NodeType getTypeFromString(char*);
 
 void printNode(Node*, Node*, int);

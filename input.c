@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "fileio.h"
 #include "input.h"
 #include "node.h"
 #include "state.h"
@@ -68,6 +69,9 @@ void parseDocumentInput() {
             break;
         case 'd':
             deleteNode(app.curr);
+            break;
+        case 'w':
+            writeToFile(app.head->next, "out.org");
             break;
         case 'q':
             app.isRunning = false;

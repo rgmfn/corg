@@ -1,0 +1,17 @@
+* Tasks
+This is a list of tasks
+** TODO Wings
+*** PROJ Schedule
+*** LOOP Eat
+**** STRT Pickup
+Pickup the wings with hands
+**** WAIT Chew
+*** WAIT Drive home
+** DONE Reach out to people
+*** [X] Ian
+*** [X] Megan
+*** [X] Helen
+*** [X] Moma
+*** [X] Peter
+*** [X] Chris
+*** [X] Victor

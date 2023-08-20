@@ -27,3 +27,29 @@ fn placeNode {
         make node curr's next
     }
 }
+
+fn writeToFile {
+    curr := app.head
+
+    while (curr isn't prev) {
+        get line
+
+        printNodeToFile
+
+        prev = curr
+        curr = goDownVisual
+    }
+}
+
+printNodeToFile {
+    depth := getDepth
+
+    loop depth-1 times {
+        print("  ")
+    }
+    print("* ")
+    print(getTypeStr)
+    print(name)
+    print(\n)
+    print(description)
+}
