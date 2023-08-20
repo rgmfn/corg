@@ -10,7 +10,12 @@
 #include "windows.h"
 #include "input.h"
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    if (argc <= 1) {
+        printf("usage: ./corg file.org\n");
+        exit(EXIT_FAILURE);
+    }
+
     initscr();
     noecho();
     curs_set(0);
@@ -25,7 +30,7 @@ int main(void) {
         init_pair(GRAY_SEL, COLOR_BLACK, GRAY);
     }
 
-    Node *head = loadFromFile("test.org");
+    Node *head = loadFromFile(argv[1]);
 
     app.head = head;
     app.curr = head->next;

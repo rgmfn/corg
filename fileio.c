@@ -18,7 +18,7 @@
  * group 4: [Get Wings]
  */
 #define HEADING_GROUPS 4
-#define DESCRIPTION "^([[:alpha:]]+[[:blank:]]*)+$"
+#define DESCRIPTION "^(([[:alpha:]]+[[:blank:]]+)*[[:alpha:]]+)\n$"
 #define DESCRIPTION_GROUPS 1
 
 #define MAX_GROUPS 5
@@ -106,6 +106,10 @@ Node* loadFromFile(char* filename) {
             depth = getDepth(curr);
         } else if (isMatch(&description, buffer, rm)) {
             sprintf(curr->description, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
+        } else {
+            endwin();
+            printf("ERROR: line type not implemented: [%s]\n", buffer);
+            exit(EXIT_FAILURE);
         }
     }
 
