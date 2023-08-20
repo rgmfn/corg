@@ -1,0 +1,29 @@
+fn loadFromFile {
+    ... 
+
+    curr := head
+    depth := 1
+    while (there's more lines) {
+        get line
+
+        if line is heading {
+            create new node
+            set node's name
+            node type = getTypeFromString
+
+            placeNode
+        } else if line is description {
+            append line to curr's description (for now replace should work fine)
+        }
+    }
+}
+
+fn placeNode {
+    if (nodeDepth > depth) {
+        make node curr's child
+    } else {
+        curr = riseToDepth(nodeDepth)
+        depth := nodeDepth
+        make node curr's next
+    }
+}

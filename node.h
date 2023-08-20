@@ -1,6 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <stdbool.h>
+
 typedef enum NodeType {
     Head,
     None,
@@ -36,12 +38,12 @@ typedef struct Node {
     struct Node* parent;
 } Node;
 
-int getTypeColor(NodeType);
+NodeType getTypeFromString(char*);
 
 void printNode(Node*, Node*, int);
 void printTree(Node*, Node*, int);
 
-void freeTree(Node*);
+void freeSubtree(Node*);
 
 void toggleSubtree(Node*);
 
@@ -50,6 +52,13 @@ Node* goUpVisual(Node*);
 Node* goNextLogical(Node*);
 Node* goPrevLogical(Node*);
 Node* gotoParent(Node*);
+
+Node* riseToDepth(int, Node*);
+int getDepth(Node*);
+
+void createChildNode(Node*);
+void createSiblingNodeAfter(Node*);
+void deleteNode(Node*);
 
 NodeType cycleNodeType(NodeType);
 #endif

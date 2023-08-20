@@ -7,7 +7,7 @@
 #include "windows.h"
 
 struct AppState {
-    Node head;
+    Node *head;
     Node *curr;
     AppFocus focus;
     WINDOW *popupWin;

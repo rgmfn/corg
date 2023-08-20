@@ -23,7 +23,7 @@ WINDOW* getInputWindow() {
 
 void drawDocument() {
     move(0, 0);
-    printTree(&app.head, app.curr, 0);
+    printTree(app.head, app.curr, 0);
     refresh();
 }
 

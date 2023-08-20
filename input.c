@@ -34,12 +34,14 @@ void parseDocumentInput() {
             app.curr = goUpVisual(app.curr);
             break;
         case 'h':
+        case 'K':
             app.curr = goPrevLogical(app.curr);
             break;
         case 'H':
             app.curr = gotoParent(app.curr);
             break;
         case 'l':
+        case 'J':
             app.curr = goNextLogical(app.curr);
             break;
         case '\t':
@@ -49,13 +51,23 @@ void parseDocumentInput() {
             openTodoWindow();
             break;
         case 'r':
+        case 'A':
             openRenameWindow();
             break;
-        case 'd':
+        case 's':
             openDescriptionWindow();
             break;
         case ENTER:
             app.curr->type = cycleNodeType(app.curr->type);
+            break;
+        case 'c':
+            createChildNode(app.curr);
+            break;
+        case 'C':
+            createSiblingNodeAfter(app.curr);
+            break;
+        case 'd':
+            deleteNode(app.curr);
             break;
         case 'q':
             app.isRunning = false;
@@ -126,6 +138,12 @@ void parseTodoInput() {
     app.popupWin = NULL;
 }
 
+/**
+ * Parses the input of the InputWindow.
+ *
+ * @param toReplace the string to be replaced with the string created in the
+ *        InputWindow.
+ */
 void parseInputInput(char *toReplace) {
     switch (app.c) {
         case ESCAPE:
