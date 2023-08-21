@@ -4,6 +4,7 @@
 
 #include "node.h"
 #include "colors.h"
+#include "util.h"
 #include "windows.h"
 #include "state.h"
 
@@ -261,8 +262,7 @@ Node* gotoParent(Node *curr) {
 
 Node* riseToDepth(int targetDepth, Node *node) {
     if (node == NULL) {
-        printf("ERROR: Tried to reach depth 0");
-        exit(EXIT_FAILURE);
+        errorAndExit("Tried to reach depth 0");
     }
 
     int currentDepth = getDepth(node);

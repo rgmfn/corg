@@ -1,8 +1,8 @@
 CC=clang
 CFLAGS=-Wall -g
 LDLIBS=-lncurses
-OBJECTS=corg.o node.o fileio.o input.o windows.o colors.o
-HEADERS=colors.h fileio.h node.h input.h windows.h state.h
+OBJECTS=corg.o node.o fileio.o input.o windows.o colors.o util.o
+HEADERS=colors.h fileio.h node.h input.h windows.h state.h util.h
 
 all: corg
 

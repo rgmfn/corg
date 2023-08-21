@@ -7,6 +7,7 @@
 #include "fileio.h"
 #include "node.h"
 #include "state.h"
+#include "util.h"
 
 #define BUF_SIZE 1000
 #define ERRBUFF_SIZE 100
@@ -32,8 +33,7 @@ bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
         return false;
     } else if (error) {
         regerror(error, regex, errbuf, ERRBUFF_SIZE-1);
-        printw("ERROR with %s: %s\n", string, errbuf);
-        exit(EXIT_FAILURE);
+        errorAndExit(errbuf);
     }
 
     return true;
@@ -51,8 +51,7 @@ Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
         node->prev = curr;
         node->parent = curr->parent;
     } else {
-        printf("ERROR: Invalid depth change");
-        exit(EXIT_FAILURE);
+        errorAndExit("Invalid depth change, grew by more than 1");
     }
 
     return node;
@@ -67,24 +66,19 @@ Node* loadFromFile(char* filename) {
     regex_t heading;
     if ((error = regcomp(&heading, HEADING, REG_EXTENDED)) != 0) {
         regerror(error, &heading, errbuf, ERRBUFF_SIZE-1);
-        printf("ERROR: %s:%d %s\n", __FILE__, __LINE__, errbuf);
-        exit(EXIT_FAILURE);
+        errorAndExitf(errbuf, "heading regex");
     }
 
     regex_t description;
     if ((error = regcomp(&description, DESCRIPTION, REG_EXTENDED)) != 0) {
         regerror(error, &description, errbuf, ERRBUFF_SIZE-1);
-        printf("ERROR: %s:%d %s\n", __FILE__, __LINE__, errbuf);
-        exit(EXIT_FAILURE);
+        errorAndExitf(errbuf, "description regex");
     }
 
     FILE *fp = fopen(filename, "r");
 
-    if (fp == NULL) {
-        endwin();
-        printf("ERROR: %s does not exist\n", filename);
-        exit(EXIT_FAILURE);
-    }
+    if (fp == NULL)
+        errorAndExitf("does not exist", filename);
 
     char buffer[BUF_SIZE];
 
@@ -115,9 +109,7 @@ Node* loadFromFile(char* filename) {
         } else if (isMatch(&description, buffer, rm)) {
             sprintf(curr->description, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
         } else {
-            endwin();
-            printf("ERROR: line type not implemented: [%s]\n", buffer);
-            exit(EXIT_FAILURE);
+            errorAndExitf("line type not implemented", buffer);
         }
     }
 

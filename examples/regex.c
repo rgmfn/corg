@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <regex.h>
 
+#include "../util.h"
+
 /* #define REGEX "([[:alpha:]]+)[[:space:]]([[:alpha:]]+)" */
 #define REGEX "^([*]+)[[:blank:]]+(([[:upper:]]{4})[[:blank:]]+)?(([[:alpha:]]+[[:space:]]*)+)$"
 #define ERRBUFF_SIZE 100
@@ -17,8 +19,7 @@ int main() {
     int compRet = regcomp(&regex, REGEX, REG_EXTENDED);
     if (compRet != 0) {
         regerror(compRet, &regex, errbuf, ERRBUFF_SIZE);
-        printf("Error: %s\n", errbuf);
-        exit(EXIT_FAILURE);
+        errorAndExit(errbuf);
     }
 
     int execRet = regexec(&regex, line, 5, rm, 0);
