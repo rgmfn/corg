@@ -13,6 +13,7 @@
 #define ERRBUFF_SIZE 100
 
 #define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?(([[:alpha:]]+[[:blank:]]+)*[[:alpha:]]+)\n$"
+#define HEADING_GROUPS 4
 /*
  * group 0: whole string
  * group 1: [****]
@@ -20,7 +21,6 @@
  * group 3: [TODO]
  * group 4: [Get Wings]
  */
-#define HEADING_GROUPS 4
 #define DESCRIPTION "^(([[:alpha:]]+[[:blank:]]+)*[[:alpha:]]+)\n$"
 #define DESCRIPTION_GROUPS 1
 
@@ -75,15 +75,25 @@ Node* loadFromFile(char* filename) {
         errorAndExitf(errbuf, "description regex");
     }
 
+    Node *head = malloc(sizeof(Node));
+    head->type = Head;
+
     FILE *fp = fopen(filename, "r");
 
-    if (fp == NULL)
-        errorAndExitf("does not exist", filename);
+    if (fp == NULL) {
+        Node *next = malloc(sizeof(Node));
+        next->type = None;
+        next->subTreeIsOpen = true;
+        head->next = next;
+
+        strncpy(app.filename, "", sizeof(app.filename));
+
+        return head;
+    }
+
+    strncpy(app.filename, filename, sizeof(app.filename));
 
     char buffer[BUF_SIZE];
-
-    Node *head = malloc(sizeof (Node));
-    head->type = Head;
 
     Node *curr = head;
     int depth = 1;
@@ -108,8 +118,6 @@ Node* loadFromFile(char* filename) {
             depth = getDepth(curr);
         } else if (isMatch(&description, buffer, rm)) {
             sprintf(curr->description, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
-        } else {
-            errorAndExitf("line type not implemented", buffer);
         }
     }
 

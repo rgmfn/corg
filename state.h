@@ -12,6 +12,8 @@ struct AppState {
     AppFocus focus;
     WINDOW *popupWin;
 
+    char filename[50];
+
     int c;
 
     bool isRunning;

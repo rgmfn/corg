@@ -20,6 +20,9 @@ void parseInput() {
         case DescriptionWindow:
             parseInputInput(app.curr->description);
             break;
+        case FilenameWindow:
+            parseInputInput(app.filename);
+            break;
         default:
             app.focus = Document;
             break;
@@ -71,7 +74,11 @@ void parseDocumentInput() {
             deleteNode(app.curr);
             break;
         case 'w':
-            writeToFile(app.head->next, "out.org");
+            if (strnlen(app.filename, sizeof(app.filename)) > 0) {
+                writeToFile(app.head->next, app.filename);
+            } else {
+                openFilenameWindow();
+            }
             break;
         case 'q':
             app.isRunning = false;
@@ -156,6 +163,7 @@ void parseInputInput(char *toReplace) {
         case ENTER:
             app.focus = Document;
             strncpy(toReplace, input.string, sizeof(app.curr->name));
+            // TODO get change sizeof arg
             break;
         case BACKSPACE:
             input.cursorPos--;

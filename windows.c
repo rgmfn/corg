@@ -1,6 +1,7 @@
 #include <curses.h>
 #include <string.h>
 
+#include "fileio.h"
 #include "windows.h"
 #include "node.h"
 #include "state.h"
@@ -39,6 +40,9 @@ void drawPopupWindow() {
             break;
         case DescriptionWindow:
             drawInputWindow("Change description");
+            break;
+        case FilenameWindow:
+            drawInputWindow("Change filename");
             break;
         default:
             drawTempWindow();
@@ -199,4 +203,12 @@ void openDescriptionWindow() {
     strncpy(input.string, app.curr->description, sizeof(input.string));
     input.cursorPos = strnlen(input.string, sizeof(input.string));
     app.focus = DescriptionWindow;
+}
+
+void openFilenameWindow() {
+    app.popupWin = getInputWindow();
+    refresh();
+    strncpy(input.string, app.filename, sizeof(input.string));
+    input.cursorPos = strnlen(input.string, sizeof(input.string));
+    app.focus = FilenameWindow;
 }

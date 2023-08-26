@@ -9,6 +9,7 @@ typedef enum AppFocus {
     CalendarWindow,
     RenameWindow,
     DescriptionWindow,
+    FilenameWindow,
 } AppFocus;
 
 WINDOW* newCenteredWin(int, int);
@@ -27,5 +28,6 @@ void indentNTimes(WINDOW*, int);
 void openTodoWindow();
 void openRenameWindow();
 void openDescriptionWindow();
+void openFilenameWindow();
 
 #endif

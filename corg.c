@@ -11,10 +11,10 @@
 #include "input.h"
 
 int main(int argc, char *argv[]) {
-    if (argc <= 1) {
-        printf("usage: ./corg file.org\n");
-        exit(EXIT_FAILURE);
-    }
+    /* if (argc <= 1) { */
+    /*     printf("usage: ./corg file.org\n"); */
+    /*     exit(EXIT_FAILURE); */
+    /* } */
 
     initscr();
     noecho();
