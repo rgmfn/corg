@@ -42,7 +42,7 @@ void drawPopupWindow() {
             drawInputWindow("Change description");
             break;
         case FilenameWindow:
-            drawInputWindow("Change filename");
+            drawInputWindow("Save to file");
             break;
         default:
             drawTempWindow();

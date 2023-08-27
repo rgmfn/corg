@@ -15,4 +15,3 @@ Pickup the wings with hands
 *** [X] Peter
 *** [X] Chris
 *** [X] Victor
-*** [X] Maia

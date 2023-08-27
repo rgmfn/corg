@@ -22,6 +22,9 @@ void parseInput() {
             break;
         case FilenameWindow:
             parseInputInput(app.filename);
+            if (app.c == ENTER) {
+                writeToFile(app.head->next, app.filename);
+            }
             break;
         default:
             app.focus = Document;
@@ -79,6 +82,9 @@ void parseDocumentInput() {
             } else {
                 openFilenameWindow();
             }
+            break;
+        case 'a':
+            openFilenameWindow();
             break;
         case 'q':
             app.isRunning = false;
