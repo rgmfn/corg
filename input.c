@@ -76,13 +76,13 @@ void parseDocumentInput() {
         case 'd':
             deleteNode(app.curr);
             break;
-        case 'w':
-            if (strnlen(app.filename, sizeof(app.filename)) > 0) {
-                writeToFile(app.head->next, app.filename);
-            } else {
-                openFilenameWindow();
-            }
-            break;
+        /* case 'w': */
+        /*     if (strnlen(app.filename, sizeof(app.filename)) > 0) { */
+        /*         writeToFile(app.head->next, app.filename); */
+        /*     } else { */
+        /*         openFilenameWindow(); */
+        /*     } */
+        /*     break; */
         case 'a':
             openFilenameWindow();
             break;

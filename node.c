@@ -168,7 +168,6 @@ void printTree(Node* node, Node* curr, int depth) {
         printTree(node->next, curr, depth);
 }
 
-// TODO make sure this is correct
 void freeSubtree(Node *node) {
     if (node == NULL) {
         return;
@@ -320,44 +319,102 @@ void createSiblingNodeAfter(Node *subroot) {
     app.curr = sibling;
 }
 
-/**
- * TODO
- * or child of parent node
- */
 void deleteNode(Node *subroot) {
-    // if subroot has next and is child of parent
-    if (subroot->parent != NULL && subroot->parent->child == subroot &&
-            subroot->next != NULL)
-    {
+    // subroot is root, with next
+    // h---x---*
+    //      \
+    //       *
+    if (subroot->prev == NULL && subroot->parent == NULL &&
+            subroot->next != NULL) {
+        Node *head = app.head;
         Node *next = subroot->next;
+
+        next->prev = NULL;
+        head->next = next;
+        subroot->next = NULL; // so we don't free next
+
+        app.curr = next;
+
+        freeSubtree(subroot);
+    }
+    // subroot is root, no next
+    // h---x
+    //      \
+    //       *
+    else if (subroot->prev == NULL && subroot->parent == NULL &&
+            subroot->next == NULL) {
+        app.head->next = NULL;
+
+        app.curr = NULL;
+
+        freeSubtree(subroot);
+    }
+    // subroot is the first child of it's parent, with next
+    // *
+    //  \
+    //   x---*
+    //    \
+    //     *
+    else if (subroot->next != NULL && subroot->prev == NULL &&
+            subroot->parent != NULL) {
+        Node *parent = subroot->parent;
+        Node *next = subroot->next;
+
+        next->prev = NULL;
+        parent->child = next;
+        subroot->next = NULL; // so that we don't free next
+
+        app.curr = next;
+
+        freeSubtree(subroot);
+    }
+    // first child of parent, no next
+    // *
+    //  \
+    //   x
+    //    \
+    //     *
+    else if (subroot->next == NULL && subroot->prev == NULL &&
+            subroot->parent != NULL) {
         Node *parent = subroot->parent;
 
-        parent->child = next;
-        next->prev = NULL;
+        parent->child = NULL;
+
+        app.curr = parent;
 
         freeSubtree(subroot);
     }
- 
-    // if subroot is root (no next)
-    else if (subroot == app.head->next && subroot->next == NULL) {
-        app.head->next = NULL;
-        subroot->prev = NULL;
+    // not parent's child, no next
+    // *
+    //  \
+    //   *---x
+    //    \   \
+    //     *   *
+    else if (subroot->parent != NULL && subroot->parent->child != subroot &&
+            subroot->prev != NULL && subroot->next == NULL) {
+        Node *prev = subroot->prev;
+
+        prev->next = NULL;
+
+        app.curr = prev;
 
         freeSubtree(subroot);
     }
-
-    // if subroot is root (with next)
-    else if (subroot == app.head->next) {
-        app.head->next = subroot->next;
-        app.head->next->prev = app.head;
-
-        freeSubtree(subroot);
-    }
- 
-    // other
+    // normally
+    // *
+    //  \
+    //   *---x---*---
+    //    \   \   \
+    //     *   *   *
     else {
-        subroot->prev->next = subroot->next;
-        subroot->prev->next->prev = subroot->prev;
+        Node *prev = subroot->prev;
+        Node *next = subroot->next;
+
+        prev->next = next;
+        prev->next->prev = prev;
+        subroot->next = NULL; // so that we don't free next
+
+        app.curr = next;
 
         freeSubtree(subroot);
     }
