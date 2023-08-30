@@ -12,16 +12,16 @@
 #define BUF_SIZE 1000
 #define ERRBUFF_SIZE 100
 
-#define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?(([[:alpha:]]+[[:blank:]]+)*[[:alpha:]]+)\n$"
+#define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?(([[:alpha:]]+[[:blank:]]+)*[[:alnum:]]+)\n$"
 #define HEADING_GROUPS 4
 /*
  * group 0: whole string
  * group 1: [****]
- * group 2: [TODO ]
- * group 3: [TODO]
+ * group 2: [STRT ]
+ * group 3: [STRT]
  * group 4: [Get Wings]
  */
-#define DESCRIPTION "^(([[:alpha:]]+[[:blank:]]+)*[[:alpha:]]+)\n$"
+#define DESCRIPTION "^(([[:alnum:]]+[[:blank:]]+)*[[:alnum:]]+)\n$"
 #define DESCRIPTION_GROUPS 1
 
 #define MAX_GROUPS 5
@@ -46,7 +46,7 @@ Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
         curr->child = node;
         node->parent = curr;
     } else if (nodeDepth <= depth) {
-        curr = riseToDepth(nodeDepth, curr);
+        curr = riseToStarDepth(nodeDepth, curr);
         curr->next = node;
         node->prev = curr;
         node->parent = curr->parent;
@@ -115,7 +115,7 @@ Node* loadFromFile(char* filename) {
             int nodeDepth = strnlen(starStr, sizeof(starStr));
 
             curr = placeNode(depth, nodeDepth, curr, node);
-            depth = getDepth(curr);
+            depth = getStarDepth(curr);
         } else if (isMatch(&description, buffer, rm)) {
             sprintf(curr->description, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
         }
@@ -134,7 +134,7 @@ void printNodeToFile(Node *node, FILE *fp) {
     if (node == NULL)
         return;
 
-    int depth = getDepth(node);
+    int depth = getStarDepth(node);
 
     for (int i = 0; i < depth; i++) {
         fprintf(fp, "*");

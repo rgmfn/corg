@@ -23,7 +23,7 @@ void drawTodoWindow();
 void drawInputWindow(char*);
 void drawTempWindow();
 
-void indentNTimes(WINDOW*, int);
+void windentNTimes(WINDOW*, int);
 
 void openTodoWindow();
 void openRenameWindow();

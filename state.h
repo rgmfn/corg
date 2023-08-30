@@ -9,6 +9,7 @@
 struct AppState {
     Node *head;
     Node *curr;
+    Node *topLine;
     AppFocus focus;
     WINDOW *popupWin;
 

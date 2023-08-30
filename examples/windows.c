@@ -6,7 +6,7 @@ int main(int argc, char ** argv) {
     int height, width, start_y, start_x;
     height = 10;
     width = 20;
-    start_y = start_x = 10;
+    start_y = start_x = 1;
 
     addstr("testing");
 

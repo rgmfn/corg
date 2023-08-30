@@ -41,20 +41,28 @@ typedef struct Node {
 char* getTypeStr(NodeType);
 NodeType getTypeFromString(char*);
 
-void printNode(Node*, Node*, int);
-void printTree(Node*, Node*, int);
+void printNode(Node*, int);
+void printTree(Node*, int);
+void printPartialTree(Node*, int);
 
 void freeSubtree(Node*);
 
 void toggleSubtree(Node*);
 
 Node* goDownVisual(Node*);
+Node* goDownVisualOrNull(Node*);
 Node* goUpVisual(Node*);
 Node* goNextLogical(Node*);
 Node* goPrevLogical(Node*);
 Node* gotoParent(Node*);
 
-Node* riseToDepth(int, Node*);
+void tryScrollUp(Node*);
+void tryScrollDown(Node*);
+
+int getLogicalDistance(Node*, Node*);
+
+Node* riseToStarDepth(int, Node*);
+int getStarDepth(Node*);
 int getDepth(Node*);
 
 void createChildNode(Node*);

@@ -35,6 +35,8 @@ int main(int argc, char *argv[]) {
     app.head = head;
     app.curr = head->next;
     app.focus = Document;
+    /* app.topLine = head->next->child->next; */
+    app.topLine = head->next;
 
     input.cursorPos = 0;
     strncpy(input.string, "", sizeof(input.string));

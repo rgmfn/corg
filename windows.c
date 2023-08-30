@@ -24,7 +24,8 @@ WINDOW* getInputWindow() {
 
 void drawDocument() {
     move(0, 0);
-    printTree(app.head, app.curr, 0);
+    /* printTree(app.head, 0); */
+    printPartialTree(app.topLine, LINES);
     refresh();
 }
 
@@ -177,7 +178,7 @@ void drawTempWindow() {
     wrefresh(app.popupWin);
 }
 
-void indentNTimes(WINDOW *win, int n) {
+void windentNTimes(WINDOW *win, int n) {
     for (int i = 0; i < n; i++) {
         waddstr(win, "  ");
     }

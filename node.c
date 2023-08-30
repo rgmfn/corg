@@ -113,7 +113,7 @@ NodeType getTypeFromString(char *string) {
     return Head;
 }
 
-void printNode(Node* node, Node* curr, int depth) {
+void printNode(Node* node, int depth) {
     if (node->type == Head) return;
 
     int textColor = getDepthColor(depth);
@@ -122,13 +122,13 @@ void printNode(Node* node, Node* curr, int depth) {
     char* typeStr = getTypeStr(node->type);
     char bulletChar = getBulletChar(node->type);
 
-    indentNTimes(stdscr, depth);
+    windentNTimes(stdscr, depth);
 
     if (typeColor == GRAY) {
         textColor = GRAY;
     }
 
-    if (node == curr) {
+    if (node == app.curr) {
         textColor += 15;
         typeColor += 15;
     }
@@ -148,7 +148,7 @@ void printNode(Node* node, Node* curr, int depth) {
         addstr(" ...\n");
     } else if (strnlen(node->description, sizeof(node->description)) > 0) {
         addch('\n');
-        indentNTimes(stdscr, depth+1);
+        windentNTimes(stdscr, depth+1);
         addstr(node->description);
         addch('\n');
     } else {
@@ -156,16 +156,29 @@ void printNode(Node* node, Node* curr, int depth) {
     }
 }
 
-void printTree(Node* node, Node* curr, int depth) {
+void printTree(Node *node, int depth) {
     if (node == NULL) return; // no tree to draw
 
-    printNode(node, curr, depth);
+    printNode(node, depth);
 
-    if (node->subTreeIsOpen && node->child != NULL)
-        printTree(node->child, curr, depth+1);
+    printTree(node->child, depth+1);
+    printTree(node->next, depth);
+}
 
-    if (node->next != NULL)
-        printTree(node->next, curr, depth);
+void printPartialTree(Node *node, int nodesToDraw) {
+    if (node == NULL || nodesToDraw <= 0) return;
+
+    printNode(node, getDepth(node));
+
+    int lines = 1; // * STRT thing
+
+    if (strnlen(node->description, sizeof(node->description)) > 0) {
+        lines++;
+    }
+    
+    // TODO add to lines when dates are a thing
+
+    printPartialTree(goDownVisualOrNull(node), nodesToDraw-lines);
 }
 
 void freeSubtree(Node *node) {
@@ -205,6 +218,19 @@ Node* runDownBack(Node *curr) {
     }
 
     return curr;
+}
+
+/**
+ * goDownVisual except when it goes down from the last node it returns NULL
+ */
+Node* goDownVisualOrNull(Node *curr) {
+    Node *down = goDownVisual(curr);
+
+    if (down == curr) {
+        return NULL;
+    } else {
+        return down;
+    }
 }
 
 Node* goDownVisual(Node *curr) {
@@ -259,30 +285,79 @@ Node* gotoParent(Node *curr) {
     return curr;
 }
 
-Node* riseToDepth(int targetDepth, Node *node) {
+#define SCROLL_OFFSET 4
+
+void tryScrollUp(Node *curr) {
+    if (getLogicalDistance(app.topLine, curr) < SCROLL_OFFSET) {
+        app.topLine = goUpVisual(app.topLine);
+    }
+}
+
+void tryScrollDown(Node *curr) {
+    if (getLogicalDistance(app.topLine, curr) > (LINES - SCROLL_OFFSET - 1)) {
+        app.topLine = goDownVisual(app.topLine);
+    }
+}
+
+int getLogicalDistance(Node* node, Node *bottom) {
+    if (node == NULL) {
+        errorAndExit("top node is below bottom node");
+    }
+
+    if (node == bottom) {
+        return 0;
+    }
+
+    int lines = 1; // * DONE task
+
+    if (strnlen(node->description, sizeof(node->description)) > 0) {
+        lines++;
+    }
+
+    // TODO add to lines when dates are a thing
+
+    return lines + getLogicalDistance(goDownVisualOrNull(node), bottom);
+}
+
+Node* riseToStarDepth(int targetDepth, Node *node) {
     if (node == NULL) {
         errorAndExit("Tried to reach depth 0");
     }
 
-    int currentDepth = getDepth(node);
+    int currentDepth = getStarDepth(node);
 
     if (currentDepth <= targetDepth) {
         return node;
     } else {
-        return riseToDepth(targetDepth, node->parent);
+        return riseToStarDepth(targetDepth, node->parent);
     }
+}
+
+/**
+ * depth - the number of indents ('  ') before a line,
+ *         used for node drawing
+ * star depth - the number of stars on a line
+ *              used for fileio
+ *
+ * star depth = depth + 1
+ */
+int getStarDepth(Node *node) {
+    if (node == NULL)
+        return 0;
+
+    return 1 + getStarDepth(node->parent);
 }
 
 int getDepth(Node *node) {
     if (node == NULL)
-        return 0;
+        return -1;
 
     return 1 + getDepth(node->parent);
 }
 
 /**
  * TODO what to do about overwriting current child tree?
- * make child after all current children
+ * make child after all current children?
  */
 void createChildNode(Node *subroot) {
     Node *child = malloc(sizeof(Node));
