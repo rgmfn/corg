@@ -7,11 +7,9 @@ This is a list of tasks
 Pickup the wings with hands
 **** WAIT Chew
 *** WAIT Drive home
-** DONE Reach out to people
-*** [X] Ian
-*** [X] Megan
-*** [X] Helen
-*** [X] Moma
-*** [X] Peter
-*** [X] Chris
-*** [X] Victor
+** Write Program
+*** [X] Open computer
+*** [X] Press on
+*** [X] Write program
+*** [X] Run program
+*** [X] Yay!

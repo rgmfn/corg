@@ -8,6 +8,8 @@
 #include "windows.h"
 #include "state.h"
 
+// === private methods === {{{
+
 int getDepthColor(int depth) {
     switch (depth%3) {
         case 0:
@@ -29,6 +31,46 @@ char getBulletChar(NodeType type) {
 
     return '*'; // no other types implemented yet
 }
+
+Node* runDownBack(Node *curr) {
+    if (curr->next != NULL)
+        return runDownBack(curr->next);
+    else if (curr->child != NULL) {
+        return runDownBack(curr->child);
+    }
+
+    return curr;
+}
+
+Node* runToBack(Node *node) {
+    if (node->next == NULL) {
+        return node;
+    }
+
+    return runToBack(node->next);
+}
+
+Node* runToBackAndMakeParent(Node *node, Node *newParent) {
+    if (node->next == NULL) {
+        node->parent = newParent;
+
+        return node;
+    }
+
+    node->parent = newParent;
+
+    return runToBackAndMakeParent(node->next, newParent);
+}
+
+Node* runToFront(Node *node) {
+    if (node->prev == NULL) {
+        return node;
+    }
+
+    return runToFront(node->prev);
+}
+
+// === end of private methods === }}}
 
 char* getTypeStr(NodeType type) {
     // TODO better solution than space after type?
@@ -210,16 +252,6 @@ void toggleSubtree(Node *subroot) {
         subroot->subTreeIsOpen = !subroot->subTreeIsOpen;
 }
 
-Node* runDownBack(Node *curr) {
-    if (curr->next != NULL)
-        return runDownBack(curr->next);
-    else if (curr->child != NULL) {
-        return runDownBack(curr->child);
-    }
-
-    return curr;
-}
-
 /**
  * goDownVisual except when it goes down from the last node it returns NULL
  */
@@ -288,18 +320,18 @@ Node* gotoParent(Node *curr) {
 #define SCROLL_OFFSET 4
 
 void tryScrollUp(Node *curr) {
-    if (getLogicalDistance(app.topLine, curr) < SCROLL_OFFSET) {
+    if (getVisualDistance(app.topLine, curr) < SCROLL_OFFSET) {
         app.topLine = goUpVisual(app.topLine);
     }
 }
 
 void tryScrollDown(Node *curr) {
-    if (getLogicalDistance(app.topLine, curr) > (LINES - SCROLL_OFFSET - 1)) {
+    if (getVisualDistance(app.topLine, curr) > (LINES - SCROLL_OFFSET - 1)) {
         app.topLine = goDownVisual(app.topLine);
     }
 }
 
-int getLogicalDistance(Node* node, Node *bottom) {
+int getVisualDistance(Node* node, Node *bottom) {
     if (node == NULL) {
         errorAndExit("top node is below bottom node");
     }
@@ -316,7 +348,7 @@ int getLogicalDistance(Node* node, Node *bottom) {
 
     // TODO add to lines when dates are a thing
 
-    return lines + getLogicalDistance(goDownVisualOrNull(node), bottom);
+    return lines + getVisualDistance(goDownVisualOrNull(node), bottom);
 }
 
 Node* riseToStarDepth(int targetDepth, Node *node) {
@@ -353,6 +385,105 @@ int getDepth(Node *node) {
         return -1;
 
     return 1 + getDepth(node->parent);
+}
+
+/**
+ * *---x        *      
+ *      \   ->   \
+ *       *        x---*
+ *
+ * sibling -> child
+ *
+ * * Thing -> * Thing
+ * * Thing      * Thing
+ *
+ * Popping out refers to the node graph, not the visual motion in the app.
+ */
+void tryPopNodeOut(Node *node) {
+    Node *prev = node->prev;
+    Node *next = node->next;
+    Node *child = node->child;
+
+    if (prev == NULL) {
+        return;
+    }
+
+    if (next != NULL) {
+        prev->next = next;
+        next->prev = prev;
+    } else {
+        prev->next = NULL;
+    }
+
+    if (child != NULL) {
+        node->next = child;
+        child->prev = node;
+        (void) runToBackAndMakeParent(child, prev);
+    } else {
+        node->next = NULL;
+    }
+
+    node->parent = prev;
+    node->child = NULL;
+
+    if (prev->child == NULL) {
+        prev->child = node;
+        node->prev = NULL;
+    } else {
+        Node *back = runToBack(prev->child);
+        back->next = node;
+        node->prev = back;
+    }
+}
+
+/**
+ * *            *---x
+ *  \       ->       \
+ *   x---*            *
+ *
+ * child -> sibling
+ *
+ * * Thing   -> * Thing
+ *   * Thing    * Thing
+ *
+ * Popping in refers to the node graph, not the visual motion in the app.
+ */
+void tryPopNodeIn(Node *node) {
+    Node *next = node->next;
+    Node *parent = node->parent;
+
+    if (parent == NULL || node->prev != NULL || node->child != NULL) {
+        return;
+    }
+
+    Node *parentNext = node->parent->next;
+
+    parent->next = node;
+    parent->child = NULL;
+
+    node->parent = parent->parent;
+    node->prev = parent;
+
+    if (parentNext != NULL) {
+        node->next = parentNext;
+        parentNext->prev = node;
+    } else {
+        node->next = NULL;
+    }
+
+    if (next != NULL) {
+        node->child = next;
+        next->prev = NULL;
+
+        Node *iter = next;
+        while (iter != NULL) {
+            iter->parent = node;
+
+            iter = iter->next;
+        }
+    } else {
+        node->child = NULL;
+    }
 }
 
 /**

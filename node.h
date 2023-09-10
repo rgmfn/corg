@@ -59,7 +59,7 @@ Node* gotoParent(Node*);
 void tryScrollUp(Node*);
 void tryScrollDown(Node*);
 
-int getLogicalDistance(Node*, Node*);
+int getVisualDistance(Node*, Node*);
 
 Node* riseToStarDepth(int, Node*);
 int getStarDepth(Node*);
@@ -68,6 +68,9 @@ int getDepth(Node*);
 void createChildNode(Node*);
 void createSiblingNodeAfter(Node*);
 void deleteNode(Node*);
+
+void tryPopNodeOut(Node*);
+void tryPopNodeIn(Node*);
 
 NodeType cycleNodeType(NodeType);
 #endif
