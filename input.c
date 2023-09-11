@@ -43,7 +43,6 @@ void parseDocumentInput() {
             tryScrollUp(app.curr);
             break;
         case 'h':
-        case 'K':
             app.curr = goPrevLogical(app.curr);
             tryScrollUp(app.curr);
             break;
@@ -52,9 +51,14 @@ void parseDocumentInput() {
             tryScrollUp(app.curr);
             break;
         case 'l':
-        case 'J':
             app.curr = goNextLogical(app.curr);
             tryScrollDown(app.curr);
+            break;
+        case 'J':
+            swapNodeAndNext(app.curr);
+            break;
+        case 'K':
+            swapNodeAndPrev(app.curr);
             break;
         case '\t':
             toggleSubtree(app.curr);

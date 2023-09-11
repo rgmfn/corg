@@ -72,5 +72,8 @@ void deleteNode(Node*);
 void tryPopNodeOut(Node*);
 void tryPopNodeIn(Node*);
 
+void swapNodeAndNext(Node*);
+void swapNodeAndPrev(Node*);
+
 NodeType cycleNodeType(NodeType);
 #endif

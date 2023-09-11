@@ -391,100 +391,6 @@ int getDepth(Node *node) {
 }
 
 /**
- * *---x        *      
- *      \   ->   \
- *       *        x---*
- *
- * sibling -> child
- *
- * * Thing -> * Thing
- * * Thing      * Thing
- *
- * Popping out refers to the node graph, not the visual motion in the app.
- */
-void tryPopNodeOut(Node *node) {
-    Node *prev = node->prev;
-    Node *next = node->next;
-    Node *child = node->child;
-
-    if (prev == NULL) {
-        return;
-    }
-
-    if (next != NULL) {
-        prev->next = next;
-        next->prev = prev;
-    } else {
-        prev->next = NULL;
-    }
-
-    if (child != NULL) {
-        node->next = child;
-        child->prev = node;
-        (void) runToBackAndMakeParent(child, prev);
-    } else {
-        node->next = NULL;
-    }
-
-    node->parent = prev;
-    node->child = NULL;
-
-    if (prev->child == NULL) {
-        prev->child = node;
-        node->prev = NULL;
-    } else {
-        Node *back = runToBack(prev->child);
-        back->next = node;
-        node->prev = back;
-    }
-}
-
-/**
- * *            *---x
- *  \       ->       \
- *   x---*            *
- *
- * child -> sibling
- *
- * * Thing   -> * Thing
- *   * Thing    * Thing
- *
- * Popping in refers to the node graph, not the visual motion in the app.
- */
-void tryPopNodeIn(Node *node) {
-    Node *next = node->next;
-    Node *parent = node->parent;
-
-    if (parent == NULL || node->prev != NULL || node->child != NULL) {
-        return;
-    }
-
-    Node *parentNext = node->parent->next;
-
-    parent->next = node;
-    parent->child = NULL;
-
-    node->parent = parent->parent;
-    node->prev = parent;
-
-    if (parentNext != NULL) {
-        node->next = parentNext;
-        parentNext->prev = node;
-    } else {
-        node->next = NULL;
-    }
-
-    if (next != NULL) {
-        node->child = next;
-        next->prev = NULL;
-
-        runToBackAndMakeParent(next, node);
-    } else {
-        node->child = NULL;
-    }
-}
-
-/**
  * TODO what to do about overwriting current child tree?
  * make child after all current children?
  */
@@ -621,6 +527,157 @@ void deleteNode(Node *subroot) {
         app.curr = next;
 
         freeSubtree(subroot);
+    }
+}
+
+/**
+ * *---x        *      
+ *      \   ->   \
+ *       *        x---*
+ *
+ * sibling -> child
+ *
+ * * Thing -> * Thing
+ * * Thing      * Thing
+ *
+ * Popping out refers to the node graph, not the visual motion in the app.
+ */
+void tryPopNodeOut(Node *node) {
+    Node *prev = node->prev;
+    Node *next = node->next;
+    Node *child = node->child;
+
+    if (prev == NULL) {
+        return;
+    }
+
+    if (next != NULL) {
+        prev->next = next;
+        next->prev = prev;
+    } else {
+        prev->next = NULL;
+    }
+
+    if (child != NULL) {
+        node->next = child;
+        child->prev = node;
+        (void) runToBackAndMakeParent(child, prev);
+    } else {
+        node->next = NULL;
+    }
+
+    node->parent = prev;
+    node->child = NULL;
+
+    if (prev->child == NULL) {
+        prev->child = node;
+        node->prev = NULL;
+    } else {
+        Node *back = runToBack(prev->child);
+        back->next = node;
+        node->prev = back;
+    }
+}
+
+/**
+ * *            *---x
+ *  \       ->       \
+ *   x---*            *
+ *
+ * child -> sibling
+ *
+ * * Thing   -> * Thing
+ *   * Thing    * Thing
+ *
+ * Popping in refers to the node graph, not the visual motion in the app.
+ */
+void tryPopNodeIn(Node *node) {
+    Node *next = node->next;
+    Node *parent = node->parent;
+
+    if (parent == NULL || node->prev != NULL || node->child != NULL) {
+        return;
+    }
+
+    Node *parentNext = node->parent->next;
+
+    parent->next = node;
+    parent->child = NULL;
+
+    node->parent = parent->parent;
+    node->prev = parent;
+
+    if (parentNext != NULL) {
+        node->next = parentNext;
+        parentNext->prev = node;
+    } else {
+        node->next = NULL;
+    }
+
+    if (next != NULL) {
+        node->child = next;
+        next->prev = NULL;
+
+        runToBackAndMakeParent(next, node);
+    } else {
+        node->child = NULL;
+    }
+}
+
+void swapNodeAndNext(Node *node) {
+    Node *prev = node->prev;
+    Node *next = node->next;
+    Node *parent = node->parent;
+
+    if (next == NULL) {
+        return;
+    }
+
+    Node *nextNext = next->next;
+
+    node->next = nextNext;
+    if (nextNext != NULL)
+        nextNext->prev = node;
+
+    if (prev != NULL)
+        prev->next = next;
+    next->prev = prev;
+
+    node->prev = next;
+    next->next = node;
+
+    if (parent != NULL && parent->child == node) {
+        parent->child = next;
+    }
+}
+
+/*
+ * *---*---x---*
+ */
+void swapNodeAndPrev(Node *node) {
+    Node *prev = node->prev;
+    Node *next = node->next;
+
+    if (prev == NULL) {
+        return;
+    }
+
+    Node *prevParent = prev->parent;
+    Node *prevPrev = prev->prev;
+
+    if (prevPrev != NULL)
+        prevPrev->next = node;
+    node->prev = prevPrev;
+
+    prev->next = next;
+    if (next != NULL)
+        next->prev = prev;
+
+    node->next = prev;
+    prev->prev = node;
+
+    if (prevParent != NULL && prevParent->child == prev) {
+        prevParent->child = node;
     }
 }
 
