@@ -84,9 +84,9 @@ void parseDocumentInput() {
         case '>':
             tryPopNodeOut(app.curr);
             break;
-        /* case '<': */
-            /* tryPopNodeIn(app.curr); */
-            /* break; */
+        case '<':
+            tryPopNodeIn(app.curr);
+            break;
         /* case 'w': */
         /*     if (strnlen(app.filename, sizeof(app.filename)) > 0) { */
         /*         writeToFile(app.head->next, app.filename); */

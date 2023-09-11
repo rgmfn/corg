@@ -50,6 +50,9 @@ Node* runToBack(Node *node) {
     return runToBack(node->next);
 }
 
+/**
+ * TODO make runToBackAnd(Node *node, void (*fun)()) function?
+ */
 Node* runToBackAndMakeParent(Node *node, Node *newParent) {
     if (node->next == NULL) {
         node->parent = newParent;
@@ -475,12 +478,7 @@ void tryPopNodeIn(Node *node) {
         node->child = next;
         next->prev = NULL;
 
-        Node *iter = next;
-        while (iter != NULL) {
-            iter->parent = node;
-
-            iter = iter->next;
-        }
+        runToBackAndMakeParent(next, node);
     } else {
         node->child = NULL;
     }
