@@ -3,6 +3,9 @@
 
 #include "curses.h"
 
+#define INPUT_COLS 53
+#define INPUT_LINES 3
+
 typedef enum AppFocus {
     Document,
     TodoWindow,

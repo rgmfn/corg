@@ -6,6 +6,7 @@
 #include "node.h"
 #include "state.h"
 #include "colors.h"
+#include "util.h"
 
 WINDOW* newCenteredWin(int height, int width) {
     int begin_y = LINES/2 - height/2;
@@ -19,7 +20,7 @@ WINDOW* getTodoWindow() {
 }
 
 WINDOW* getInputWindow() {
-    return newCenteredWin(3, 30);
+    return newCenteredWin(INPUT_LINES, INPUT_COLS);
 }
 
 void drawDocument() {
@@ -158,9 +159,8 @@ void drawTodoWindow() {
 }
 
 void drawInputWindow(char *name) {
-    // TODO draw differently when running off the edge
-
     box(app.popupWin, 0, 0);
+
     mvwprintw(app.popupWin, 1, 1, input.string);
 
     wattrset(app.popupWin, COLOR_PAIR(WHITE_SEL));

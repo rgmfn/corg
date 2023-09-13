@@ -6,6 +6,8 @@
 #include "node.h"
 #include "windows.h"
 
+#define INPUT_SIZE 50
+
 struct AppState {
     Node *head;
     Node *curr;
@@ -21,7 +23,7 @@ struct AppState {
 } app;
 
 struct InputState {
-    char string[50];
+    char string[INPUT_SIZE];
     int cursorPos;
 } input;
 

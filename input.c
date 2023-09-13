@@ -187,14 +187,17 @@ void parseInputInput(char *toReplace) {
             // TODO get change sizeof arg
             break;
         case BACKSPACE:
-            input.cursorPos--;
-            input.string[input.cursorPos] = '\0';
+            if (strnlen(input.string, INPUT_SIZE) > 0) {
+                input.cursorPos--;
+                input.string[input.cursorPos] = '\0';
+            }
             break;
         default:
-            // TODO bound check
-            input.string[input.cursorPos] = app.c;
-            input.cursorPos++;
-            input.string[input.cursorPos] = '\0';
+            if (strnlen(input.string, INPUT_SIZE) < 50) {
+                input.string[input.cursorPos] = app.c;
+                input.cursorPos++;
+                input.string[input.cursorPos] = '\0';
+            }
             break;
     } 
 }

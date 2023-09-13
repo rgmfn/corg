@@ -18,6 +18,6 @@ void errorAndExitf(char *msg, char *detail) {
 
 void todo(int line, char *file) {
     endwin();
-    printf("Not Implemented: %s:%d\n", file, line);
+    printf("TODO: %s:%d\n", file, line);
     exit(EXIT_FAILURE);
 }
