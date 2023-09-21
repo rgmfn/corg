@@ -113,6 +113,8 @@ char* getTypeStr(NodeType type) {
             return "YES ";
         case No:
             return "NO ";
+        case Head:
+            return "HEAD ";
         default:
             return "ERROR ";
     }
@@ -222,6 +224,9 @@ void printPartialTree(Node *node, int nodesToDraw) {
     }
     
     // TODO add to lines when dates are a thing
+    /* if (node->date != NULL) { */
+        /* lines++; */ 
+    /* } */
 
     printPartialTree(goDownVisualOrNull(node), nodesToDraw-lines);
 }
@@ -390,10 +395,6 @@ int getDepth(Node *node) {
     return 1 + getDepth(node->parent);
 }
 
-/**
- * TODO what to do about overwriting current child tree?
- * make child after all current children?
- */
 void createChildNode(Node *subroot) {
     Node *child = malloc(sizeof(Node));
     child->type = None;
@@ -401,8 +402,9 @@ void createChildNode(Node *subroot) {
     strncpy(child->description, "", sizeof(child->description));
     child->subTreeIsOpen = true;
 
-    if (subroot->next != NULL) {
+    if (subroot->child != NULL) {
         child->next = subroot->child;
+        child->next->prev = child;
     }
     subroot->child = child;
     child->parent = subroot;
@@ -446,6 +448,9 @@ void deleteNode(Node *subroot) {
         app.curr = next;
 
         freeSubtree(subroot);
+
+        createSiblingNodeAfter(app.head);
+        app.topLine = app.head->next;
     }
     // subroot is root, no next
     // h---x
@@ -458,6 +463,10 @@ void deleteNode(Node *subroot) {
         app.curr = NULL;
 
         freeSubtree(subroot);
+
+        createSiblingNodeAfter(app.head);
+        app.head->next->prev = NULL;
+        app.topLine = app.head->next;
     }
     // subroot is the first child of it's parent, with next
     // *
