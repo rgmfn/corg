@@ -26,6 +26,9 @@ void parseInput() {
                 writeToFile(app.head->next, app.filename);
             }
             break;
+        case CalendarWindow:
+            parseCalendarInput();
+            break;
         default:
             app.focus = Document;
             break;
@@ -65,6 +68,9 @@ void parseDocumentInput() {
             break;
         case 't':
             openTodoWindow();
+            break;
+        case 'T':
+            openCalendarWindow();
             break;
         case 'r':
         case 'A':
@@ -171,6 +177,15 @@ void parseTodoInput() {
 
     app.focus = Document;
     app.popupWin = NULL;
+}
+
+void parseCalendarInput() {
+    switch (app.c) {
+        case ESCAPE:
+        case 'q':
+            app.focus = Document;
+            break;
+    }
 }
 
 /**

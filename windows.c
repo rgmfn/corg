@@ -1,5 +1,6 @@
 #include <curses.h>
 #include <string.h>
+#include <time.h>
 
 #include "fileio.h"
 #include "windows.h"
@@ -17,6 +18,10 @@ WINDOW* newCenteredWin(int height, int width) {
 
 WINDOW* getTodoWindow() {
     return newCenteredWin(12, 30);
+}
+
+WINDOW* getCalendarWindow() {
+    return newCenteredWin(CALENDAR_COLS, CALENDAR_LINES);
 }
 
 WINDOW* getInputWindow() {
@@ -45,6 +50,9 @@ void drawPopupWindow() {
             break;
         case FilenameWindow:
             drawInputWindow("Save to file");
+            break;
+        case CalendarWindow:
+            drawCalendarWindow();
             break;
         default:
             drawTempWindow();
@@ -158,6 +166,48 @@ void drawTodoWindow() {
     wrefresh(app.popupWin);
 }
 
+void drawCalendarWindow() {
+    // --- ROW1 ---
+    time_t t = time(NULL);
+    struct tm today = *localtime(&t);
+
+    char month[20];
+    sprintf(month, "%s", getMonthFromInt(today.tm_mon));
+    int monthLen = strnlen(month, sizeof(month))+5; // + " 20XX"
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    mvwprintw(app.popupWin, 1, CALENDAR_LINES/2-(monthLen+1)/2, month);
+
+    mvwprintw(app.popupWin, 1, CALENDAR_LINES/2+(monthLen-8)/2, "%d", (today.tm_year+1900));
+
+    // --- ROW2 ---
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    mvwprintw(app.popupWin, 2, 2, "Su                Sa");
+    wattrset(app.popupWin, COLOR_PAIR(CYAN));
+    mvwprintw(app.popupWin, 2, 5, "Mo Tu We Th Fr");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+
+    // --- ROW3-7 ---
+    struct tm firstOfMonth = getFirstOfMonth(today);
+    int offset = firstOfMonth.tm_wday;
+
+    for (int day = 1; day < 30; day++) {
+        int col = ((day-1 + offset)%7)*3+2;
+        int line = (day-1 + offset)/7+3;
+
+        mvwprintw(app.popupWin, line, col, "%d", day);
+    }
+    
+    TODO; // show current day selected
+    TODO; // call function for days in a month
+
+    // --- ROW8 ---
+    TODO; // print stuff about prev month, next month, today
+
+    box(app.popupWin, 0, 0);
+
+    wrefresh(app.popupWin);
+}
+
 void drawInputWindow(char *name) {
     box(app.popupWin, 0, 0);
 
@@ -182,6 +232,12 @@ void windentNTimes(WINDOW *win, int n) {
     for (int i = 0; i < n; i++) {
         waddstr(win, "  ");
     }
+}
+
+void openCalendarWindow() {
+    app.popupWin = getCalendarWindow();
+    refresh();
+    app.focus = CalendarWindow;
 }
 
 void openTodoWindow() {

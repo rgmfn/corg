@@ -6,6 +6,9 @@
 #define INPUT_COLS 53
 #define INPUT_LINES 3
 
+#define CALENDAR_COLS 12
+#define CALENDAR_LINES 24
+
 typedef enum AppFocus {
     Document,
     TodoWindow,
@@ -18,17 +21,20 @@ typedef enum AppFocus {
 WINDOW* newCenteredWin(int, int);
 
 WINDOW* getTodoWindow();
+WINDOW* getCalendarWindow();
 WINDOW* getInputWindow();
 
 void drawDocument();
 void drawPopupWindow();
 void drawTodoWindow();
+void drawCalendarWindow();
 void drawInputWindow(char*);
 void drawTempWindow();
 
 void windentNTimes(WINDOW*, int);
 
 void openTodoWindow();
+void openCalendarWindow();
 void openRenameWindow();
 void openDescriptionWindow();
 void openFilenameWindow();

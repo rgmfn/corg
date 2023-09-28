@@ -10,6 +10,7 @@
 void parseInput();
 void parseDocumentInput();
 void parseTodoInput();
+void parseCalendarInput();
 void parseInputInput(char*);
 
 #endif
