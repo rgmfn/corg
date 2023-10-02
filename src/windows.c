@@ -170,6 +170,8 @@ void drawCalendarWindow() {
     // --- ROW1 ---
     time_t t = time(NULL);
     struct tm today = *localtime(&t);
+    today.tm_mon = 9;
+    today.tm_mday = 16;
 
     char month[20];
     sprintf(month, "%s", getMonthFromInt(today.tm_mon));
@@ -189,19 +191,20 @@ void drawCalendarWindow() {
     // --- ROW3-7 ---
     struct tm firstOfMonth = getFirstOfMonth(today);
     int offset = firstOfMonth.tm_wday;
+    int daysInMonth = getDaysInMonth(today.tm_mon, today.tm_year+1900);
 
-    for (int day = 1; day < 30; day++) {
+    for (int day = 1; day <= daysInMonth; day++) {
         int col = ((day-1 + offset)%7)*3+2;
         int line = (day-1 + offset)/7+3;
 
         mvwprintw(app.popupWin, line, col, "%d", day);
     }
     
-    TODO; // show current day selected
-    TODO; // call function for days in a month
+    /* TODO; // show current day selected */
+    /* TODO; // call function for days in a month */
 
     // --- ROW8 ---
-    TODO; // print stuff about prev month, next month, today
+    /* TODO; // print stuff about prev month, next month, today */
 
     box(app.popupWin, 0, 0);
 

@@ -1,6 +1,8 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <stdbool.h>
+
 #define TODO todo(__LINE__, __FILE__)
 
 #define JANUARY 0
@@ -29,6 +31,9 @@ void errorAndExitf(char*, char*);
 void todo(int, char*);
 
 char* getMonthFromInt(int);
+char* getWeekdayFromInt(int);
 struct tm getFirstOfMonth(struct tm);
+int getDaysInMonth(int, int);
+bool isLeapYear(int);
 
 #endif
