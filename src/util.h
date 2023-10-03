@@ -5,6 +5,7 @@
 
 #define TODO todo(__LINE__, __FILE__)
 
+#define PAST_DECEMBER -1
 #define JANUARY 0
 #define FEBRUARY 1
 #define MARCH 2

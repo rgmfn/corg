@@ -5,6 +5,7 @@
 #include "node.h"
 #include "state.h"
 #include "windows.h"
+#include "util.h"
 
 void parseInput() {
     switch (app.focus) {
@@ -180,11 +181,61 @@ void parseTodoInput() {
 }
 
 void parseCalendarInput() {
+    int daysInCurrMonth = getDaysInMonth(calendar.curr.tm_mon, calendar.curr.tm_year);
+
     switch (app.c) {
         case ESCAPE:
         case 'q':
             app.focus = Document;
             break;
+        case 'j':
+            calendar.curr.tm_mday += 7;
+            break;
+        case 'k':
+        case KEY_UP:
+            calendar.curr.tm_mday -= 7;
+            break;
+        case 'h':
+            calendar.curr.tm_mday--;
+            calendar.curr.tm_wday--;
+            break;
+        case 'l':
+            calendar.curr.tm_mday++;
+            calendar.curr.tm_wday++;
+            break;
+        case '<':
+        case 'H':
+        case 'J':
+            calendar.curr.tm_mday -= daysInCurrMonth;
+            calendar.curr.tm_wday -= daysInCurrMonth;
+            break;
+        case '>':
+        case 'L':
+        case 'K':
+            calendar.curr.tm_mday += daysInCurrMonth;
+            calendar.curr.tm_wday += daysInCurrMonth;
+            break;
+        case 'd':
+            calendar.curr.tm_wday %= 7;
+            break;
+    }
+
+    calendar.curr.tm_wday %= 7;
+
+    if (calendar.curr.tm_mday > daysInCurrMonth) {
+        calendar.curr.tm_mday -= daysInCurrMonth;
+        calendar.curr.tm_mon++;
+    } else if (calendar.curr.tm_mday < 1) {
+        calendar.curr.tm_mday += getDaysInMonth(calendar.curr.tm_mon-1, calendar.curr.tm_year);
+        calendar.curr.tm_mon--;
+    }
+
+    if (calendar.curr.tm_mon > DECEMBER) {
+        calendar.curr.tm_year++;
+        calendar.curr.tm_mon = JANUARY;
+    } else if (calendar.curr.tm_mon < JANUARY) {
+        calendar.curr.tm_year--;
+        calendar.curr.tm_mon = DECEMBER;
     }
 }
 

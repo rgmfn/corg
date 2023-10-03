@@ -21,7 +21,7 @@ WINDOW* getTodoWindow() {
 }
 
 WINDOW* getCalendarWindow() {
-    return newCenteredWin(CALENDAR_COLS, CALENDAR_LINES);
+    return newCenteredWin(CALENDAR_LINES, CALENDAR_COLS);
 }
 
 WINDOW* getInputWindow() {
@@ -168,18 +168,17 @@ void drawTodoWindow() {
 
 void drawCalendarWindow() {
     // --- ROW1 ---
-    time_t t = time(NULL);
-    struct tm today = *localtime(&t);
-    today.tm_mon = 9;
-    today.tm_mday = 16;
-
     char month[20];
-    sprintf(month, "%s", getMonthFromInt(today.tm_mon));
+    sprintf(month, "%s", getMonthFromInt(calendar.curr.tm_mon));
     int monthLen = strnlen(month, sizeof(month))+5; // + " 20XX"
     wattrset(app.popupWin, COLOR_PAIR(GREEN));
-    mvwprintw(app.popupWin, 1, CALENDAR_LINES/2-(monthLen+1)/2, month);
+    mvwprintw(app.popupWin, 1, CALENDAR_COLS/2-(monthLen+1)/2, month);
 
-    mvwprintw(app.popupWin, 1, CALENDAR_LINES/2+(monthLen-8)/2, "%d", (today.tm_year+1900));
+    mvwprintw(app.popupWin, 1, CALENDAR_COLS/2+(monthLen-8)/2, "%d", (calendar.curr.tm_year+1900));
+
+    wattrset(app.popupWin, COLOR_PAIR(WHITE));
+    mvwprintw(app.popupWin, 1, 2, "<");
+    mvwprintw(app.popupWin, 1, CALENDAR_COLS-3, ">");
 
     // --- ROW2 ---
     wattrset(app.popupWin, COLOR_PAIR(GRAY));
@@ -189,19 +188,22 @@ void drawCalendarWindow() {
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     // --- ROW3-7 ---
-    struct tm firstOfMonth = getFirstOfMonth(today);
+    struct tm firstOfMonth = getFirstOfMonth(calendar.curr);
     int offset = firstOfMonth.tm_wday;
-    int daysInMonth = getDaysInMonth(today.tm_mon, today.tm_year+1900);
+    int daysInMonth = getDaysInMonth(calendar.curr.tm_mon, calendar.curr.tm_year+1900);
 
     for (int day = 1; day <= daysInMonth; day++) {
         int col = ((day-1 + offset)%7)*3+2;
         int line = (day-1 + offset)/7+3;
 
-        mvwprintw(app.popupWin, line, col, "%d", day);
+        if (day == calendar.curr.tm_mday) {
+            wattrset(app.popupWin, COLOR_PAIR(WHITE_SEL));
+        }
+
+        mvwprintw(app.popupWin, line, col, "%2d", day);
+
+        wattrset(app.popupWin, COLOR_PAIR(0));
     }
-    
-    /* TODO; // show current day selected */
-    /* TODO; // call function for days in a month */
 
     // --- ROW8 ---
     /* TODO; // print stuff about prev month, next month, today */
@@ -239,6 +241,10 @@ void windentNTimes(WINDOW *win, int n) {
 
 void openCalendarWindow() {
     app.popupWin = getCalendarWindow();
+
+    time_t t = time(NULL);
+    calendar.curr = *localtime(&t);
+
     refresh();
     app.focus = CalendarWindow;
 }

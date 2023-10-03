@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include <curses.h>
+#include <time.h>
 
 #include "node.h"
 #include "windows.h"
@@ -26,5 +27,10 @@ struct InputState {
     char string[INPUT_SIZE];
     int cursorPos;
 } input;
+
+struct CalendarState {
+     struct tm curr;
+     // haven't decided if 'curr' should mean current or cursor
+} calendar;
 
 #endif

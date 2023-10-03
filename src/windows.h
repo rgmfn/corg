@@ -6,8 +6,8 @@
 #define INPUT_COLS 53
 #define INPUT_LINES 3
 
-#define CALENDAR_COLS 12
-#define CALENDAR_LINES 24
+#define CALENDAR_COLS 24
+#define CALENDAR_LINES 12
 
 typedef enum AppFocus {
     Document,

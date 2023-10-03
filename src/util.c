@@ -98,6 +98,7 @@ int getDaysInMonth(int month, int year) {
         case AUGUST:
         case OCTOBER:
         case DECEMBER:
+        case PAST_DECEMBER:
             return 31;
         case APRIL:
         case JUNE:
