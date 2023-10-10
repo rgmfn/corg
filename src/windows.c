@@ -49,7 +49,7 @@ void drawPopupWindow() {
             drawInputWindow("Change description");
             break;
         case FilenameWindow:
-            drawInputWindow("Save to file");
+            drawInputWindow("Write to file");
             break;
         case CalendarWindow:
             drawCalendarWindow();
@@ -205,8 +205,17 @@ void drawCalendarWindow() {
         wattrset(app.popupWin, COLOR_PAIR(0));
     }
 
-    // --- ROW8 ---
-    /* TODO; // print stuff about prev month, next month, today */
+    mvwhline(app.popupWin, 8, 1, 0, CALENDAR_COLS);
+
+    wattrset(app.popupWin, COLOR_PAIR(BLUE));
+    mvwprintw(app.popupWin, 9, 5, "t");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "oday");
+
+    wattrset(app.popupWin, COLOR_PAIR(RED));
+    mvwprintw(app.popupWin, 9, 13, "d");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    wprintw(app.popupWin, "elete");
 
     box(app.popupWin, 0, 0);
 
@@ -242,8 +251,7 @@ void windentNTimes(WINDOW *win, int n) {
 void openCalendarWindow() {
     app.popupWin = getCalendarWindow();
 
-    time_t t = time(NULL);
-    calendar.curr = *localtime(&t);
+    calendar.curr = getToday();
 
     refresh();
     app.focus = CalendarWindow;
@@ -277,4 +285,9 @@ void openFilenameWindow() {
     strncpy(input.string, app.filename, sizeof(input.string));
     input.cursorPos = strnlen(input.string, sizeof(input.string));
     app.focus = FilenameWindow;
+}
+
+void closePopupWindow() {
+    app.focus = Document;
+    app.popupWin = NULL;
 }

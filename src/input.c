@@ -31,7 +31,7 @@ void parseInput() {
             parseCalendarInput();
             break;
         default:
-            app.focus = Document;
+            closePopupWindow();
             break;
     }
 }
@@ -101,14 +101,14 @@ void parseDocumentInput() {
         case '0':
             // debug
             break;
-        /* case 'w': */
+        /* case 'a': */
         /*     if (strnlen(app.filename, sizeof(app.filename)) > 0) { */
         /*         writeToFile(app.head->next, app.filename); */
         /*     } else { */
         /*         openFilenameWindow(); */
         /*     } */
         /*     break; */
-        case 'a':
+        case 'w':
             openFilenameWindow();
             break;
         case 'q':
@@ -176,8 +176,7 @@ void parseTodoInput() {
             break;
     }
 
-    app.focus = Document;
-    app.popupWin = NULL;
+    closePopupWindow();
 }
 
 void parseCalendarInput() {
@@ -186,7 +185,7 @@ void parseCalendarInput() {
     switch (app.c) {
         case ESCAPE:
         case 'q':
-            app.focus = Document;
+            closePopupWindow();
             break;
         case 'j':
             calendar.curr.tm_mday += 7;
@@ -216,11 +215,17 @@ void parseCalendarInput() {
             calendar.curr.tm_wday += daysInCurrMonth;
             break;
         case 'd':
-            calendar.curr.tm_wday %= 7;
+            app.curr->date = NULL;
+            closePopupWindow();
+            break;
+        case 't':
+            calendar.curr = getToday();
+            break;
+        case ENTER:
+            app.curr->date = &calendar.curr;
+            closePopupWindow();
             break;
     }
-
-    calendar.curr.tm_wday %= 7;
 
     if (calendar.curr.tm_mday > daysInCurrMonth) {
         calendar.curr.tm_mday -= daysInCurrMonth;
@@ -237,6 +242,8 @@ void parseCalendarInput() {
         calendar.curr.tm_year--;
         calendar.curr.tm_mon = DECEMBER;
     }
+
+    calendar.curr.tm_wday %= 7;
 }
 
 /**
@@ -248,10 +255,10 @@ void parseCalendarInput() {
 void parseInputInput(char *toReplace) {
     switch (app.c) {
         case ESCAPE:
-            app.focus = Document;
+            closePopupWindow();
             break;
         case ENTER:
-            app.focus = Document;
+            closePopupWindow();
             strncpy(toReplace, input.string, sizeof(app.curr->name));
             // TODO get change sizeof arg
             break;

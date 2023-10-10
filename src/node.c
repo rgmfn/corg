@@ -193,12 +193,20 @@ void printNode(Node* node, int depth) {
     attrset(COLOR_PAIR(0));
     if (!node->subTreeIsOpen) {
         addstr(" ...\n");
-    } else if (strnlen(node->description, sizeof(node->description)) > 0) {
-        addch('\n');
-        windentNTimes(stdscr, depth+1);
-        addstr(node->description);
-        addch('\n');
     } else {
+        if (node->date != NULL) {
+            attrset(COLOR_PAIR(YELLOW));
+            addch('\n');
+            windentNTimes(stdscr, depth+1);
+            addstr(tmToString(node->date));
+            attrset(COLOR_PAIR(0));
+        }
+        if (strnlen(node->description, sizeof(node->description)) > 0) {
+            addch('\n');
+            windentNTimes(stdscr, depth+1);
+            addstr(node->description);
+        }
+
         addch('\n');
     }
 }
@@ -223,10 +231,9 @@ void printPartialTree(Node *node, int nodesToDraw) {
         lines++;
     }
     
-    // TODO add to lines when dates are a thing
-    /* if (node->date != NULL) { */
-        /* lines++; */ 
-    /* } */
+    if (node->date != NULL) {
+        lines++; 
+    }
 
     printPartialTree(goDownVisualOrNull(node), nodesToDraw-lines);
 }
@@ -247,6 +254,10 @@ void freeSubtree(Node *node) {
 
     node->parent = NULL;
     node->prev = NULL;
+
+    if (node->date != NULL) {
+        free(node->date);
+    }
 
     free(node);
 }

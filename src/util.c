@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <curses.h>
@@ -79,6 +80,53 @@ char* getWeekdayFromInt(int weekdayNum) {
     }
 }
 
+int getIntFromWeekday(char* weekdayStr) {
+    const int STRING_SIZE = 3;
+    if (strncmp(weekdayStr, "Sun", STRING_SIZE)) {
+        return 0;
+    } else if (strncmp(weekdayStr, "Mon", STRING_SIZE)) {
+        return 1;
+    } else if (strncmp(weekdayStr, "Tue", STRING_SIZE)) {
+        return 2;
+    } else if (strncmp(weekdayStr, "Wed", STRING_SIZE)) {
+        return 3;
+    } else if (strncmp(weekdayStr, "Thur", STRING_SIZE)) {
+        return 4;
+    } else if (strncmp(weekdayStr, "Fri", STRING_SIZE)) {
+        return 5;
+    } else if (strncmp(weekdayStr, "Sat", STRING_SIZE)) {
+        return 6;
+    } else {
+        return -1;
+    }
+}
+
+char* getShortWeekdayFromInt(int weekdayNum) {
+    switch(weekdayNum) {
+        case SUNDAY:
+            return "Sun";
+        case MONDAY:
+            return "Mon";
+        case TUESDAY:
+            return "Tue";
+        case WEDNESDAY:
+            return "Wed";
+        case THURSDAY:
+            return "Thu";
+        case FRIDAY:
+            return "Fri";
+        case SATURDAY:
+            return "Sat";
+        default:
+            return "ERROR";
+    }
+}
+
+struct tm getToday() {
+    time_t t = time(NULL);
+    return *localtime(&t);
+}
+
 struct tm getFirstOfMonth(struct tm day) {
     day.tm_mday %= 7;
     day.tm_wday -= day.tm_mday - 1;
@@ -135,4 +183,13 @@ bool isLeapYear(int year) {
     }
 
     return false;
+}
+
+char* tmToString(struct tm* date) {
+    char *dateStr = (char*)malloc(17);
+
+    sprintf(dateStr, "<%d-%02d-%02d %s>", date->tm_year+1900, date->tm_mon+1,
+            date->tm_mday, getShortWeekdayFromInt(date->tm_wday));
+
+    return dateStr;
 }

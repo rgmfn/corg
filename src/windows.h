@@ -7,7 +7,7 @@
 #define INPUT_LINES 3
 
 #define CALENDAR_COLS 24
-#define CALENDAR_LINES 12
+#define CALENDAR_LINES 11
 
 typedef enum AppFocus {
     Document,
@@ -38,5 +38,7 @@ void openCalendarWindow();
 void openRenameWindow();
 void openDescriptionWindow();
 void openFilenameWindow();
+
+void closePopupWindow();
 
 #endif

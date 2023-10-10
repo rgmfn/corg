@@ -2,6 +2,7 @@
 #define NODE_H
 
 #include <stdbool.h>
+#include <time.h>
 
 typedef enum NodeType {
     Head,
@@ -29,6 +30,7 @@ typedef struct Node {
 
     char name[50];
     char description[100];
+    struct tm* date;
 
     bool subTreeIsOpen;
 

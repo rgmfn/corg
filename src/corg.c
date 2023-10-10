@@ -9,6 +9,7 @@
 #include "state.h"
 #include "windows.h"
 #include "input.h"
+#include "util.h"
 
 int main(int argc, char *argv[]) {
     initscr();
@@ -31,6 +32,8 @@ int main(int argc, char *argv[]) {
     app.curr = head->next;
     app.focus = Document;
     app.topLine = head->next;
+    
+    calendar.curr = getToday();
 
     input.cursorPos = 0;
     strncpy(input.string, "", sizeof(input.string));

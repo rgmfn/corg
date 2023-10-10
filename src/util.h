@@ -33,8 +33,12 @@ void todo(int, char*);
 
 char* getMonthFromInt(int);
 char* getWeekdayFromInt(int);
+int getIntFromWeekday(char*);
+struct tm getToday();
 struct tm getFirstOfMonth(struct tm);
 int getDaysInMonth(int, int);
 bool isLeapYear(int);
+
+char* tmToString(struct tm*);
 
 #endif
