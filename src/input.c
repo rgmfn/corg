@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 
 #include "fileio.h"
 #include "input.h"
@@ -222,7 +223,11 @@ void parseCalendarInput() {
             calendar.curr = getToday();
             break;
         case ENTER:
-            app.curr->date = &calendar.curr;
+            app.curr->date = malloc(sizeof(struct tm));
+            app.curr->date->tm_year = calendar.curr.tm_year;
+            app.curr->date->tm_mon = calendar.curr.tm_mon;
+            app.curr->date->tm_mday = calendar.curr.tm_mday;
+            app.curr->date->tm_wday = calendar.curr.tm_wday;
             closePopupWindow();
             break;
     }
@@ -243,6 +248,9 @@ void parseCalendarInput() {
         calendar.curr.tm_mon = DECEMBER;
     }
 
+    calendar.curr.tm_wday %= 7;
+    // vvv needed for when wday is negative
+    calendar.curr.tm_wday += 7;
     calendar.curr.tm_wday %= 7;
 }
 

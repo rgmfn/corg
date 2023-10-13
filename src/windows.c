@@ -251,7 +251,11 @@ void windentNTimes(WINDOW *win, int n) {
 void openCalendarWindow() {
     app.popupWin = getCalendarWindow();
 
-    calendar.curr = getToday();
+    if (app.curr->date != NULL) {
+        calendar.curr = *app.curr->date;
+    } else {
+        calendar.curr = getToday();
+    }
 
     refresh();
     app.focus = CalendarWindow;
