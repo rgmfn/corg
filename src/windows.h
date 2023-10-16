@@ -16,6 +16,7 @@ typedef enum AppFocus {
     RenameWindow,
     DescriptionWindow,
     FilenameWindow,
+    ErrorWindow,
 } AppFocus;
 
 WINDOW* newCenteredWin(int, int);
@@ -23,11 +24,13 @@ WINDOW* newCenteredWin(int, int);
 WINDOW* getTodoWindow();
 WINDOW* getCalendarWindow();
 WINDOW* getInputWindow();
+WINDOW* getErrorWindow();
 
 void drawDocument();
 void drawPopupWindow();
 void drawTodoWindow();
 void drawCalendarWindow();
+void drawErrorWindow();
 void drawInputWindow(char*);
 void drawTempWindow();
 
@@ -38,6 +41,7 @@ void openCalendarWindow();
 void openRenameWindow();
 void openDescriptionWindow();
 void openFilenameWindow();
+void openErrorWindow();
 
 void closePopupWindow();
 

@@ -28,6 +28,11 @@ WINDOW* getInputWindow() {
     return newCenteredWin(INPUT_LINES, INPUT_COLS);
 }
 
+WINDOW* getErrorWindow() {
+    // TODO change const
+    return newCenteredWin(5, INPUT_COLS);
+}
+
 void drawDocument() {
     move(0, 0);
     /* printTree(app.head, 0); */
@@ -53,6 +58,9 @@ void drawPopupWindow() {
             break;
         case CalendarWindow:
             drawCalendarWindow();
+            break;
+        case ErrorWindow:
+            drawErrorWindow();
             break;
         default:
             drawTempWindow();
@@ -222,6 +230,18 @@ void drawCalendarWindow() {
     wrefresh(app.popupWin);
 }
 
+void drawErrorWindow() {
+    box(app.popupWin, 0, 0);
+
+    wattrset(app.popupWin, COLOR_PAIR(RED));
+    mvwprintw(app.popupWin, 1, 1, "ERROR:");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 1, 8, "%s", app.errbuf);
+    mvwprintw(app.popupWin, 3, INPUT_COLS/2-8, "Press any key...");
+
+    wrefresh(app.popupWin);
+}
+
 void drawInputWindow(char *name) {
     box(app.popupWin, 0, 0);
 
@@ -289,6 +309,12 @@ void openFilenameWindow() {
     strncpy(input.string, app.filename, sizeof(input.string));
     input.cursorPos = strnlen(input.string, sizeof(input.string));
     app.focus = FilenameWindow;
+}
+
+void openErrorWindow() {
+    app.popupWin = getErrorWindow();
+    refresh();
+    app.focus = ErrorWindow;
 }
 
 void closePopupWindow() {

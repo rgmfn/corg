@@ -17,6 +17,7 @@ struct AppState {
     WINDOW *popupWin;
 
     char filename[50];
+    char errbuf[100];
 
     int c;
 

@@ -124,63 +124,75 @@ void parseDocumentInput() {
 }
 
 void parseTodoInput() {
+    NodeType newType = app.curr->type;
+
     switch (app.c) {
         case 't':
-            app.curr->type = Todo;
+            newType = Todo;
             break;
         case 'p':
-            app.curr->type = Proj;
+            newType = Proj;
             break;
         case 'r':
-            app.curr->type = Loop;
+            newType = Loop;
             break;
         case 's':
-            app.curr->type = Strt;
+            newType = Strt;
             break;
         case 'w':
-            app.curr->type = Wait;
+            newType = Wait;
             break;
         case 'h':
-            app.curr->type = Hold;
+            newType = Hold;
             break;
         case 'i':
-            app.curr->type = Idea;
+            newType = Idea;
             break;
         case 'd':
-            app.curr->type = Done;
+            newType = Done;
             break;
         case 'k':
-            app.curr->type = Kill;
+            newType = Kill;
             break;
         case 'T':
-            app.curr->type = Unchecked;
+            newType = Unchecked;
             break;
         case 'S':
-            app.curr->type = Started;
+            newType = Started;
             break;
         case 'W':
-            app.curr->type = Waiting;
+            newType = Waiting;
             break;
         case 'D':
-            app.curr->type = Checked;
+            newType = Checked;
             break;
         case 'o':
-            app.curr->type = Okay;
+            newType = Okay;
             break;
         case 'y':
-            app.curr->type = Yes;
+            newType = Yes;
             break;
         case 'n':
-            app.curr->type = No;
+            newType = No;
             break;
         case 'N':
-            app.curr->type = None;
+            newType = None;
             break;
         default:
             break;
     }
 
-    closePopupWindow();
+    int numAnyTodoChildren = countAnyTodo(app.curr->child);
+    int numDoneTodoChildren = countDoneTodo(app.curr->child);
+    bool allChildrenAreFinished = numDoneTodoChildren == numAnyTodoChildren;
+
+    if (allChildrenAreFinished || !isFinishedType(newType)) {
+        app.curr->type = newType;
+        closePopupWindow();
+    } else {
+        sprintf(app.errbuf, "Not all children are in a completed state.");
+        openErrorWindow();
+    }
 }
 
 void parseCalendarInput() {
