@@ -12,15 +12,18 @@
 #define BUF_SIZE 1000
 #define ERRBUFF_SIZE 100
 
-#define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?(([[:alpha:]]+[[:blank:]]+)*[[:alnum:]]+)\n$"
+#define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?" \
+                "(([[:alpha:]]+[[:blank:]]+)*[[:alnum:]]+)([[:blank:]]+\\[[[:digit:]]+\\/[[:digit:]]+\\])?\n$"
 /*
  * group 0: whole string
  * group 1: [****]
  * group 2: [STRT ]
  * group 3: [STRT]
- * group 4: [Get Wings]
+ * group 4: [Get some wings]
+ * group 5: [some ] // captures last (\w\h)*
+ * group 6: [ [3/4]]
  */
-#define HEADING_GROUPS 4
+#define HEADING_GROUPS 7
 
 #define DESCRIPTION "^(([[:alnum:]]+[[:blank:]]+)*[[:alnum:]]+)\n$"
 #define DESCRIPTION_GROUPS 1
@@ -28,7 +31,7 @@
 #define TIMESTAMP "^<([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
 #define TIMESTAMP_GROUPS 4
 
-#define MAX_GROUPS 5
+#define MAX_GROUPS 7
 
 bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
     char errbuf[ERRBUFF_SIZE];
@@ -121,8 +124,17 @@ Node* loadFromFile(char* filename) {
             node->type = getTypeFromString(typeStr);
 
             char starStr[20];
+            /* TODO; // will break past 20 indents */
             sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
             int nodeDepth = strnlen(starStr, sizeof(starStr));
+
+            char counterStr[10];
+            sprintf(counterStr, "%.*s", (int)(rm[6].rm_eo - rm[6].rm_so), buffer + rm[6].rm_so);
+            if (strnlen(counterStr, sizeof(counterStr)) > 0) {
+                node->hasCounter = true;
+            } else {
+                node->hasCounter = false;
+            }
 
             curr = placeNode(depth, nodeDepth, curr, node);
             depth = getStarDepth(curr);

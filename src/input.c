@@ -99,6 +99,9 @@ void parseDocumentInput() {
         case '<':
             tryPopNodeIn(app.curr);
             break;
+        case '#':
+            toggleCounter(app.curr);
+            break;
         case '0':
             // debug
             break;

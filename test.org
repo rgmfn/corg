@@ -1,4 +1,4 @@
-* Tasks
+* Tasks [0/1]
 This is a list of tasks
 ** TODO Wings
 *** PROJ Schedule
@@ -6,7 +6,7 @@ This is a list of tasks
 **** STRT Pickup
 Pickup the wings with hands
 **** WAIT Chew
-*** WAIT Drive home
+*** WAIT Drive to home
 ** Write Program
 *** [X] Open computer
 *** [X] Press on

@@ -160,10 +160,25 @@ NodeType getTypeFromString(char *string) {
     return Head;
 }
 
+bool isFinishedType(NodeType type) {
+    switch (type) {
+        case Done:
+        case Kill:
+        case Checked:
+        case Okay:
+        case Yes:
+        case No:
+            return true;
+        default:
+            return false;
+    }
+}
+
 void printNode(Node* node, int depth) {
     if (node->type == Head) return;
 
     int textColor = getDepthColor(depth);
+    int offset = 0;
 
     int typeColor = getTypeColor(node->type);
     char* typeStr = getTypeStr(node->type);
@@ -176,9 +191,10 @@ void printNode(Node* node, int depth) {
     }
 
     if (node == app.curr) {
-        textColor += 15;
-        typeColor += 15;
+        offset = 15;
     }
+    textColor += offset;
+    typeColor += offset;
 
     attrset(COLOR_PAIR(textColor));
     addch(bulletChar);
@@ -189,6 +205,18 @@ void printNode(Node* node, int depth) {
 
     attrset(COLOR_PAIR(textColor));
     addstr(node->name);
+
+    if (node->hasCounter) {
+        int numAnyTodo = countAnyTodo(node->child);
+        int numDoneTodo = countDoneTodo(node->child);
+
+        if (numAnyTodo == numDoneTodo) {
+            attrset(COLOR_PAIR(GRAY+offset));
+        } else {
+            attrset(COLOR_PAIR(GREEN+offset));
+        }
+        printw(" [%d/%d]", numDoneTodo, numAnyTodo);
+    }
 
     attrset(COLOR_PAIR(0));
     if (!node->subTreeIsOpen) {
@@ -699,6 +727,42 @@ void swapNodeAndPrev(Node *node) {
     if (prevParent != NULL && prevParent->child == prev) {
         prevParent->child = node;
     }
+}
+
+void toggleCounter(Node *node) {
+    node->hasCounter = !node->hasCounter;
+}
+
+/**
+ * Counts the number of nodes with any todo status. Searches current node
+ *  and any nodes past it (node->next, node->next->next, etc.).
+ */
+int countAnyTodo(Node *node) {
+    if (node == NULL) {
+        return 0;
+    }
+
+    if (node->type != None && node->type != Head) {
+        return 1 + countAnyTodo(node->next);
+    }
+
+    return countAnyTodo(node->next);
+}
+
+/**
+ * Counts the number of nodes with any 'completed' status. Searches current
+ *  node and any nodes past it (node->next, node->next->next, etc.).
+ */
+int countDoneTodo(Node *node) {
+    if (node == NULL) {
+        return 0;
+    }
+
+    if (isFinishedType(node->type)) {
+        return 1 + countDoneTodo(node->next);
+    }
+
+    return countDoneTodo(node->next);
 }
 
 NodeType cycleNodeType(NodeType type) {

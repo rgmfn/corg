@@ -28,6 +28,7 @@
 #define SATURDAY 6
 
 void errorAndExit(char*);
+void errorAndExitInt(int);
 void errorAndExitf(char*, char*);
 void todo(int, char*);
 

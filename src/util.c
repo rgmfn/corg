@@ -12,6 +12,12 @@ void errorAndExit(char *msg) {
     exit(EXIT_FAILURE);
 }
 
+void errorAndExitInt(int num) {
+    endwin();
+    printf("ERROR: %d\n", num);
+    exit(EXIT_FAILURE);
+}
+
 void errorAndExitf(char *msg, char *detail) {
     endwin();
     printf("ERROR: [%s] %s\n", detail, msg);

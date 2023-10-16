@@ -32,6 +32,8 @@ typedef struct Node {
     char description[100];
     struct tm* date;
 
+    bool hasCounter;
+
     bool subTreeIsOpen;
 
     struct Node* next;
@@ -42,6 +44,7 @@ typedef struct Node {
 
 char* getTypeStr(NodeType);
 NodeType getTypeFromString(char*);
+bool isFinishedType(NodeType);
 
 void printNode(Node*, int);
 void printTree(Node*, int);
@@ -76,6 +79,10 @@ void tryPopNodeIn(Node*);
 
 void swapNodeAndNext(Node*);
 void swapNodeAndPrev(Node*);
+
+void toggleCounter(Node*);
+int countAnyTodo(Node*);
+int countDoneTodo(Node*);
 
 NodeType cycleNodeType(NodeType);
 #endif
