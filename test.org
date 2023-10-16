@@ -1,4 +1,4 @@
-* Tasks [0/1]
+* Tasks
 This is a list of tasks
 ** TODO Wings
 *** PROJ Schedule

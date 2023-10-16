@@ -13,7 +13,7 @@
 #define ERRBUFF_SIZE 100
 
 #define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?" \
-                "(([[:alpha:]]+[[:blank:]]+)*[[:alnum:]]+)([[:blank:]]+\\[[[:digit:]]+\\/[[:digit:]]+\\])?\n$"
+                "((.+[[:blank:]]+)*?.+)([[:blank:]]+\\[[[:digit:]]+\\/[[:digit:]]+\\])?\n$"
 /*
  * group 0: whole string
  * group 1: [****]
@@ -71,7 +71,7 @@ Node* loadFromFile(char* filename) {
     regmatch_t rm[MAX_GROUPS];
 
     regex_t heading;
-    if ((error = regcomp(&heading, HEADING, REG_EXTENDED)) != 0) {
+    if ((error = regcomp(&heading, HEADING, REG_EXTENDED|REG_ENHANCED)) != 0) {
         regerror(error, &heading, errbuf, ERRBUFF_SIZE-1);
         errorAndExitf(errbuf, "heading regex");
     }
