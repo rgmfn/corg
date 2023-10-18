@@ -50,9 +50,6 @@ Node* runToBack(Node *node) {
     return runToBack(node->next);
 }
 
-/**
- * TODO make runToBackAnd(Node *node, void (*fun)()) function?
- */
 Node* runToBackAndMakeParent(Node *node, Node *newParent) {
     if (node->next == NULL) {
         node->parent = newParent;
@@ -76,8 +73,7 @@ Node* runToFront(Node *node) {
 // === end of private methods === }}}
 
 char* getTypeStr(NodeType type) {
-    // TODO better solution than space after type?
-    // so that space doesn't appear for no type
+    // space after is baked in so that space doesn't appear for no type
     switch (type) {
         case None:
             return "";
@@ -437,7 +433,9 @@ int getVisualDistance(Node* node, Node *bottom) {
         lines++;
     }
 
-    // TODO add to lines when dates are a thing
+    if (node->date != NULL) {
+        lines++;
+    }
 
     return lines + getVisualDistance(goDownVisualOrNull(node), bottom);
 }

@@ -296,7 +296,7 @@ void parseInputInput(char *toReplace) {
         case ENTER:
             closePopupWindow();
             strncpy(toReplace, input.string, sizeof(app.curr->name));
-            // TODO get change sizeof arg
+            /* TODO; // get change sizeof arg */
             break;
         case BACKSPACE:
             if (strnlen(input.string, INPUT_SIZE) > 0) {

@@ -2,8 +2,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "fileio.h"
 #include "windows.h"
+#include "fileio.h"
 #include "node.h"
 #include "state.h"
 #include "colors.h"
@@ -29,8 +29,7 @@ WINDOW* getInputWindow() {
 }
 
 WINDOW* getErrorWindow() {
-    // TODO change const
-    return newCenteredWin(5, INPUT_COLS);
+    return newCenteredWin(ERROR_LINES, ERROR_COLS);
 }
 
 void drawDocument() {

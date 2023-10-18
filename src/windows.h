@@ -7,6 +7,9 @@
 #define INPUT_COLS 53
 #define INPUT_LINES 3
 
+#define ERROR_COLS 53
+#define ERROR_LINES 5
+
 #define CALENDAR_COLS 24
 #define CALENDAR_LINES 11
 
