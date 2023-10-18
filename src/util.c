@@ -191,6 +191,10 @@ bool isLeapYear(int year) {
     return false;
 }
 
+/**
+ * WARNING: MUST FREE STRING AFTER USING
+ * TODO; better way to do this?
+ */
 char* tmToString(struct tm* date) {
     char *dateStr = (char*)malloc(17);
 

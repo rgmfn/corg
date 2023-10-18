@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <curses.h>
 #include <regex.h>
+#include <time.h>
 
 #include "fileio.h"
 #include "node.h"
@@ -204,6 +205,12 @@ Node* loadFromFile(char* filename) {
 
     fclose(fp);
 
+    regfree(&heading);
+    regfree(&description);
+    regfree(&timestamp);
+    regfree(&deadline);
+    regfree(&scheduled);
+
     return head;
 }
 
@@ -231,7 +238,9 @@ void printNodeToFile(Node *node, FILE *fp) {
                 break;
         }
 
-        fprintf(fp, "%s\n", tmToString(node->date));
+        char *dateStr= tmToString(node->date);
+        fprintf(fp, "%s\n", dateStr);
+        free(dateStr);
     }
 
     if (strnlen(node->description, sizeof(node->description)) > 0) {
