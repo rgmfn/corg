@@ -28,8 +28,14 @@ void parseInput() {
                 writeToFile(app.head->next, app.filename);
             }
             break;
-        case CalendarWindow:
-            parseCalendarInput();
+        case TimestampWindow:
+            parseCalendarInput(Timestamp);
+            break;
+        case DeadlineWindow:
+            parseCalendarInput(Deadline);
+            break;
+        case ScheduledWindow:
+            parseCalendarInput(Scheduled);
             break;
         default:
             closePopupWindow();
@@ -72,7 +78,13 @@ void parseDocumentInput() {
             openTodoWindow();
             break;
         case 'T':
-            openCalendarWindow();
+            openCalendarWindow(TimestampWindow);
+            break;
+        case 'D':
+            openCalendarWindow(DeadlineWindow);
+            break;
+        case 'S':
+            openCalendarWindow(ScheduledWindow);
             break;
         case 'r':
         case 'A':
@@ -195,7 +207,7 @@ void parseTodoInput() {
     }
 }
 
-void parseCalendarInput() {
+void parseCalendarInput(DateType dateType) {
     int daysInCurrMonth = getDaysInMonth(calendar.curr.tm_mon, calendar.curr.tm_year);
 
     switch (app.c) {
@@ -243,6 +255,7 @@ void parseCalendarInput() {
             app.curr->date->tm_mon = calendar.curr.tm_mon;
             app.curr->date->tm_mday = calendar.curr.tm_mday;
             app.curr->date->tm_wday = calendar.curr.tm_wday;
+            app.curr->dateType = dateType;
             closePopupWindow();
             break;
     }

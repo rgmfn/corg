@@ -2,6 +2,7 @@
 This is a list of tasks
 ** TODO Wings
 *** PROJ Schedule
+SCHEDULED: <2022-04-07 Sun>
 *** LOOP Eat
 **** STRT Pickup
 Pickup the wings with hands

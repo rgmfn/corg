@@ -56,7 +56,9 @@ void drawPopupWindow() {
         case FilenameWindow:
             drawInputWindow("Write to file");
             break;
-        case CalendarWindow:
+        case DeadlineWindow:
+        case TimestampWindow:
+        case ScheduledWindow:
             drawCalendarWindow();
             break;
         case ErrorWindow:
@@ -268,7 +270,7 @@ void windentNTimes(WINDOW *win, int n) {
     }
 }
 
-void openCalendarWindow() {
+void openCalendarWindow(AppFocus newFocus) {
     app.popupWin = getCalendarWindow();
 
     if (app.curr->date != NULL) {
@@ -278,7 +280,7 @@ void openCalendarWindow() {
     }
 
     refresh();
-    app.focus = CalendarWindow;
+    app.focus = newFocus;
 }
 
 void openTodoWindow() {

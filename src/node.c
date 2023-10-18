@@ -221,22 +221,66 @@ void printNode(Node* node, int depth) {
     attrset(COLOR_PAIR(0));
     if (!node->subTreeIsOpen) {
         addstr(" ...\n");
-    } else {
-        if (node->date != NULL) {
-            attrset(COLOR_PAIR(YELLOW));
-            addch('\n');
-            windentNTimes(stdscr, depth+1);
-            addstr(tmToString(node->date));
-            attrset(COLOR_PAIR(0));
-        }
-        if (strnlen(node->description, sizeof(node->description)) > 0) {
-            addch('\n');
-            windentNTimes(stdscr, depth+1);
-            addstr(node->description);
+        return;
+    }
+
+    if (node->date != NULL) {
+        addch('\n');
+        windentNTimes(stdscr, depth+1);
+
+        switch (node->dateType) {
+            case Timestamp:
+                attrset(COLOR_PAIR(YELLOW));
+                addstr(tmToString(node->date));
+                break;
+            case Deadline:
+                attrset(COLOR_PAIR(GRAY));
+                addstr("DEADLINE: ");
+                attrset(COLOR_PAIR(YELLOW));
+                addstr(tmToString(node->date));
+                break;
+            case Scheduled:
+                attrset(COLOR_PAIR(GRAY));
+                addstr("SCHEDULED: ");
+                attrset(COLOR_PAIR(YELLOW));
+                addstr(tmToString(node->date));
+                break;
         }
 
-        addch('\n');
+        attrset(COLOR_PAIR(0));
     }
+
+    /* if (node->date != NULL && node->dateType == Timestamp) { */
+    /*     addch('\n'); */
+    /*     windentNTimes(stdscr, depth+1); */
+    /*     attrset(COLOR_PAIR(YELLOW)); */
+    /*     addstr(tmToString(node->date)); */
+    /*     attrset(COLOR_PAIR(0)); */
+    /* } else if (node->date != NULL && node->dateType == Deadline) { */
+    /*     addch('\n'); */
+    /*     windentNTimes(stdscr, depth+1); */
+    /*     attrset(COLOR_PAIR(GRAY)); */
+    /*     addstr("DEADLINE: "); */
+    /*     attrset(COLOR_PAIR(YELLOW)); */
+    /*     addstr(tmToString(node->date)); */
+    /*     attrset(COLOR_PAIR(0)); */
+    /* } else if (node->date != NULL && node->dateType == Deadline) { */
+    /*     addch('\n'); */
+    /*     windentNTimes(stdscr, depth+1); */
+    /*     attrset(COLOR_PAIR(GRAY)); */
+    /*     addstr("SCHEDULED: "); */
+    /*     attrset(COLOR_PAIR(YELLOW)); */
+    /*     addstr(tmToString(node->date)); */
+    /*     attrset(COLOR_PAIR(0)); */
+    /* } */
+
+    if (strnlen(node->description, sizeof(node->description)) > 0) {
+        addch('\n');
+        windentNTimes(stdscr, depth+1);
+        addstr(node->description);
+    }
+
+    addch('\n');
 }
 
 void printTree(Node *node, int depth) {

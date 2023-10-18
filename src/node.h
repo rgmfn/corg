@@ -1,6 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "util.h"
 #include <stdbool.h>
 #include <time.h>
 
@@ -31,6 +32,7 @@ typedef struct Node {
     char name[50];
     char description[100];
     struct tm* date;
+    DateType dateType;
 
     bool hasCounter;
 

@@ -31,6 +31,12 @@
 #define TIMESTAMP "^<([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
 #define TIMESTAMP_GROUPS 4
 
+#define DEADLINE "^DEADLINE: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
+#define DEADLINE_GROUPS 4
+
+#define SCHEDULED "^SCHEDULED: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
+#define SCHEDULED_GROUPS 4
+
 #define MAX_GROUPS 7
 
 bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
@@ -64,6 +70,32 @@ Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
     return node;
 }
 
+struct tm* getTmFromRegex(char *buffer, regmatch_t *rm) {
+    char yearStr[5];
+    sprintf(yearStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
+    int year = atoi(yearStr);
+
+    char monStr[3];
+    sprintf(monStr, "%.*s", (int)(rm[2].rm_eo - rm[2].rm_so), buffer + rm[2].rm_so);
+    int month = atoi(monStr);
+
+    char dayStr[3];
+    sprintf(dayStr, "%.*s", (int)(rm[3].rm_eo - rm[3].rm_so), buffer + rm[3].rm_so);
+    int day = atoi(dayStr);
+
+    char wdayStr[4];
+    sprintf(wdayStr, "%.*s", (int)(rm[4].rm_eo - rm[4].rm_so), buffer + rm[4].rm_so);
+    int wday = getIntFromWeekday(wdayStr);
+
+    struct tm *timestamp = malloc(sizeof(struct tm));
+    timestamp->tm_year = year-1900;
+    timestamp->tm_mon = month-1; // 0-indexed
+    timestamp->tm_mday = day;
+    timestamp->tm_wday = wday;
+
+    return timestamp;
+}
+
 Node* loadFromFile(char* filename) {
     int error;
     char errbuf[ERRBUFF_SIZE];
@@ -86,6 +118,18 @@ Node* loadFromFile(char* filename) {
     if ((error = regcomp(&timestamp, TIMESTAMP, REG_EXTENDED)) != 0) {
         regerror(error, &timestamp, errbuf, ERRBUFF_SIZE-1);
         errorAndExitf(errbuf, "timestamp regex");
+    }
+
+    regex_t deadline;
+    if ((error = regcomp(&deadline, DEADLINE, REG_EXTENDED)) != 0) {
+        regerror(error, &deadline, errbuf, ERRBUFF_SIZE-1);
+        errorAndExitf(errbuf, "deadline regex");
+    }
+
+    regex_t scheduled;
+    if ((error = regcomp(&scheduled, SCHEDULED, REG_EXTENDED)) != 0) {
+        regerror(error, &scheduled, errbuf, ERRBUFF_SIZE-1);
+        errorAndExitf(errbuf, "scheduled regex");
     }
 
     Node *head = malloc(sizeof(Node));
@@ -139,29 +183,14 @@ Node* loadFromFile(char* filename) {
             curr = placeNode(depth, nodeDepth, curr, node);
             depth = getStarDepth(curr);
         } else if (isMatch(&timestamp, buffer, rm)) {
-            char yearStr[5];
-            sprintf(yearStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
-            int year = atoi(yearStr);
-
-            char monStr[3];
-            sprintf(monStr, "%.*s", (int)(rm[2].rm_eo - rm[2].rm_so), buffer + rm[2].rm_so);
-            int month = atoi(monStr);
-
-            char dayStr[3];
-            sprintf(dayStr, "%.*s", (int)(rm[3].rm_eo - rm[3].rm_so), buffer + rm[3].rm_so);
-            int day = atoi(dayStr);
-
-            char wdayStr[4];
-            sprintf(wdayStr, "%.*s", (int)(rm[4].rm_eo - rm[4].rm_so), buffer + rm[4].rm_so);
-            int wday = getIntFromWeekday(wdayStr);
-
-            struct tm *timestamp = malloc(sizeof(struct tm));
-            timestamp->tm_year = year-1900;
-            timestamp->tm_mon = month-1; // 0-indexed
-            timestamp->tm_mday = day;
-            timestamp->tm_wday = wday;
-
-            curr->date = timestamp;
+            curr->date = getTmFromRegex(buffer, rm);
+            curr->dateType = Timestamp;
+        } else if (isMatch(&deadline, buffer, rm)) {
+            curr->date = getTmFromRegex(buffer, rm);
+            curr->dateType = Deadline;
+        } else if (isMatch(&scheduled, buffer, rm)) {
+            curr->date = getTmFromRegex(buffer, rm);
+            curr->dateType = Scheduled;
         }
         // DESCRIPTION MUST GO AT END, WILL CAPTURE ANYTHING
         else if (isMatch(&description, buffer, rm)) {
@@ -191,6 +220,17 @@ void printNodeToFile(Node *node, FILE *fp) {
     fprintf(fp, " %s%s\n", getTypeStr(node->type), node->name);
 
     if (node->date != NULL) {
+        switch (node->dateType) {
+            case Deadline:
+                fprintf(fp, "DEADLINE: ");
+                break;
+            case Scheduled:
+                fprintf(fp, "SCHEDULED: ");
+                break;
+            case Timestamp:
+                break;
+        }
+
         fprintf(fp, "%s\n", tmToString(node->date));
     }
 

@@ -2,6 +2,7 @@
 #define WINDOWS_H
 
 #include "curses.h"
+#include "util.h"
 
 #define INPUT_COLS 53
 #define INPUT_LINES 3
@@ -12,7 +13,9 @@
 typedef enum AppFocus {
     Document,
     TodoWindow,
-    CalendarWindow,
+    TimestampWindow,
+    DeadlineWindow,
+    ScheduledWindow,
     RenameWindow,
     DescriptionWindow,
     FilenameWindow,
@@ -37,7 +40,7 @@ void drawTempWindow();
 void windentNTimes(WINDOW*, int);
 
 void openTodoWindow();
-void openCalendarWindow();
+void openCalendarWindow(AppFocus);
 void openRenameWindow();
 void openDescriptionWindow();
 void openFilenameWindow();

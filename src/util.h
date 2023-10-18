@@ -27,6 +27,12 @@
 #define FRIDAY 5
 #define SATURDAY 6
 
+typedef enum DateType {
+    Timestamp,
+    Deadline,
+    Scheduled,
+} DateType;
+
 void errorAndExit(char*);
 void errorAndExitInt(int);
 void errorAndExitf(char*, char*);
