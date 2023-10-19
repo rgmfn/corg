@@ -235,10 +235,13 @@ void drawErrorWindow() {
     box(app.popupWin, 0, 0);
 
     wattrset(app.popupWin, COLOR_PAIR(RED));
-    mvwprintw(app.popupWin, 1, 1, "ERROR:");
+    mvwprintw(app.popupWin, 0, 1, "ERROR");
     wattrset(app.popupWin, COLOR_PAIR(0));
-    mvwprintw(app.popupWin, 1, 8, "%s", app.errbuf);
-    mvwprintw(app.popupWin, 3, INPUT_COLS/2-8, "Press any key...");
+    mvwprintw(app.popupWin, 1, 1, "%s", app.errbuf);
+
+    /* wattrset(app.popupWin, COLOR_PAIR(CYAN)); */
+    /* mvwprintw(app.popupWin, ERROR_LINES-1, ERROR_COLS-6, "[ESC]"); */
+    /* wattrset(app.popupWin, COLOR_PAIR(0)); */
 
     wrefresh(app.popupWin);
 }
@@ -253,6 +256,10 @@ void drawInputWindow(char *name) {
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     mvwaddstr(app.popupWin, 0, 1, name);
+
+    /* wattrset(app.popupWin, COLOR_PAIR(CYAN)); */
+    /* mvwprintw(app.popupWin, INPUT_LINES-1, INPUT_COLS-8, "[ENTER]"); */
+    /* wattrset(app.popupWin, COLOR_PAIR(0)); */
 
     wrefresh(app.popupWin);
 }
@@ -312,7 +319,9 @@ void openFilenameWindow() {
     app.focus = FilenameWindow;
 }
 
-void openErrorWindow() {
+void openErrorWindow(const char *errmsg) {
+    sprintf(app.errbuf, "%s", errmsg);
+
     app.popupWin = getErrorWindow();
     refresh();
     app.focus = ErrorWindow;

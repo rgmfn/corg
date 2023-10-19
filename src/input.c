@@ -24,9 +24,12 @@ void parseInput() {
             break;
         case FilenameWindow:
             parseInputInput(app.filename);
-            if (app.c == ENTER) {
+            if (app.c != ENTER)
+                break;
+            else if (strnlen(app.filename, sizeof(app.filename)) > 0)
                 writeToFile(app.head->next, app.filename);
-            }
+            else
+                openErrorWindow("Cannot write to a blank file.");
             break;
         case TimestampWindow:
             parseCalendarInput(Timestamp);
@@ -202,8 +205,7 @@ void parseTodoInput() {
         app.curr->type = newType;
         closePopupWindow();
     } else {
-        sprintf(app.errbuf, "Not all children are in a completed state.");
-        openErrorWindow();
+        openErrorWindow("Not all children are in a completed state.");
     }
 }
 
@@ -295,8 +297,9 @@ void parseInputInput(char *toReplace) {
             break;
         case ENTER:
             closePopupWindow();
-            strncpy(toReplace, input.string, sizeof(app.curr->name));
+            strncpy(toReplace, input.string, sizeof(input.string));
             /* TODO; // get change sizeof arg */
+            // look at the things I'm replacing I guess
             break;
         case BACKSPACE:
             if (strnlen(input.string, INPUT_SIZE) > 0) {
