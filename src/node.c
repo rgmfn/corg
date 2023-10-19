@@ -339,7 +339,8 @@ void freeSubtree(Node *node) {
 
 void toggleSubtree(Node *subroot) {
     bool hasSubtree = subroot->child != NULL ||
-        strnlen(subroot->description, sizeof(subroot->description)) > 0;
+        strnlen(subroot->description, sizeof(subroot->description)) > 0 ||
+        subroot->date != NULL;
     if (!hasSubtree)
         subroot->subTreeIsOpen = true;
     else if (subroot != NULL)
