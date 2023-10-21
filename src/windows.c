@@ -17,7 +17,11 @@ WINDOW* newCenteredWin(int height, int width) {
 }
 
 WINDOW* getTodoWindow() {
-    return newCenteredWin(12, 30);
+    return newCenteredWin(TODO_LINES, TODO_COLS);
+}
+
+WINDOW* getDateTypeWindow() {
+    return newCenteredWin(DATETYPE_LINES, DATETYPE_COLS);
 }
 
 WINDOW* getCalendarWindow() {
@@ -55,9 +59,10 @@ void drawPopupWindow() {
         case FilenameWindow:
             drawInputWindow("Write to file");
             break;
-        case DeadlineWindow:
-        case TimestampWindow:
-        case ScheduledWindow:
+        case DateTypeWindow:
+            drawDateTypeWindow();
+            break;
+        case CalendarWindow:
             drawCalendarWindow();
             break;
         case ErrorWindow:
@@ -175,6 +180,69 @@ void drawTodoWindow() {
     wrefresh(app.popupWin);
 }
 
+void drawDateTypeWindow() {
+    // --- ROW 1 ---
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 1, 1, "[t] ");
+    wattrset(app.popupWin, COLOR_PAIR(RED));
+    wprintw(app.popupWin, "Timestamp");
+    
+    // --- ROW 2 ---
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    mvwprintw(app.popupWin, 2, 3, "<2023-10-20 Fri>");
+
+    // --- ROW 4 ---
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 4, 1, "[d] ");
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    wprintw(app.popupWin, "Deadline");
+    
+    // --- ROW 5 ---
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    mvwprintw(app.popupWin, 5, 3, "DEADLINE: ");
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wprintw(app.popupWin, "<2023-10-20 Fri>");
+
+    // --- ROW 7 ---
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 7, 1, "[s] ");
+    wattrset(app.popupWin, COLOR_PAIR(BLUE));
+    wprintw(app.popupWin, "Scheduled");
+    
+    // --- ROW 8 ---
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    mvwprintw(app.popupWin, 8, 3, "SCHEDULED: ");
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wprintw(app.popupWin, "<2023-10-20 Fri>");
+
+    // --- ROW 10 ---
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 10, 1, "[T] ");
+    wattrset(app.popupWin, COLOR_PAIR(CYAN));
+    wprintw(app.popupWin, "Inactive");
+    
+    // --- ROW 11 ---
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    mvwprintw(app.popupWin, 11, 3, "[2023-10-20 Fri]");
+
+    // --- ROW 13 ---
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 13, 1, "[c] ");
+    wattrset(app.popupWin, COLOR_PAIR(MAGENTA));
+    wprintw(app.popupWin, "Closed");
+    
+    // --- ROW 14 ---
+    wattrset(app.popupWin, COLOR_PAIR(GRAY));
+    mvwprintw(app.popupWin, 14, 3, "CLOSED: ");
+    wattrset(app.popupWin, COLOR_PAIR(YELLOW));
+    wprintw(app.popupWin, "[2023-10-20 Fri]");
+
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    box(app.popupWin, 0, 0);
+
+    wrefresh(app.popupWin);
+}
+
 void drawCalendarWindow() {
     // --- ROW1 ---
     char month[20];
@@ -224,6 +292,7 @@ void drawCalendarWindow() {
     wattrset(app.popupWin, COLOR_PAIR(RED));
     mvwprintw(app.popupWin, 9, 13, "d");
     wattrset(app.popupWin, COLOR_PAIR(0));
+
     wprintw(app.popupWin, "elete");
 
     box(app.popupWin, 0, 0);
@@ -276,8 +345,9 @@ void windentNTimes(WINDOW *win, int n) {
     }
 }
 
-void openCalendarWindow(AppFocus newFocus) {
+void openCalendarWindow(DateType dateType) {
     app.popupWin = getCalendarWindow();
+    calendar.dateType = dateType;
 
     if (app.curr->date != NULL) {
         calendar.curr = *app.curr->date;
@@ -286,13 +356,19 @@ void openCalendarWindow(AppFocus newFocus) {
     }
 
     refresh();
-    app.focus = newFocus;
+    app.focus = CalendarWindow;
 }
 
 void openTodoWindow() {
     app.popupWin = getTodoWindow();
     refresh();
     app.focus = TodoWindow;
+}
+
+void openDateTypeWindow() {
+    app.popupWin = getDateTypeWindow();
+    refresh();
+    app.focus = DateTypeWindow;
 }
 
 void openRenameWindow() {

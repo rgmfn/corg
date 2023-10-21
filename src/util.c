@@ -195,11 +195,42 @@ bool isLeapYear(int year) {
  * WARNING: MUST FREE STRING AFTER USING
  * TODO; better way to do this?
  */
-char* tmToString(struct tm* date) {
+char* tmToString(struct tm* date, DateType type) {
     char *dateStr = (char*)malloc(17);
+    char open = getDateTypeOpenChar(type);
+    char closed = getDateTypeClosedChar(type);
 
-    sprintf(dateStr, "<%d-%02d-%02d %s>", date->tm_year+1900, date->tm_mon+1,
-            date->tm_mday, getShortWeekdayFromInt(date->tm_wday));
+    sprintf(dateStr, "%c%d-%02d-%02d %s%c", open, date->tm_year+1900,
+            date->tm_mon+1, date->tm_mday,
+            getShortWeekdayFromInt(date->tm_wday), closed);
 
     return dateStr;
+}
+
+char getDateTypeOpenChar(DateType dateType) {
+    switch (dateType) {
+        case Timestamp:
+        case Deadline:
+        case Scheduled:
+            return '<';
+            break;
+        case Inactive:
+        case Closed:
+            return '[';
+            break;
+    }
+}
+
+char getDateTypeClosedChar(DateType dateType) {
+    switch (dateType) {
+        case Timestamp:
+        case Deadline:
+        case Scheduled:
+            return '>';
+            break;
+        case Inactive:
+        case Closed:
+            return ']';
+            break;
+    }
 }

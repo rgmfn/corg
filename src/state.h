@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "node.h"
+#include "util.h"
 #include "windows.h"
 
 #define INPUT_SIZE 50
@@ -31,6 +32,7 @@ struct InputState {
 
 struct CalendarState {
      struct tm curr;
+     DateType dateType;
      // haven't decided if 'curr' should mean current or cursor
 } calendar;
 

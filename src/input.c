@@ -31,14 +31,11 @@ void parseInput() {
             else
                 openErrorWindow("Cannot write to a blank file.");
             break;
-        case TimestampWindow:
-            parseCalendarInput(Timestamp);
+        case DateTypeWindow:
+            parseDateTypeInput();
             break;
-        case DeadlineWindow:
-            parseCalendarInput(Deadline);
-            break;
-        case ScheduledWindow:
-            parseCalendarInput(Scheduled);
+        case CalendarWindow:
+            parseCalendarInput();
             break;
         default:
             closePopupWindow();
@@ -80,14 +77,8 @@ void parseDocumentInput() {
         case 't':
             openTodoWindow();
             break;
-        case 'T':
-            openCalendarWindow(TimestampWindow);
-            break;
-        case 'D':
-            openCalendarWindow(DeadlineWindow);
-            break;
-        case 'S':
-            openCalendarWindow(ScheduledWindow);
+        case 'm':
+            openDateTypeWindow();
             break;
         case 'r':
         case 'A':
@@ -209,7 +200,30 @@ void parseTodoInput() {
     }
 }
 
-void parseCalendarInput(DateType dateType) {
+void parseDateTypeInput() {
+    switch (app.c) {
+        case 't':
+            openCalendarWindow(Timestamp);
+            break;
+        case 'd':
+            openCalendarWindow(Deadline);
+            break;
+        case 's':
+            openCalendarWindow(Scheduled);
+            break;
+        case 'T':
+            openCalendarWindow(Inactive);
+            break;
+        case 'c':
+            openCalendarWindow(Closed);
+            break;
+        default:
+            closePopupWindow();
+            break;
+    }
+}
+
+void parseCalendarInput() {
     int daysInCurrMonth = getDaysInMonth(calendar.curr.tm_mon, calendar.curr.tm_year);
 
     switch (app.c) {
@@ -257,7 +271,7 @@ void parseCalendarInput(DateType dateType) {
             app.curr->date->tm_mon = calendar.curr.tm_mon;
             app.curr->date->tm_mday = calendar.curr.tm_mday;
             app.curr->date->tm_wday = calendar.curr.tm_wday;
-            app.curr->dateType = dateType;
+            app.curr->dateType = calendar.dateType;
             closePopupWindow();
             break;
     }

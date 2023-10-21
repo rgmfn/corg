@@ -224,31 +224,28 @@ void printNode(Node* node, int depth) {
         addch('\n');
         windentNTimes(stdscr, depth+1);
 
+        attrset(COLOR_PAIR(GRAY));
+
         char *dateStr;
         switch (node->dateType) {
             case Timestamp:
-                attrset(COLOR_PAIR(YELLOW));
-                dateStr = tmToString(node->date);
-                addstr(dateStr);
-                free(dateStr);
+            case Inactive:
                 break;
             case Deadline:
-                attrset(COLOR_PAIR(GRAY));
                 addstr("DEADLINE: ");
-                attrset(COLOR_PAIR(YELLOW));
-                dateStr = tmToString(node->date);
-                addstr(dateStr);
-                free(dateStr);
                 break;
             case Scheduled:
-                attrset(COLOR_PAIR(GRAY));
                 addstr("SCHEDULED: ");
-                attrset(COLOR_PAIR(YELLOW));
-                dateStr = tmToString(node->date);
-                addstr(dateStr);
-                free(dateStr);
+                break;
+            case Closed:
+                addstr("CLOSED: ");
                 break;
         }
+
+        attrset(COLOR_PAIR(YELLOW));
+        dateStr = tmToString(node->date, node->dateType);
+        addstr(dateStr);
+        free(dateStr);
 
         attrset(COLOR_PAIR(0));
     }

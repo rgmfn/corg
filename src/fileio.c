@@ -38,6 +38,12 @@
 #define SCHEDULED "^SCHEDULED: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
 #define SCHEDULED_GROUPS 4
 
+#define CLOSED "^CLOSED: \\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})\\]\n$"
+#define CLOSED_GROUPS 4
+
+#define INACTIVE "^\\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})\\]\n$"
+#define INACTIVE_GROUPS 4
+
 #define MAX_GROUPS 7
 
 bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
@@ -133,6 +139,18 @@ Node* loadFromFile(char* filename) {
         errorAndExitf(errbuf, "scheduled regex");
     }
 
+    regex_t closed;
+    if ((error = regcomp(&closed, CLOSED, REG_EXTENDED)) != 0) {
+        regerror(error, &closed, errbuf, ERRBUFF_SIZE-1);
+        errorAndExitf(errbuf, "closed regex");
+    }
+
+    regex_t inactive;
+    if ((error = regcomp(&inactive, INACTIVE, REG_EXTENDED)) != 0) {
+        regerror(error, &inactive, errbuf, ERRBUFF_SIZE-1);
+        errorAndExitf(errbuf, "inactive regex");
+    }
+
     Node *head = malloc(sizeof(Node));
     head->type = Head;
 
@@ -192,6 +210,12 @@ Node* loadFromFile(char* filename) {
         } else if (isMatch(&scheduled, buffer, rm)) {
             curr->date = getTmFromRegex(buffer, rm);
             curr->dateType = Scheduled;
+        } else if (isMatch(&inactive, buffer, rm)) {
+            curr->date = getTmFromRegex(buffer, rm);
+            curr->dateType = Inactive;
+        } else if (isMatch(&closed, buffer, rm)) {
+            curr->date = getTmFromRegex(buffer, rm);
+            curr->dateType = Closed;
         }
         // DESCRIPTION MUST GO AT END, WILL CAPTURE ANYTHING
         else if (isMatch(&description, buffer, rm)) {
@@ -234,11 +258,15 @@ void printNodeToFile(Node *node, FILE *fp) {
             case Scheduled:
                 fprintf(fp, "SCHEDULED: ");
                 break;
+            case Closed:
+                fprintf(fp, "CLOSED: ");
+                break;
+            case Inactive:
             case Timestamp:
                 break;
         }
 
-        char *dateStr= tmToString(node->date);
+        char *dateStr = tmToString(node->date, node->dateType);
         fprintf(fp, "%s\n", dateStr);
         free(dateStr);
     }

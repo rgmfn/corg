@@ -31,6 +31,8 @@ typedef enum DateType {
     Timestamp,
     Deadline,
     Scheduled,
+    Inactive,
+    Closed,
 } DateType;
 
 void errorAndExit(char*);
@@ -46,6 +48,9 @@ struct tm getFirstOfMonth(struct tm);
 int getDaysInMonth(int, int);
 bool isLeapYear(int);
 
-char* tmToString(struct tm*);
+char* tmToString(struct tm*, DateType);
+
+char getDateTypeOpenChar(DateType);
+char getDateTypeClosedChar(DateType);
 
 #endif

@@ -13,7 +13,8 @@
 void parseInput();
 void parseDocumentInput();
 void parseTodoInput();
-void parseCalendarInput(DateType);
+void parseDateTypeInput();
+void parseCalendarInput();
 void parseInputInput(char*);
 
 #endif
