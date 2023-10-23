@@ -26,11 +26,22 @@
 #include "state.h"
 #include "windows.h"
 #include "util.h"
+#include "help.h"
 
 void parseInput() {
     switch (app.focus) {
         case Document:
             parseDocumentInput();
+            break;
+        case HelpWindow:
+            if (app.c == '{')
+                goPrevHelpPage();
+            else if (app.c == '}')
+                goNextHelpPage();
+            else {
+                closePopupWindow();
+                parseDocumentInput();
+            }
             break;
         case TodoWindow:
             parseTodoInput();
@@ -76,19 +87,19 @@ void parseDocumentInput() {
             app.curr = goPrevLogical(app.curr);
             tryScrollUp(app.curr);
             break;
-        case 'p':
-            app.curr = gotoParent(app.curr);
-            tryScrollUp(app.curr);
-            break;
         case 'l':
             app.curr = goNextLogical(app.curr);
             tryScrollDown(app.curr);
             break;
+        case 'p':
+            app.curr = gotoParent(app.curr);
+            tryScrollUp(app.curr);
+            break;
         case 'J':
-            swapNodeAndNext(app.curr);
+            moveNodeDown(app.curr);
             break;
         case 'K':
-            swapNodeAndPrev(app.curr);
+            moveNodeUp(app.curr);
             break;
         case '\t':
             toggleSubtree(app.curr);
@@ -127,6 +138,10 @@ void parseDocumentInput() {
         case '#':
             toggleCounter(app.curr);
             break;
+        case '?':
+            openHelpWindow();
+            break;
+            // only used for help page
         case '0':
             // debug
             break;

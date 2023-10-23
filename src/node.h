@@ -98,8 +98,8 @@ void deleteNode(Node*);
 void tryPopNodeOut(Node*);
 void tryPopNodeIn(Node*);
 
-void swapNodeAndNext(Node*);
-void swapNodeAndPrev(Node*);
+void moveNodeDown(Node*);
+void moveNodeUp(Node*);
 
 void toggleCounter(Node*);
 int countAnyTodo(Node*);

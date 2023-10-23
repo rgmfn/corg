@@ -27,6 +27,7 @@
 #include "state.h"
 #include "colors.h"
 #include "util.h"
+#include "help.h"
 
 WINDOW* newCenteredWin(int height, int width) {
     int begin_y = LINES/2 - height/2;
@@ -49,6 +50,10 @@ WINDOW* getCalendarWindow() {
 
 WINDOW* getInputWindow() {
     return newCenteredWin(INPUT_LINES, INPUT_COLS);
+}
+
+WINDOW* getHelpWindow() {
+    return newCenteredWin(HELP_LINES, HELP_COLS);
 }
 
 WINDOW* getErrorWindow() {
@@ -83,6 +88,9 @@ void drawPopupWindow() {
             break;
         case CalendarWindow:
             drawCalendarWindow();
+            break;
+        case HelpWindow:
+            drawHelpWindow();
             break;
         case ErrorWindow:
             drawErrorWindow();
@@ -319,6 +327,41 @@ void drawCalendarWindow() {
     wrefresh(app.popupWin);
 }
 
+void drawHelpWindow() {
+    wattrset(app.popupWin, COLOR_PAIR(BLUE));
+    mvwprintw(app.popupWin, 1, HELP_COLS/2-2, "HELP");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwhline(app.popupWin, 2, 1, 0, HELP_COLS);
+
+    switch (help.page) {
+        case 1:
+            drawHelpPageOne();
+            break;
+        case 2:
+            drawHelpPageTwo();
+            break;
+        case 3:
+            drawHelpPageThree();
+            break;
+        case 4:
+            drawHelpPageFour();
+            break;
+        default:
+            openErrorWindow("Invalid help window page number.");
+            break;
+    }
+
+    wattrset(app.popupWin, COLOR_PAIR(CYAN));
+    mvwprintw(app.popupWin, HELP_LINES-2, 1, "({) prev page     (}) next page");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, HELP_LINES-2, HELP_COLS-6,
+                "[%d/%d]", help.page, NUM_HELP_PAGES);
+
+    box(app.popupWin, 0, 0);
+    
+    wrefresh(app.popupWin);
+}
+
 void drawErrorWindow() {
     box(app.popupWin, 0, 0);
 
@@ -412,6 +455,13 @@ void openFilenameWindow() {
     strncpy(input.string, app.filename, sizeof(input.string));
     input.cursorPos = strnlen(input.string, sizeof(input.string));
     app.focus = FilenameWindow;
+}
+
+void openHelpWindow() {
+    app.popupWin = getHelpWindow();
+    refresh();
+    app.focus = HelpWindow;
+    help.page = 1;
 }
 
 void openErrorWindow(const char *errmsg) {

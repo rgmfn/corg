@@ -17,46 +17,18 @@
  * with Corg. If not, see <https://www.gnu.org/licenses/>. 
  */
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef HELP_H
+#define HELP_H
 
-#include <curses.h>
-#include <time.h>
+#define NUM_HELP_PAGES 4
 
-#include "node.h"
-#include "util.h"
-#include "windows.h"
+void goNextHelpPage();
+void goPrevHelpPage();
 
-#define INPUT_SIZE 50
-
-struct AppState {
-    Node *head;
-    Node *curr;
-    Node *topLine;
-    AppFocus focus;
-    WINDOW *popupWin;
-
-    char filename[50];
-    char errbuf[100];
-
-    int c;
-
-    bool isRunning;
-} app;
-
-struct InputState {
-    char string[INPUT_SIZE];
-    int cursorPos;
-} input;
-
-struct CalendarState {
-     struct tm curr;
-     DateType dateType;
-     // haven't decided if 'curr' should mean current or cursor
-} calendar;
-
-struct HelpState {
-    int page;
-} help;
+void drawHelpPageOne();
+void drawHelpPageTwo();
+void drawHelpPageThree();
+void drawHelpPageFour();
+void drawHelpErrorPage();
 
 #endif

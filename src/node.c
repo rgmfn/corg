@@ -738,7 +738,7 @@ void tryPopNodeIn(Node *node) {
     }
 }
 
-void swapNodeAndNext(Node *node) {
+void moveNodeDown(Node *node) {
     Node *prev = node->prev;
     Node *next = node->next;
     Node *parent = node->parent;
@@ -768,7 +768,7 @@ void swapNodeAndNext(Node *node) {
 /*
  * *---*---x---*
  */
-void swapNodeAndPrev(Node *node) {
+void moveNodeUp(Node *node) {
     Node *prev = node->prev;
     Node *next = node->next;
 

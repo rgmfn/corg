@@ -32,6 +32,9 @@
 #define INPUT_LINES 3
 #define INPUT_COLS 53
 
+#define HELP_LINES 15
+#define HELP_COLS 40
+
 #define ERROR_LINES 3
 #define ERROR_COLS 53
 
@@ -49,6 +52,7 @@ typedef enum AppFocus {
     RenameWindow,
     DescriptionWindow,
     FilenameWindow,
+    HelpWindow,
     ErrorWindow,
 } AppFocus;
 
@@ -58,6 +62,7 @@ WINDOW* getTodoWindow();
 WINDOW* getDateTypeWindow();
 WINDOW* getCalendarWindow();
 WINDOW* getInputWindow();
+WINDOW* getHelpWindow();
 WINDOW* getErrorWindow();
 
 void drawDocument();
@@ -65,6 +70,7 @@ void drawPopupWindow();
 void drawTodoWindow();
 void drawDateTypeWindow();
 void drawCalendarWindow();
+void drawHelpWindow();
 void drawErrorWindow();
 void drawInputWindow(char*);
 void drawTempWindow();
@@ -77,6 +83,7 @@ void openDateTypeWindow();
 void openRenameWindow();
 void openDescriptionWindow();
 void openFilenameWindow();
+void openHelpWindow();
 void openErrorWindow(const char*);
 
 void closePopupWindow();
