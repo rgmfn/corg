@@ -5,13 +5,13 @@ I personally use org files mostly for their list, todo, and agenda functionaliti
 
 # Quick start
 * Dependencies
- - `ncurses`
- - `clang`
- - `make`
+    - `ncurses`
+    - `clang`
+    - `make`
 ## Compilation
 In corg/src, run make.
 ```
-> make
+make
 ```
 
 ## Running
