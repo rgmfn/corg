@@ -17,12 +17,12 @@ In corg/src, run make.
 ## Running
 Run command corg with the file path of an org file as the argument.
 ```
-> ./corg /path/to/file.org
+./corg /path/to/file.org
 ```
 
 Additionally, you can run corg with no arguments to open a new, blank, unnamed file.
 ```
-> ./corg
+./corg
 ```
 
 Press ? in the app for a list of commands.
