@@ -4,10 +4,10 @@ An emacs org-file reader written with ncurses in C.
 I personally use org files mostly for their list, todo, and agenda functionalities, so the app is focused around those specific features.
 
 # Quick start
-* Dependencies
-    - `ncurses`
-    - `clang`
-    - `make`
+## Dependencies
+  - `ncurses`
+  - `clang`
+  - `make`
 ## Compilation
 In corg/src, run make.
 ```
@@ -26,6 +26,8 @@ Additionally, you can run corg with no arguments to open a new, blank, unnamed f
 ```
 
 Press ? in the app for a list of commands.
+
+# Features
 
 ## Current Features
 - Can create, move, edit and delete org headings
