@@ -47,13 +47,13 @@ void parseInput() {
             parseTodoInput();
             break;
         case RenameWindow:
-            parseInputInput(app.curr->name);
+            parseInputInput(app.curr->name, sizeof(app.curr->name));
             break;
         case DescriptionWindow:
-            parseInputInput(app.curr->description);
+            parseInputInput(app.curr->description, sizeof(app.curr->description));
             break;
         case FilenameWindow:
-            parseInputInput(app.filename);
+            parseInputInput(app.filename, sizeof(app.filename));
             if (app.c != ENTER)
                 break;
             else if (strnlen(app.filename, sizeof(app.filename)) > 0)
@@ -338,16 +338,20 @@ void parseCalendarInput() {
  * @param toReplace the string to be replaced with the string created in the
  *        InputWindow.
  */
-void parseInputInput(char *toReplace) {
+void parseInputInput(char *toReplace, unsigned long toReplaceSize) {
     switch (app.c) {
         case ESCAPE:
             closePopupWindow();
             break;
         case ENTER:
             closePopupWindow();
-            strncpy(toReplace, input.string, sizeof(input.string));
-            /* TODO; // get change sizeof arg */
-            // look at the things I'm replacing I guess
+            strncpy(toReplace, input.string, toReplaceSize);
+            /*
+             * TODO;
+             * this looks like it would cause issues if
+             * sizeof(input.string) > toReplaceSize, but this is never
+             * the case right now
+             */
             break;
         case BACKSPACE:
             if (strnlen(input.string, INPUT_SIZE) > 0) {

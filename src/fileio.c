@@ -206,7 +206,7 @@ Node* loadFromFile(char* filename) {
             node->type = getTypeFromString(typeStr);
 
             char starStr[20];
-            /* TODO; // will break past 20 indents */
+            /* TODO; // will break past 19 indents */
             sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
             int nodeDepth = strnlen(starStr, sizeof(starStr));
 
