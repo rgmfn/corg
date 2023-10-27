@@ -1,9 +1,10 @@
+.gitignore
 *.o
 corg
 *.png
 Session.vim
-out.org
-empty.org
 a.out
 test.c
 .DS_STORE
+*.org
+*.txt
