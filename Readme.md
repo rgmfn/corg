@@ -3,6 +3,8 @@ An emacs org-file reader written with ncurses in C.
 
 I personally use org files mostly for their list, todo, and agenda functionalities, so the app is focused around those specific features.
 
+Currently it only runs on Mac because Mac allows for the C POSIX regex library to use non-greedy quantifiers. Once I figure out another solution for non-greedy quantifiers, it should work on linux.
+
 # Quick start
 ## Dependencies
   - `ncurses`
@@ -40,6 +42,7 @@ Press ? in the app for a list of commands.
 - A selection mode to modify multiple lines at once
 - The ability to add web links to nodes and open them from inside the program
 - A better help menu (with a search bar)
+- Linux support
 
 ## Known Issues
 - Headings break past 18 indents (head node is 0 indents)
