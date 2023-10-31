@@ -85,7 +85,10 @@ Node* gotoParent(Node*);
 void tryScrollUp(Node*);
 void tryScrollDown(Node*);
 
+int getVisualSize(Node*);
 int getVisualDistance(Node*, Node*);
+
+bool isAbove(Node*, Node*);
 
 Node* riseToStarDepth(int, Node*);
 int getStarDepth(Node*);

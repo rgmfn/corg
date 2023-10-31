@@ -431,15 +431,43 @@ Node* gotoParent(Node *curr) {
 #define SCROLL_OFFSET 4
 
 void tryScrollUp(Node *curr) {
-    if (getVisualDistance(app.topLine, curr) < SCROLL_OFFSET) {
+    int distance;
+    if (isAbove(app.topLine, curr)) {
+        distance = getVisualDistance(app.topLine, curr) * -1;
+    } else {
+        distance = getVisualDistance(curr, app.topLine);
+    }
+
+    int moveBy = distance + SCROLL_OFFSET;
+
+    for (int i = 0; i < moveBy; i++) {
         app.topLine = goUpVisual(app.topLine);
     }
 }
 
 void tryScrollDown(Node *curr) {
-    if (getVisualDistance(app.topLine, curr) > (LINES - SCROLL_OFFSET - 1)) {
+    int distance = getVisualDistance(app.topLine, curr);
+    int size = getVisualSize(curr) + SCROLL_OFFSET;
+
+    int moveBy = distance + size - LINES;
+
+    for (int i = 0; i < moveBy; i++) {
         app.topLine = goDownVisual(app.topLine);
     }
+}
+
+int getVisualSize(Node *node) {
+    int lines = 1; // * DONE task
+
+    if (strnlen(node->description, sizeof(node->description)) > 0) {
+        lines++;
+    }
+
+    if (node->date != NULL) {
+        lines++;
+    }
+
+    return lines;
 }
 
 int getVisualDistance(Node* node, Node *bottom) {
@@ -451,17 +479,23 @@ int getVisualDistance(Node* node, Node *bottom) {
         return 0;
     }
 
-    int lines = 1; // * DONE task
-
-    if (strnlen(node->description, sizeof(node->description)) > 0) {
-        lines++;
+    if (!node->subTreeIsOpen) {
+        return 1;
     }
 
-    if (node->date != NULL) {
-        lines++;
+    return getVisualSize(node) + getVisualDistance(goDownVisualOrNull(node), bottom);
+}
+
+bool isAbove(Node *node, Node *other) {
+    Node *next = goDownVisualOrNull(node);
+
+    if (!next) {
+        return false;
+    } else if (node == other) {
+        return true;
     }
 
-    return lines + getVisualDistance(goDownVisualOrNull(node), bottom);
+    return isAbove(next, other);
 }
 
 Node* riseToStarDepth(int targetDepth, Node *node) {
