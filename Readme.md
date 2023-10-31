@@ -47,3 +47,7 @@ Press ? in the app for a list of commands.
 ## Known Issues
 - Headings break past 18 indents (head node is 0 indents)
     - or 19 stars in an org file
+- Headings can only be 100 charactes and descriptions can only be 200 characters
+    - this works for my workflow, may expand them in the future
+- Can't write a description past 50 characters
+    - will be fixed along with a multiline text input box
