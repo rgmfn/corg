@@ -51,6 +51,7 @@ typedef enum AppFocus {
     ScheduledWindow,
     RenameWindow,
     DescriptionWindow,
+    LinkWindow,
     FilenameWindow,
     HelpWindow,
     ErrorWindow,
@@ -82,6 +83,7 @@ void openCalendarWindow(DateType);
 void openDateTypeWindow();
 void openRenameWindow();
 void openDescriptionWindow();
+void openLinkWindow();
 void openFilenameWindow();
 void openHelpWindow();
 void openErrorWindow(const char*);

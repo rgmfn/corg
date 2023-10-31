@@ -47,12 +47,14 @@ typedef enum NodeType {
 
 #define MAX_NAME_SIZE 100
 #define MAX_DESCRIPTION_SIZE 200
+#define MAX_LINK_SIZE 200
 
 typedef struct Node {
     NodeType type;
 
     char name[MAX_NAME_SIZE];
     char description[MAX_DESCRIPTION_SIZE];
+    char link[MAX_LINK_SIZE];
     struct tm* date;
     DateType dateType;
 

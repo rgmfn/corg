@@ -23,6 +23,7 @@
 #include <curses.h>
 #include <time.h>
 
+#include "node.h"
 #include "util.h"
 
 void errorAndExit(char *msg) {
@@ -252,4 +253,18 @@ char getDateTypeClosedChar(DateType dateType) {
             return ']';
             break;
     }
+}
+
+void openLink(char *link) {
+    char cmd[MAX_LINK_SIZE+10];
+
+#ifdef __unix__
+    sprintf(cmd, "xdg-open %s", link);
+#elif defined(_WIN32) | defined(_WIN64)
+    sprintf(cmd, "start %s", link);
+#elif __APPLE__
+    sprintf(cmd, "open %s", link);
+#endif
+
+    system(cmd);
 }

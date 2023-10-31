@@ -72,4 +72,6 @@ char* tmToString(struct tm*, DateType);
 char getDateTypeOpenChar(DateType);
 char getDateTypeClosedChar(DateType);
 
+void openLink(char*);
+
 #endif

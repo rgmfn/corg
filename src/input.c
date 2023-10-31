@@ -52,6 +52,9 @@ void parseInput() {
         case DescriptionWindow:
             parseInputInput(app.curr->description, sizeof(app.curr->description));
             break;
+        case LinkWindow:
+            parseInputInput(app.curr->link, sizeof(app.curr->link));
+            break;
         case FilenameWindow:
             parseInputInput(app.filename, sizeof(app.filename));
             if (app.c != ENTER)
@@ -116,6 +119,12 @@ void parseDocumentInput() {
             break;
         case 's':
             openDescriptionWindow();
+            break;
+        case 'n':
+            openLinkWindow();
+            break;
+        case 'N':
+            openLink(app.curr->link);
             break;
         case ENTER:
             app.curr->type = cycleNodeType(app.curr->type);

@@ -83,6 +83,9 @@ void drawPopupWindow() {
         case FilenameWindow:
             drawInputWindow("Write to file");
             break;
+        case LinkWindow:
+            drawInputWindow("Hyperlink");
+            break;
         case DateTypeWindow:
             drawDateTypeWindow();
             break;
@@ -447,6 +450,14 @@ void openDescriptionWindow() {
     strncpy(input.string, app.curr->description, sizeof(input.string));
     input.cursorPos = strnlen(input.string, sizeof(input.string));
     app.focus = DescriptionWindow;
+}
+
+void openLinkWindow() {
+    app.popupWin = getInputWindow();
+    refresh();
+    strncpy(input.string, app.curr->link, sizeof(input.string));
+    input.cursorPos = strnlen(input.string, sizeof(input.string));
+    app.focus = LinkWindow;
 }
 
 void openFilenameWindow() {

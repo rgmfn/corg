@@ -269,34 +269,18 @@ void printNode(Node* node, int depth) {
         attrset(COLOR_PAIR(0));
     }
 
-    /* if (node->date != NULL && node->dateType == Timestamp) { */
-    /*     addch('\n'); */
-    /*     windentNTimes(stdscr, depth+1); */
-    /*     attrset(COLOR_PAIR(YELLOW)); */
-    /*     addstr(tmToString(node->date)); */
-    /*     attrset(COLOR_PAIR(0)); */
-    /* } else if (node->date != NULL && node->dateType == Deadline) { */
-    /*     addch('\n'); */
-    /*     windentNTimes(stdscr, depth+1); */
-    /*     attrset(COLOR_PAIR(GRAY)); */
-    /*     addstr("DEADLINE: "); */
-    /*     attrset(COLOR_PAIR(YELLOW)); */
-    /*     addstr(tmToString(node->date)); */
-    /*     attrset(COLOR_PAIR(0)); */
-    /* } else if (node->date != NULL && node->dateType == Deadline) { */
-    /*     addch('\n'); */
-    /*     windentNTimes(stdscr, depth+1); */
-    /*     attrset(COLOR_PAIR(GRAY)); */
-    /*     addstr("SCHEDULED: "); */
-    /*     attrset(COLOR_PAIR(YELLOW)); */
-    /*     addstr(tmToString(node->date)); */
-    /*     attrset(COLOR_PAIR(0)); */
-    /* } */
-
     if (strnlen(node->description, sizeof(node->description)) > 0) {
         addch('\n');
         windentNTimes(stdscr, depth+1);
         addstr(node->description);
+    }
+
+    if (strnlen(node->link, sizeof(node->link)) > 0) {
+        attrset(COLOR_PAIR(BLUE)|A_UNDERLINE);
+        addch('\n');
+        windentNTimes(stdscr, depth+1);
+        addstr(node->link);
+        attrset(COLOR_PAIR(0));
     }
 
     addch('\n');
@@ -460,6 +444,10 @@ int getVisualSize(Node *node) {
     int lines = 1; // * DONE task
 
     if (strnlen(node->description, sizeof(node->description)) > 0) {
+        lines++;
+    }
+
+    if (strnlen(node->link, sizeof(node->link)) > 0) {
         lines++;
     }
 
