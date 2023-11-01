@@ -63,6 +63,9 @@
 #define INACTIVE "^\\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})\\]\n$"
 #define INACTIVE_GROUPS 4
 
+#define HYPERLINK "^(((https?|ftp|smtp):\\/\\/)?(www.)?[a-z0-9]+\\.[a-z]+(\\/[a-zA-Z0-9#]+\\/?)*\\/?)\n$"
+#define HYPERLINK_GROUPS 1
+
 #define MAX_GROUPS 7
 
 bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
@@ -170,6 +173,12 @@ Node* loadFromFile(char* filename) {
         errorAndExitf(errbuf, "inactive regex");
     }
 
+    regex_t hyperlink;
+    if ((error = regcomp(&hyperlink, HYPERLINK, REG_EXTENDED)) != 0) {
+        regerror(error, &hyperlink, errbuf, ERRBUFF_SIZE-1);
+        errorAndExitf(errbuf, "hyperlink regex");
+    }
+
     Node *head = malloc(sizeof(Node));
     head->type = Head;
 
@@ -235,6 +244,8 @@ Node* loadFromFile(char* filename) {
         } else if (isMatch(&closed, buffer, rm)) {
             curr->date = getTmFromRegex(buffer, rm);
             curr->dateType = Closed;
+        } else if (isMatch(&hyperlink, buffer, rm)) {
+            sprintf(curr->link, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
         }
         // DESCRIPTION MUST GO AT END, WILL CAPTURE ANYTHING
         else if (isMatch(&description, buffer, rm)) {
@@ -292,6 +303,10 @@ void printNodeToFile(Node *node, FILE *fp) {
 
     if (strnlen(node->description, sizeof(node->description)) > 0) {
         fprintf(fp, "%s\n", node->description);
+    }
+
+    if (strnlen(node->link, sizeof(node->link)) > 0) {
+        fprintf(fp, "%s\n", node->link);
     }
 
     printNodeToFile(node->child, fp);
