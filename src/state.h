@@ -29,6 +29,9 @@
 
 #define INPUT_SIZE 50
 
+#define MAX_FILENAME_SIZE 50
+#define ERRBUF_SIZE 100
+
 struct AppState {
     Node *head;
     Node *curr;
@@ -36,8 +39,8 @@ struct AppState {
     AppFocus focus;
     WINDOW *popupWin;
 
-    char filename[50];
-    char errbuf[100];
+    char filename[MAX_FILENAME_SIZE];
+    char errbuf[ERRBUF_SIZE];
 
     int c;
 

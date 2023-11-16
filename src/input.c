@@ -70,7 +70,10 @@ void parseInput() {
         case CalendarWindow:
             parseCalendarInput();
             break;
-        default:
+        case ScheduledWindow:
+        case TimestampWindow:
+        case DeadlineWindow:
+        case ErrorWindow:
             closePopupWindow();
             break;
     }

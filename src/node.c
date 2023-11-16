@@ -276,9 +276,9 @@ void printNode(Node* node, int depth) {
     }
 
     if (strnlen(node->link, sizeof(node->link)) > 0) {
-        attrset(COLOR_PAIR(BLUE)|A_UNDERLINE);
         addch('\n');
         windentNTimes(stdscr, depth+1);
+        attrset(COLOR_PAIR(BLUE)|A_UNDERLINE);
         addstr(node->link);
         attrset(COLOR_PAIR(0));
     }

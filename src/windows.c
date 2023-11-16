@@ -98,9 +98,6 @@ void drawPopupWindow() {
         case ErrorWindow:
             drawErrorWindow();
             break;
-        default:
-            drawTempWindow();
-            break;
     }
 }
 
