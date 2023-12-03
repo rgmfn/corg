@@ -83,7 +83,6 @@ void drawHelpPageFour() {
     mvwprintw(app.popupWin, 6, 1, "(l) nextDay");
     mvwprintw(app.popupWin, 7, 1, "(</H/J) prevMonth");
     mvwprintw(app.popupWin, 8, 1, "(>/L/K) nextMonth");
-    mvwprintw(app.popupWin, 9, 1, "(r/A) openRenameWindow");
-    mvwprintw(app.popupWin, 10, 1, "(t) gotoToday");
-    mvwprintw(app.popupWin, 11, 1, "(ENTER) pickDate");
+    mvwprintw(app.popupWin, 9, 1, "(t) gotoToday");
+    mvwprintw(app.popupWin, 10, 1, "(ENTER) pickDate");
 }
