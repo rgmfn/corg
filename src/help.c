@@ -71,6 +71,8 @@ void drawHelpPageThree() {
     mvwprintw(app.popupWin, 5, 1, "(r/A) openRenameWindow");
     mvwprintw(app.popupWin, 6, 1, "(s) openDescriptionWindow");
     mvwprintw(app.popupWin, 7, 1, "(w) writeToFile");
+    mvwprintw(app.popupWin, 8, 1, "(n) openLinkWindow");
+    mvwprintw(app.popupWin, 9, 1, "(N) openLink");
 }
 
 void drawHelpPageFour() {
