@@ -50,9 +50,8 @@ void drawHelpPageOne() {
     mvwprintw(app.popupWin, 7, 1, "(h) goPrevLogical");
     mvwprintw(app.popupWin, 8, 1, "(l) goNextLogical");
     mvwprintw(app.popupWin, 9, 1, "(p) gotoParent");
-    mvwprintw(app.popupWin, 10, 1, "(J) gotoParent");
-    mvwprintw(app.popupWin, 11, 1, "(J) moveNodeDown");
-    mvwprintw(app.popupWin, 12, 1, "(K) moveNodeUp");
+    mvwprintw(app.popupWin, 10, 1, "(J) moveNodeDown");
+    mvwprintw(app.popupWin, 11, 1, "(K) moveNodeUp");
 }
 
 void drawHelpPageTwo() {
