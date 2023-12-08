@@ -37,6 +37,8 @@ Press ? in the app for a list of commands.
 - Can set the TODO status of headings
 - Can open and save org files
 
+https://www.youtube.com/watch?v=QgYhuPgbp3s
+
 ## Planned Features
 - Support #+title and #+startup
 - A selection mode to modify multiple lines at once
