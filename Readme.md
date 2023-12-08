@@ -5,6 +5,8 @@ I personally use org files mostly for their list, todo, and agenda functionaliti
 
 Currently it only runs on Mac because Mac allows for the C POSIX regex library to use non-greedy quantifiers. Once I figure out another solution for non-greedy quantifiers, it should work on linux.
 
+[![YouTube thumbnail](https://img.youtube.com/vi/QgYhuPgbp3s/maxresdefault.jpg)](https://www.youtube.com/watch?v=QgYhuPgbp3s)
+
 # Quick start
 ## Dependencies
   - `ncurses`
@@ -36,8 +38,6 @@ Press ? in the app for a list of commands.
 - Can give descriptions and dates to these headings
 - Can set the TODO status of headings
 - Can open and save org files
-
-https://www.youtube.com/watch?v=QgYhuPgbp3s
 
 ## Planned Features
 - Support #+title and #+startup
