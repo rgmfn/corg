@@ -291,7 +291,7 @@ void drawCalendarWindow() {
     mvwprintw(app.popupWin, 2, 5, "Mo Tu We Th Fr");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
-    // --- ROW3-7 ---
+    // --- ROW3-8 ---
     struct tm firstOfMonth = getFirstOfMonth(calendar.curr);
     int offset = firstOfMonth.tm_wday;
     int daysInMonth = getDaysInMonth(calendar.curr.tm_mon, calendar.curr.tm_year+1900);
@@ -309,15 +309,15 @@ void drawCalendarWindow() {
         wattrset(app.popupWin, COLOR_PAIR(0));
     }
 
-    mvwhline(app.popupWin, 8, 1, 0, CALENDAR_COLS);
+    mvwhline(app.popupWin, 9, 1, 0, CALENDAR_COLS);
 
     wattrset(app.popupWin, COLOR_PAIR(BLUE));
-    mvwprintw(app.popupWin, 9, 5, "t");
+    mvwprintw(app.popupWin, 10, 5, "t");
     wattrset(app.popupWin, COLOR_PAIR(0));
     wprintw(app.popupWin, "oday");
 
     wattrset(app.popupWin, COLOR_PAIR(RED));
-    mvwprintw(app.popupWin, 9, 13, "d");
+    mvwprintw(app.popupWin, 10, 13, "d");
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     wprintw(app.popupWin, "elete");

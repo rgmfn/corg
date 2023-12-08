@@ -38,7 +38,7 @@
 #define ERROR_LINES 3
 #define ERROR_COLS 53
 
-#define CALENDAR_LINES 11
+#define CALENDAR_LINES 12
 #define CALENDAR_COLS 24
 
 typedef enum AppFocus {
