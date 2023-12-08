@@ -29,6 +29,9 @@ Additionally, you can run corg with no arguments to open a new, blank, unnamed f
 
 Press ? in the app for a list of commands.
 
+# Demo
+[![YouTube thumbnail](https://img.youtube.com/vi/QgYhuPgbp3s/maxresdefault.jpg)](https://www.youtube.com/watch?v=QgYhuPgbp3s)
+
 # Features
 
 ## Current Features
@@ -36,8 +39,6 @@ Press ? in the app for a list of commands.
 - Can give descriptions and dates to these headings
 - Can set the TODO status of headings
 - Can open and save org files
-
-https://www.youtube.com/watch?v=QgYhuPgbp3s
 
 ## Planned Features
 - Support #+title and #+startup
