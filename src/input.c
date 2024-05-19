@@ -134,9 +134,11 @@ void parseDocumentInput() {
             break;
         case 'c':
             createChildNode(app.curr);
+            openRenameWindow();
             break;
         case 'C':
             createSiblingNodeAfter(app.curr);
+            openRenameWindow();
             break;
         case 'd':
             deleteNode(app.curr);

@@ -42,7 +42,7 @@ struct AppState {
     char filename[MAX_FILENAME_SIZE];
     char errbuf[ERRBUF_SIZE];
 
-    int c;
+    int c; // character just pressed
 
     bool isRunning;
 } app;

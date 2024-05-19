@@ -218,6 +218,7 @@ Node* loadFromFile(char* filename) {
             /* TODO; // will break past 19 indents */
             sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
             int nodeDepth = strnlen(starStr, sizeof(starStr));
+            // can I do math instead??
 
             char counterStr[10];
             sprintf(counterStr, "%.*s", (int)(rm[6].rm_eo - rm[6].rm_so), buffer + rm[6].rm_so);
