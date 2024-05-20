@@ -592,6 +592,20 @@ void deleteNode(Node *subroot) {
         app.head->next->prev = NULL;
         app.topLine = app.head->next;
     }
+    // subroot is not root, no next
+    // h---*---x
+    //          \
+    //           *
+    else if (subroot->prev != NULL && subroot->parent == NULL &&
+            subroot->next == NULL) {
+        Node *prev = subroot->prev;
+
+        prev->next = NULL;
+
+        app.curr = prev;
+
+        freeSubtree(subroot);
+    }
     // subroot is the first child of it's parent, with next
     // *
     //  \
@@ -627,14 +641,15 @@ void deleteNode(Node *subroot) {
 
         freeSubtree(subroot);
     }
-    // not parent's child, no next
+    // not parent's child or no parent, no next
     // *
     //  \
-    //   *---x
-    //    \   \
-    //     *   *
-    else if (subroot->parent != NULL && subroot->parent->child != subroot &&
-            subroot->prev != NULL && subroot->next == NULL) {
+    //   *---x    or h---...---x
+    //    \   \                 \
+    //     *   *                 *
+    else if ((subroot->parent == NULL ||
+             (subroot->parent != NULL && subroot->parent->child != subroot)) &&
+             subroot->prev != NULL && subroot->next == NULL) {
         Node *prev = subroot->prev;
 
         prev->next = NULL;
