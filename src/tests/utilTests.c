@@ -1,8 +1,9 @@
 #include <time.h>
 #include <stdio.h>
+#include "utilTests.h"
 #include "../util.h"
 
-void getFirstOfMonthTests() {
+int getFirstOfMonthTests() {
     struct tm day, first, expected;
 
     int inputMDay[] = {2, 19, 29};
@@ -11,7 +12,8 @@ void getFirstOfMonthTests() {
     int expectedWDay[] = {SUNDAY, SUNDAY, WEDNESDAY};
 
     int numTests = sizeof(inputMDay)/sizeof(int);
-    printf("Num Tests: %d\n", numTests);
+
+    int failedTests = 0;
 
     for (int testNum = 0; testNum < numTests; testNum++) {
         day.tm_mday = inputMDay[testNum];
@@ -24,19 +26,24 @@ void getFirstOfMonthTests() {
         if (first.tm_wday != expected.tm_wday ||
                 first.tm_mday != 1 ||
                 first.tm_mon != expected.tm_mon) {
-            printf("Test %d Failed:\nExpected %d/%d (%s), got %d/%d (%s)",
+            printf("getFirstOfMonth Test %d Failed:\nExpected %d/%d (%s), got %d/%d (%s)",
                     testNum, expected.tm_mon, expected.tm_mday,
                     getWeekdayFromInt(expected.tm_wday),
                     first.tm_mon, first.tm_mday,
                     getWeekdayFromInt(first.tm_wday));
-        } else {
-            printf("Test %d Success\n", testNum);
+            failedTests++;
         }
     }
+
+    return failedTests;
 }
 
-int main() {
-    getFirstOfMonthTests();
+int utilTests() {
+    int failedTests = 0;
 
-    return 0;
+    failedTests += getFirstOfMonthTests();
+
+    printf("UTIL %i Failed Tests\n", failedTests);
+
+    return failedTests;
 }
