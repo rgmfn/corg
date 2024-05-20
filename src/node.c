@@ -509,10 +509,7 @@ Node* riseToStarDepth(int targetDepth, Node *node) {
  * star depth = depth + 1
  */
 int getStarDepth(Node *node) {
-    if (node == NULL)
-        return 0;
-
-    return 1 + getStarDepth(node->parent);
+    return getDepth(node) + 1;
 }
 
 int getDepth(Node *node) {

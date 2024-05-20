@@ -81,6 +81,10 @@ bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
     return true;
 }
 
+/**
+ * depth - depth of curr node
+ * nodeDepth - depth of node to be placed
+ */
 Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
     printw("curr: %d, node: %d", depth, nodeDepth);
     refresh();
@@ -93,7 +97,8 @@ Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
         node->prev = curr;
         node->parent = curr->parent;
     } else {
-        errorAndExit("Invalid depth change, grew by more than 1");
+        errorAndExitf("Invalid depth change, grew by more than 1", curr->name);
+        /* errorAndExitInt(depth); */
     }
 
     return node;
@@ -218,6 +223,7 @@ Node* loadFromFile(char* filename) {
             /* TODO; // will break past 19 indents */
             sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
             int nodeDepth = strnlen(starStr, sizeof(starStr));
+            /* int nodeDepth = (int)(rm[1].rm_eo - rm[1].rm_so); */
             // can I do math instead??
 
             char counterStr[10];
@@ -269,7 +275,7 @@ Node* loadFromFile(char* filename) {
     return head;
 }
 
-void printNodeToFile(Node *node, FILE *fp) {
+void printSubtreeToFile(Node *node, FILE *fp) {
     if (node == NULL)
         return;
 
@@ -310,14 +316,16 @@ void printNodeToFile(Node *node, FILE *fp) {
         fprintf(fp, "%s\n", node->link);
     }
 
-    printNodeToFile(node->child, fp);
-    printNodeToFile(node->next, fp);
+    TODO; // write counter if active (#77)
+
+    printSubtreeToFile(node->child, fp);
+    printSubtreeToFile(node->next, fp);
 }
 
 void writeToFile(Node *node, char *filename) {
     FILE *fp = fopen(filename, "w");
 
-    printNodeToFile(node, fp);
+    printSubtreeToFile(node, fp);
 
     fclose(fp);
 }
