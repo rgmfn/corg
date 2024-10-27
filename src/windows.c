@@ -22,7 +22,6 @@
 #include <time.h>
 
 #include "windows.h"
-#include "fileio.h"
 #include "node.h"
 #include "state.h"
 #include "colors.h"
