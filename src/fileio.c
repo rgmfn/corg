@@ -316,7 +316,11 @@ void printSubtreeToFile(Node *node, FILE *fp) {
         fprintf(fp, "%s\n", node->link);
     }
 
-    TODO; // write counter if active (#77)
+    if (node->hasCounter) {
+        int numAnyTodo = countAnyTodo(node->child);
+        int numDoneTodo = countDoneTodo(node->child);
+        fprintf(fp, " [%d/%d]", numDoneTodo, numAnyTodo);
+    }
 
     printSubtreeToFile(node->child, fp);
     printSubtreeToFile(node->next, fp);
