@@ -41,6 +41,9 @@
 #define CALENDAR_LINES 12
 #define CALENDAR_COLS 24
 
+#define PRIORITY_LINES 7
+#define PRIORITY_COLS 31
+
 typedef enum AppFocus {
     Document,
     TodoWindow,
@@ -50,6 +53,7 @@ typedef enum AppFocus {
     DescriptionWindow,
     LinkWindow,
     FilenameWindow,
+    PriorityWindow,
     HelpWindow,
     ErrorWindow,
 } AppFocus;
@@ -62,6 +66,7 @@ WINDOW* getCalendarWindow();
 WINDOW* getInputWindow();
 WINDOW* getHelpWindow();
 WINDOW* getErrorWindow();
+WINDOW* getPriorityWindow();
 
 void drawDocument();
 void drawPopupWindow();
@@ -70,6 +75,7 @@ void drawDateTypeWindow();
 void drawCalendarWindow();
 void drawHelpWindow();
 void drawErrorWindow();
+void drawPriorityWindow();
 void drawInputWindow(char*);
 void drawTempWindow();
 
@@ -82,6 +88,7 @@ void openRenameWindow();
 void openDescriptionWindow();
 void openLinkWindow();
 void openFilenameWindow();
+void openPriorityWindow();
 void openHelpWindow();
 void openErrorWindow(const char*);
 

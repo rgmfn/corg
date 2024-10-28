@@ -51,6 +51,10 @@ WINDOW* getInputWindow() {
     return newCenteredWin(INPUT_LINES, INPUT_COLS);
 }
 
+WINDOW* getPriorityWindow() {
+    return newCenteredWin(PRIORITY_LINES, PRIORITY_COLS);
+}
+
 WINDOW* getHelpWindow() {
     return newCenteredWin(HELP_LINES, HELP_COLS);
 }
@@ -90,6 +94,9 @@ void drawPopupWindow() {
             break;
         case CalendarWindow:
             drawCalendarWindow();
+            break;
+        case PriorityWindow:
+            drawPriorityWindow();
             break;
         case HelpWindow:
             drawHelpWindow();
@@ -202,6 +209,8 @@ void drawTodoWindow() {
     wattrset(app.popupWin, COLOR_PAIR(0));
 
     box(app.popupWin, 0, 0);
+
+    mvwprintw(app.popupWin, 0, 12, "STATUS");
 
     wrefresh(app.popupWin);
 }
@@ -376,6 +385,34 @@ void drawErrorWindow() {
     wrefresh(app.popupWin);
 }
 
+void drawPriorityWindow() {
+    box(app.popupWin, 0, 0);
+
+    mvwprintw(app.popupWin, 0, 11, "PRIORITY");
+
+    mvwprintw(app.popupWin, 1, 2, "Press _ - _ to set priority");
+    wattrset(app.popupWin, COLOR_PAIR(BLUE));
+    mvwaddch(app.popupWin, 1, 8, 'A');
+    mvwaddch(app.popupWin, 1, 12, 'A' + app.maxPriority);
+    wattrset(app.popupWin, COLOR_PAIR(0));
+
+    mvwprintw(app.popupWin, 3, 1, "[+]");
+    wattrset(app.popupWin, COLOR_PAIR(GREEN));
+    mvwprintw(app.popupWin, 3, 5, "Increase");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 3, 14, "maximum priority");
+
+    mvwprintw(app.popupWin, 4, 1, "[-]");
+    wattrset(app.popupWin, COLOR_PAIR(RED));
+    mvwprintw(app.popupWin, 4, 5, "Decrease");
+    wattrset(app.popupWin, COLOR_PAIR(0));
+    mvwprintw(app.popupWin, 4, 14, "maximum priority");
+
+    mvwprintw(app.popupWin, 5, 1, "[BACKSPACE]  remove  priority");
+
+    wrefresh(app.popupWin);
+}
+
 void drawInputWindow(char *name) {
     box(app.popupWin, 0, 0);
 
@@ -462,6 +499,12 @@ void openFilenameWindow() {
     strncpy(input.string, app.filename, sizeof(input.string));
     input.cursorPos = strnlen(input.string, sizeof(input.string));
     app.focus = FilenameWindow;
+}
+
+void openPriorityWindow(){
+    app.popupWin = getPriorityWindow();
+    refresh();
+    app.focus = PriorityWindow;
 }
 
 void openHelpWindow() {

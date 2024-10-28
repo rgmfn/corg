@@ -57,6 +57,7 @@ typedef struct Node {
     char link[MAX_LINK_SIZE];
     struct tm* date;
     DateType dateType;
+    int priority; // 0 = no priority
 
     bool hasCounter;
 

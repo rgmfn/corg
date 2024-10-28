@@ -70,6 +70,9 @@ void parseInput() {
   case CalendarWindow:
     parseCalendarInput();
     break;
+  case PriorityWindow:
+    parsePriorityInput();
+    break;
   case ErrorWindow:
     closePopupWindow();
     break;
@@ -99,6 +102,7 @@ void parseDocumentInput() {
     tryScrollUp(app.curr);
     break;
   case 'P':
+    openPriorityWindow();
     break;
   case 'J':
     moveNodeDown(app.curr);
@@ -345,6 +349,25 @@ void parseCalendarInput() {
   // vvv needed for when wday is negative
   calendar.curr.tm_wday += 7;
   calendar.curr.tm_wday %= 7;
+}
+
+void parsePriorityInput() {
+  if (app.c == ESCAPE || app.c == 'q') {
+    closePopupWindow();
+  } else if (app.c >= 'A' && app.c <= 'A' + app.maxPriority) {
+    app.curr->priority = app.c - 'A' + 1;
+    closePopupWindow();
+  } else if (app.c >= 'a' && app.c <= 'a' + app.maxPriority) {
+    app.curr->priority = app.c - 'a' + 1;
+    closePopupWindow();
+  } else if (app.c == '+' && app.maxPriority < MAX_PRIORITY) {
+    app.maxPriority += 1;
+  } else if (app.c == '-' && app.maxPriority > MIN_PRIORITY) {
+    app.maxPriority -= 1;
+  } else if (app.c == BACKSPACE) {
+    app.curr->priority = 0;
+    closePopupWindow();
+  }
 }
 
 /**

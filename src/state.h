@@ -44,6 +44,8 @@ struct AppState {
 
     int c; // character just pressed
 
+    int maxPriority;
+
     bool isRunning;
 } app;
 

@@ -34,6 +34,7 @@ void parseDocumentInput();
 void parseTodoInput();
 void parseDateTypeInput();
 void parseCalendarInput();
+void parsePriorityInput();
 void parseInputInput(char*, unsigned long);
 
 #endif

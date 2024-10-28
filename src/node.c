@@ -92,46 +92,45 @@ Node* runToFront(Node *node) {
 // === end of private methods === }}}
 
 char* getTypeStr(NodeType type) {
-    // space after is baked in so that space doesn't appear for no type
     switch (type) {
         case None:
             return "";
         case Todo:
-            return "TODO ";
+            return "TODO";
         case Proj:
-            return "PROJ ";
+            return "PROJ";
         case Loop:
-            return "LOOP ";
+            return "LOOP";
         case Strt:
-            return "STRT ";
+            return "STRT";
         case Wait:
-            return "WAIT ";
+            return "WAIT";
         case Hold:
-            return "HOLD ";
+            return "HOLD";
         case Idea:
-            return "IDEA ";
+            return "IDEA";
         case Done:
-            return "DONE ";
+            return "DONE";
         case Kill:
-            return "KILL ";
+            return "KILL";
         case Unchecked:
-            return "[ ] ";
+            return "[ ]";
         case Started:
-            return "[-] ";
+            return "[-]";
         case Waiting:
-            return "[?] ";
+            return "[?]";
         case Checked:
-            return "[X] ";
+            return "[X]";
         case Okay:
-            return "OKAY ";
+            return "OKAY";
         case Yes:
-            return "YES ";
+            return "YES";
         case No:
-            return "NO ";
+            return "NO";
         case Head:
-            return "HEAD ";
+            return "HEAD";
         default:
-            return "ERROR ";
+            return "ERROR";
     }
 }
 
@@ -213,13 +212,34 @@ void printNode(Node* node, int depth) {
 
     attrset(COLOR_PAIR(textColor));
     addch(bulletChar);
-    addch(' ');
 
-    attrset(COLOR_PAIR(typeColor));
-    addstr(typeStr);
+    if (node->type != None) {
+        attrset(COLOR_PAIR(typeColor));
+        addch(' ');
+        addstr(typeStr);
+    }
 
-    attrset(COLOR_PAIR(textColor));
-    addstr(node->name);
+    if (node->priority > 0) {
+        if (node->priority <= app.maxPriority / 4) {
+            attrset(COLOR_PAIR(RED+offset));
+        } else if (node->priority <= app.maxPriority / 2) {
+            attrset(COLOR_PAIR(YELLOW+offset));
+        } else if (node->priority <= (app.maxPriority*3) / 4) {
+            attrset(COLOR_PAIR(GREEN+offset));
+        } else {
+            attrset(COLOR_PAIR(MAGENTA+offset));
+        }
+
+        addstr(" [#");
+        addch('A' + node->priority-1);
+        addstr("]");
+    }
+
+    if (strlen(node->name) > 0) {
+        attrset(COLOR_PAIR(textColor));
+        addch(' ');
+        addstr(node->name);
+    }
 
     if (node->hasCounter) {
         int numAnyTodo = countAnyTodo(node->child);

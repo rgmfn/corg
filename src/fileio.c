@@ -32,18 +32,19 @@
 #define BUF_SIZE 1000
 #define ERRBUFF_SIZE 100
 
-#define HEADING "^(\\*+)[[:blank:]]+(([[:upper:]]{4}|\\[[X \\?\\-]\\])[[:blank:]]+)?" \
-                "((.+[[:blank:]]+)*?.+)([[:blank:]]+\\[[[:digit:]]+\\/[[:digit:]]+\\])?\n$"
+#define HEADING "^(\\*+)(?:[[:blank:]]+([[:upper:]]{4}|\\[[X \\?\\-]\\]))?" \
+                "(?:[[:blank:]]+(\\[\\#[A-Z]\\]))?(?:[[:blank:]]+(.+?))?" \
+                "(?:[[:blank:]]+(\\[[[:digit:]]+\\/[[:digit:]]+\\]))?\\n$"
+
 /*
  * group 0: whole string
- * group 1: [****]
- * group 2: [STRT ]
- * group 3: [STRT]
- * group 4: [Get some wings]
- * group 5: [some ] // captures last (\w\h)*
- * group 6: [ [3/4]]
+ * group 1: {****}
+ * group 2: {STRT}
+ * group 3: {[#C]}
+ * group 4: {Get some wings}
+ * group 5: {[3/4]}
  */
-#define HEADING_GROUPS 7
+#define HEADING_GROUPS 6
 
 #define DESCRIPTION "^(([[:alnum:]]+[[:blank:]]+)*[[:alnum:]]+)\n$"
 #define DESCRIPTION_GROUPS 1
@@ -216,8 +217,16 @@ Node* loadFromFile(char* filename) {
             sprintf(node->name, "%.*s", (int)(rm[4].rm_eo-rm[4].rm_so), buffer + rm[4].rm_so);
 
             char typeStr[5];
-            sprintf(typeStr, "%.*s", (int)(rm[3].rm_eo-rm[3].rm_so), buffer + rm[3].rm_so);
+            sprintf(typeStr, "%.*s", (int)(rm[2].rm_eo-rm[2].rm_so), buffer + rm[2].rm_so);
             node->type = getTypeFromString(typeStr);
+
+            char priorityStr[5];
+            sprintf(priorityStr, "%.*s", (int)(rm[3].rm_eo-rm[3].rm_so), buffer + rm[3].rm_so);
+            if (priorityStr[2] >= 'A' && priorityStr[2] <= 'Z') {
+                node->priority = priorityStr[2] - 'A' + 1;
+            } else {
+                node->priority = 0;
+            }
 
             char starStr[20];
             /* TODO; // will break past 19 indents */
@@ -227,7 +236,7 @@ Node* loadFromFile(char* filename) {
             // can I do math instead??
 
             char counterStr[10];
-            sprintf(counterStr, "%.*s", (int)(rm[6].rm_eo - rm[6].rm_so), buffer + rm[6].rm_so);
+            sprintf(counterStr, "%.*s", (int)(rm[5].rm_eo - rm[5].rm_so), buffer + rm[5].rm_so);
             if (strnlen(counterStr, sizeof(counterStr)) > 0) {
                 node->hasCounter = true;
             } else {
@@ -285,7 +294,19 @@ void printSubtreeToFile(Node *node, FILE *fp) {
         fprintf(fp, "*");
     };
 
-    fprintf(fp, " %s%s\n", getTypeStr(node->type), node->name);
+    if (node->type != None) {
+        fprintf(fp, " %s", getTypeStr(node->type));
+    }
+
+    if (node->priority > 0) {
+        fprintf(fp, " [#%c]", 'A' + node->priority-1);
+    }
+
+    if (strlen(node->name) > 0) {
+        fprintf(fp, " %s", node->name);
+    }
+
+    fputc('\n', fp);
 
     if (node->date != NULL) {
         switch (node->dateType) {
