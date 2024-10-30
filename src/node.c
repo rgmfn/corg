@@ -219,19 +219,19 @@ void printNode(Node* node, int depth) {
         addstr(typeStr);
     }
 
-    if (node->priority > 0) {
-        if (node->priority <= app.maxPriority / 4) {
+    if (node->priority > -1) {
+        if (node->priority < app.maxPriority / 4) {
             attrset(COLOR_PAIR(RED+offset));
-        } else if (node->priority <= app.maxPriority / 2) {
+        } else if (node->priority < app.maxPriority / 2) {
             attrset(COLOR_PAIR(YELLOW+offset));
-        } else if (node->priority <= (app.maxPriority*3) / 4) {
+        } else if (node->priority < (app.maxPriority*3) / 4) {
             attrset(COLOR_PAIR(GREEN+offset));
         } else {
             attrset(COLOR_PAIR(MAGENTA+offset));
         }
 
         addstr(" [#");
-        addch('A' + node->priority-1);
+        addch('A' + node->priority);
         addstr("]");
     }
 
@@ -461,7 +461,7 @@ void tryScrollDown(Node *curr) {
 }
 
 int getVisualSize(Node *node) {
-    int lines = 1; // * DONE task
+    int lines = 1; // line with *s and title
 
     if (strnlen(node->description, sizeof(node->description)) > 0) {
         lines++;
@@ -545,6 +545,7 @@ void createChildNode(Node *subroot) {
     strncpy(child->name, "", sizeof(child->name));
     strncpy(child->description, "", sizeof(child->description));
     child->subTreeIsOpen = true;
+    child->priority = -1;
 
     if (subroot->child != NULL) {
         child->next = subroot->child;
@@ -562,6 +563,7 @@ void createSiblingNodeAfter(Node *subroot) {
     strncpy(sibling->name, "", sizeof(sibling->name));
     strncpy(sibling->description, "", sizeof(sibling->description));
     sibling->subTreeIsOpen = true;
+    sibling->priority = -1;
 
     if (subroot->next != NULL) {
         sibling->next = subroot->next;

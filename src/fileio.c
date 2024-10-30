@@ -195,6 +195,7 @@ Node* loadFromFile(char* filename) {
         next->type = None;
         next->subTreeIsOpen = true;
         head->next = next;
+        next->priority = -1;
 
         strncpy(app.filename, "", sizeof(app.filename));
 
@@ -223,9 +224,13 @@ Node* loadFromFile(char* filename) {
             char priorityStr[5];
             sprintf(priorityStr, "%.*s", (int)(rm[3].rm_eo-rm[3].rm_so), buffer + rm[3].rm_so);
             if (priorityStr[2] >= 'A' && priorityStr[2] <= 'Z') {
-                node->priority = priorityStr[2] - 'A' + 1;
+                node->priority = priorityStr[2] - 'A';
             } else {
-                node->priority = 0;
+                node->priority = -1;
+            }
+
+            if (node->priority > app.maxPriority) {
+                app.maxPriority = node->priority;
             }
 
             char starStr[20];
@@ -299,7 +304,7 @@ void printSubtreeToFile(Node *node, FILE *fp) {
     }
 
     if (node->priority > 0) {
-        fprintf(fp, " [#%c]", 'A' + node->priority-1);
+        fprintf(fp, " [#%c]", 'A' + node->priority);
     }
 
     if (strlen(node->name) > 0) {

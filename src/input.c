@@ -355,17 +355,17 @@ void parsePriorityInput() {
   if (app.c == ESCAPE || app.c == 'q') {
     closePopupWindow();
   } else if (app.c >= 'A' && app.c <= 'A' + app.maxPriority) {
-    app.curr->priority = app.c - 'A' + 1;
+    app.curr->priority = app.c - 'A';
     closePopupWindow();
   } else if (app.c >= 'a' && app.c <= 'a' + app.maxPriority) {
-    app.curr->priority = app.c - 'a' + 1;
+    app.curr->priority = app.c - 'a';
     closePopupWindow();
   } else if (app.c == '+' && app.maxPriority < MAX_PRIORITY) {
     app.maxPriority += 1;
   } else if (app.c == '-' && app.maxPriority > MIN_PRIORITY) {
     app.maxPriority -= 1;
   } else if (app.c == BACKSPACE) {
-    app.curr->priority = 0;
+    app.curr->priority = -1;
     closePopupWindow();
   }
 }
