@@ -49,6 +49,9 @@ typedef enum NodeType {
 #define MAX_DESCRIPTION_SIZE 200
 #define MAX_LINK_SIZE 200
 
+#define MIN_PRIORITY 0
+#define MAX_PRIORITY 25
+
 typedef struct Node {
     NodeType type;
 
@@ -57,7 +60,7 @@ typedef struct Node {
     char link[MAX_LINK_SIZE];
     struct tm* date;
     DateType dateType;
-    int priority; // 0 = no priority
+    int priority; // -1 no priority, 0/A highest, 25/Z lowest
 
     bool hasCounter;
 

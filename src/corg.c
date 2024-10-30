@@ -44,13 +44,14 @@ int main(int argc, char *argv[]) {
         init_pair(GRAY_SEL, COLOR_BLACK, GRAY);
     }
 
+    app.maxPriority = 4;
+
     Node *head = loadFromFile(argv[1]);
 
     app.head = head;
     app.curr = head->next;
     app.focus = Document;
     app.topLine = head->next;
-    app.maxPriority = 4;
     
     input.cursorPos = 0;
     strncpy(input.string, "", sizeof(input.string));
