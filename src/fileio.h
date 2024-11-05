@@ -14,7 +14,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef FILEIO_H
@@ -24,6 +24,6 @@
 
 #include "node.h"
 
-Node* loadFromFile(char*);
-void writeToFile(Node*, char*);
+Node *loadFromFile(char *);
+void writeToFile(Node *, char *);
 #endif

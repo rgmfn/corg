@@ -14,14 +14,14 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <curses.h>
 #include <regex.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "fileio.h"
@@ -32,9 +32,10 @@
 #define BUF_SIZE 1000
 #define ERRBUFF_SIZE 100
 
-#define HEADING "^(\\*+)(?:[[:blank:]]+([[:upper:]]{4}|\\[[X \\?\\-]\\]))?" \
-                "(?:[[:blank:]]+(\\[\\#[A-Z]\\]))?(?:[[:blank:]]+(.+?))?" \
-                "(?:[[:blank:]]+(\\[[[:digit:]]+\\/[[:digit:]]+\\]))?\\n$"
+#define HEADING                                                                \
+    "^(\\*+)(?:[[:blank:]]+([[:upper:]]{4}|\\[[X \\?\\-]\\]))?"                \
+    "(?:[[:blank:]]+(\\[\\#[A-Z]\\]))?(?:[[:blank:]]+(.+?))?"                  \
+    "(?:[[:blank:]]+(\\[[[:digit:]]+\\/[[:digit:]]+\\]))?\\n$"
 
 /*
  * group 0: whole string
@@ -49,33 +50,45 @@
 #define DESCRIPTION "^(([[:alnum:]]+[[:blank:]]+)*[[:alnum:]]+)\n$"
 #define DESCRIPTION_GROUPS 1
 
-#define TIMESTAMP "^<([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
+#define TIMESTAMP                                                              \
+    "^<([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) "                    \
+    "([[:alpha:]]{3})>\n$"
 #define TIMESTAMP_GROUPS 4
 
-#define DEADLINE "^DEADLINE: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
+#define DEADLINE                                                               \
+    "^DEADLINE: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) "          \
+    "([[:alpha:]]{3})>\n$"
 #define DEADLINE_GROUPS 4
 
-#define SCHEDULED "^SCHEDULED: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})>\n$"
+#define SCHEDULED                                                              \
+    "^SCHEDULED: <([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) "         \
+    "([[:alpha:]]{3})>\n$"
 #define SCHEDULED_GROUPS 4
 
-#define CLOSED "^CLOSED: \\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})\\]\n$"
+#define CLOSED                                                                 \
+    "^CLOSED: \\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) "          \
+    "([[:alpha:]]{3})\\]\n$"
 #define CLOSED_GROUPS 4
 
-#define INACTIVE "^\\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) ([[:alpha:]]{3})\\]\n$"
+#define INACTIVE                                                               \
+    "^\\[([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2}) "                  \
+    "([[:alpha:]]{3})\\]\n$"
 #define INACTIVE_GROUPS 4
 
-#define HYPERLINK "^(((https?|ftp|smtp):\\/\\/)?(www.)?[a-z0-9]+\\.[a-z]+(\\/[a-zA-Z0-9#]+\\/?)*\\/?)\n$"
+#define HYPERLINK                                                              \
+    "^(((https?|ftp|smtp):\\/\\/)?(www.)?[a-z0-9]+\\.[a-z]+(\\/"               \
+    "[a-zA-Z0-9#]+\\/?)*\\/?)\n$"
 #define HYPERLINK_GROUPS 1
 
 #define MAX_GROUPS 7
 
 bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
     char errbuf[ERRBUFF_SIZE];
-    int error = regexec(regex, string, HEADING_GROUPS+1, rm, 0);
+    int error = regexec(regex, string, HEADING_GROUPS + 1, rm, 0);
     if (error == REG_NOMATCH) {
         return false;
     } else if (error) {
-        regerror(error, regex, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, regex, errbuf, ERRBUFF_SIZE - 1);
         errorAndExit(errbuf);
     }
 
@@ -86,10 +99,10 @@ bool isMatch(regex_t *regex, char *string, regmatch_t *rm) {
  * depth - depth of curr node
  * nodeDepth - depth of node to be placed
  */
-Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
+Node *placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
     printw("curr: %d, node: %d", depth, nodeDepth);
     refresh();
-    if (nodeDepth == depth+1) {
+    if (nodeDepth == depth + 1) {
         curr->child = node;
         node->parent = curr;
     } else if (nodeDepth <= depth) {
@@ -105,83 +118,88 @@ Node* placeNode(int depth, int nodeDepth, Node *curr, Node *node) {
     return node;
 }
 
-struct tm* getTmFromRegex(char *buffer, regmatch_t *rm) {
+struct tm *getTmFromRegex(char *buffer, regmatch_t *rm) {
     char yearStr[5];
-    sprintf(yearStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
+    sprintf(yearStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so),
+            buffer + rm[1].rm_so);
     int year = atoi(yearStr);
 
     char monStr[3];
-    sprintf(monStr, "%.*s", (int)(rm[2].rm_eo - rm[2].rm_so), buffer + rm[2].rm_so);
+    sprintf(monStr, "%.*s", (int)(rm[2].rm_eo - rm[2].rm_so),
+            buffer + rm[2].rm_so);
     int month = atoi(monStr);
 
     char dayStr[3];
-    sprintf(dayStr, "%.*s", (int)(rm[3].rm_eo - rm[3].rm_so), buffer + rm[3].rm_so);
+    sprintf(dayStr, "%.*s", (int)(rm[3].rm_eo - rm[3].rm_so),
+            buffer + rm[3].rm_so);
     int day = atoi(dayStr);
 
     char wdayStr[4];
-    sprintf(wdayStr, "%.*s", (int)(rm[4].rm_eo - rm[4].rm_so), buffer + rm[4].rm_so);
+    sprintf(wdayStr, "%.*s", (int)(rm[4].rm_eo - rm[4].rm_so),
+            buffer + rm[4].rm_so);
     int wday = getIntFromWeekday(wdayStr);
 
     struct tm *timestamp = malloc(sizeof(struct tm));
-    timestamp->tm_year = year-1900;
-    timestamp->tm_mon = month-1; // 0-indexed
+    timestamp->tm_year = year - 1900;
+    timestamp->tm_mon = month - 1; // 0-indexed
     timestamp->tm_mday = day;
     timestamp->tm_wday = wday;
 
     return timestamp;
 }
 
-Node* loadFromFile(char* filename) {
+Node *loadFromFile(char *filename) {
     int error;
     char errbuf[ERRBUFF_SIZE];
 
     regmatch_t rm[MAX_GROUPS];
 
     regex_t heading;
-    if ((error = regcomp(&heading, HEADING, REG_EXTENDED|REG_ENHANCED)) != 0) {
-        regerror(error, &heading, errbuf, ERRBUFF_SIZE-1);
+    if ((error = regcomp(&heading, HEADING, REG_EXTENDED | REG_ENHANCED)) !=
+        0) {
+        regerror(error, &heading, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "heading regex");
     }
 
     regex_t description;
     if ((error = regcomp(&description, DESCRIPTION, REG_EXTENDED)) != 0) {
-        regerror(error, &description, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &description, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "description regex");
     }
 
     regex_t timestamp;
     if ((error = regcomp(&timestamp, TIMESTAMP, REG_EXTENDED)) != 0) {
-        regerror(error, &timestamp, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &timestamp, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "timestamp regex");
     }
 
     regex_t deadline;
     if ((error = regcomp(&deadline, DEADLINE, REG_EXTENDED)) != 0) {
-        regerror(error, &deadline, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &deadline, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "deadline regex");
     }
 
     regex_t scheduled;
     if ((error = regcomp(&scheduled, SCHEDULED, REG_EXTENDED)) != 0) {
-        regerror(error, &scheduled, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &scheduled, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "scheduled regex");
     }
 
     regex_t closed;
     if ((error = regcomp(&closed, CLOSED, REG_EXTENDED)) != 0) {
-        regerror(error, &closed, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &closed, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "closed regex");
     }
 
     regex_t inactive;
     if ((error = regcomp(&inactive, INACTIVE, REG_EXTENDED)) != 0) {
-        regerror(error, &inactive, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &inactive, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "inactive regex");
     }
 
     regex_t hyperlink;
     if ((error = regcomp(&hyperlink, HYPERLINK, REG_EXTENDED)) != 0) {
-        regerror(error, &hyperlink, errbuf, ERRBUFF_SIZE-1);
+        regerror(error, &hyperlink, errbuf, ERRBUFF_SIZE - 1);
         errorAndExitf(errbuf, "hyperlink regex");
     }
 
@@ -215,14 +233,17 @@ Node* loadFromFile(char* filename) {
         if (isMatch(&heading, buffer, rm)) {
             Node *node = malloc(sizeof(Node));
             node->subTreeIsOpen = true;
-            sprintf(node->name, "%.*s", (int)(rm[4].rm_eo-rm[4].rm_so), buffer + rm[4].rm_so);
+            sprintf(node->name, "%.*s", (int)(rm[4].rm_eo - rm[4].rm_so),
+                    buffer + rm[4].rm_so);
 
             char typeStr[5];
-            sprintf(typeStr, "%.*s", (int)(rm[2].rm_eo-rm[2].rm_so), buffer + rm[2].rm_so);
+            sprintf(typeStr, "%.*s", (int)(rm[2].rm_eo - rm[2].rm_so),
+                    buffer + rm[2].rm_so);
             node->type = getTypeFromString(typeStr);
 
             char priorityStr[5];
-            sprintf(priorityStr, "%.*s", (int)(rm[3].rm_eo-rm[3].rm_so), buffer + rm[3].rm_so);
+            sprintf(priorityStr, "%.*s", (int)(rm[3].rm_eo - rm[3].rm_so),
+                    buffer + rm[3].rm_so);
             if (priorityStr[2] >= 'A' && priorityStr[2] <= 'Z') {
                 node->priority = priorityStr[2] - 'A';
             } else {
@@ -235,13 +256,15 @@ Node* loadFromFile(char* filename) {
 
             char starStr[20];
             /* TODO; // will break past 19 indents */
-            sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
+            sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so),
+                    buffer + rm[1].rm_so);
             int nodeDepth = strnlen(starStr, sizeof(starStr));
             /* int nodeDepth = (int)(rm[1].rm_eo - rm[1].rm_so); */
             // can I do math instead??
 
             char counterStr[10];
-            sprintf(counterStr, "%.*s", (int)(rm[5].rm_eo - rm[5].rm_so), buffer + rm[5].rm_so);
+            sprintf(counterStr, "%.*s", (int)(rm[5].rm_eo - rm[5].rm_so),
+                    buffer + rm[5].rm_so);
             if (strnlen(counterStr, sizeof(counterStr)) > 0) {
                 node->hasCounter = true;
             } else {
@@ -266,11 +289,13 @@ Node* loadFromFile(char* filename) {
             curr->date = getTmFromRegex(buffer, rm);
             curr->dateType = Closed;
         } else if (isMatch(&hyperlink, buffer, rm)) {
-            sprintf(curr->link, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
+            sprintf(curr->link, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so),
+                    buffer + rm[1].rm_so);
         }
         // DESCRIPTION MUST GO AT END, WILL CAPTURE ANYTHING
         else if (isMatch(&description, buffer, rm)) {
-            sprintf(curr->description, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so), buffer + rm[1].rm_so);
+            sprintf(curr->description, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so),
+                    buffer + rm[1].rm_so);
         }
     }
 
@@ -315,18 +340,18 @@ void printSubtreeToFile(Node *node, FILE *fp) {
 
     if (node->date != NULL) {
         switch (node->dateType) {
-            case Deadline:
-                fprintf(fp, "DEADLINE: ");
-                break;
-            case Scheduled:
-                fprintf(fp, "SCHEDULED: ");
-                break;
-            case Closed:
-                fprintf(fp, "CLOSED: ");
-                break;
-            case Inactive:
-            case Timestamp:
-                break;
+        case Deadline:
+            fprintf(fp, "DEADLINE: ");
+            break;
+        case Scheduled:
+            fprintf(fp, "SCHEDULED: ");
+            break;
+        case Closed:
+            fprintf(fp, "CLOSED: ");
+            break;
+        case Inactive:
+        case Timestamp:
+            break;
         }
 
         char *dateStr = tmToString(node->date, node->dateType);

@@ -14,17 +14,15 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <curses.h>
 
-#include "help.h"
-#include "node.h"
-#include "util.h"
-#include "windows.h"
-#include "state.h"
 #include "colors.h"
+#include "help.h"
+#include "state.h"
+#include "windows.h"
 
 void goNextHelpPage() {
     help.page++;
@@ -77,7 +75,7 @@ void drawHelpPageThree() {
 
 void drawHelpPageFour() {
     wattrset(app.popupWin, COLOR_PAIR(BLUE));
-    mvwprintw(app.popupWin, 1, HELP_COLS/2-7, "CALENDAR HELP");
+    mvwprintw(app.popupWin, 1, HELP_COLS / 2 - 7, "CALENDAR HELP");
     wattrset(app.popupWin, COLOR_PAIR(0));
     mvwprintw(app.popupWin, 3, 1, "(j) prevWeek");
     mvwprintw(app.popupWin, 4, 1, "(k) nextWeek");

@@ -14,20 +14,20 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <curses.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include "node.h"
 #include "colors.h"
 #include "fileio.h"
+#include "input.h"
+#include "node.h"
 #include "state.h"
 #include "windows.h"
-#include "input.h"
 
 int main(int argc, char *argv[]) {
     initscr();
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 
         for (int i = RED; i <= BRIGHT_WHITE; i++) {
             init_pair(i, i, COLOR_BLACK);
-            init_pair(i+15, i, GRAY);
+            init_pair(i + 15, i, GRAY);
         }
         init_pair(GRAY_SEL, COLOR_BLACK, GRAY);
     }
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     app.curr = head->next;
     app.focus = Document;
     app.topLine = head->next;
-    
+
     input.cursorPos = 0;
     strncpy(input.string, "", sizeof(input.string));
 

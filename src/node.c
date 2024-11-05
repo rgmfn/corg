@@ -14,31 +14,31 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <curses.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "node.h"
 #include "colors.h"
+#include "node.h"
+#include "state.h"
 #include "util.h"
 #include "windows.h"
-#include "state.h"
 
 // === private methods === {{{
 
 int getDepthColor(int depth) {
-    switch (depth%3) {
-        case 0:
-            return BLUE;
-        case 1:
-            return MAGENTA;
-        case 2:
-            return CYAN;
-        default:
-            return WHITE;
+    switch (depth % 3) {
+    case 0:
+        return BLUE;
+    case 1:
+        return MAGENTA;
+    case 2:
+        return CYAN;
+    default:
+        return WHITE;
     }
 }
 
@@ -51,7 +51,7 @@ char getBulletChar(NodeType type) {
     return '*'; // no other types implemented yet
 }
 
-Node* runDownBack(Node *curr) {
+Node *runDownBack(Node *curr) {
     if (curr->next != NULL)
         return runDownBack(curr->next);
     else if (curr->child != NULL) {
@@ -61,7 +61,7 @@ Node* runDownBack(Node *curr) {
     return curr;
 }
 
-Node* runToBack(Node *node) {
+Node *runToBack(Node *node) {
     if (node->next == NULL) {
         return node;
     }
@@ -69,7 +69,7 @@ Node* runToBack(Node *node) {
     return runToBack(node->next);
 }
 
-Node* runToBackAndMakeParent(Node *node, Node *newParent) {
+Node *runToBackAndMakeParent(Node *node, Node *newParent) {
     if (node->next == NULL) {
         node->parent = newParent;
 
@@ -81,7 +81,7 @@ Node* runToBackAndMakeParent(Node *node, Node *newParent) {
     return runToBackAndMakeParent(node->next, newParent);
 }
 
-Node* runToFront(Node *node) {
+Node *runToFront(Node *node) {
     if (node->prev == NULL) {
         return node;
     }
@@ -91,46 +91,46 @@ Node* runToFront(Node *node) {
 
 // === end of private methods === }}}
 
-char* getTypeStr(NodeType type) {
+char *getTypeStr(NodeType type) {
     switch (type) {
-        case None:
-            return "";
-        case Todo:
-            return "TODO";
-        case Proj:
-            return "PROJ";
-        case Loop:
-            return "LOOP";
-        case Strt:
-            return "STRT";
-        case Wait:
-            return "WAIT";
-        case Hold:
-            return "HOLD";
-        case Idea:
-            return "IDEA";
-        case Done:
-            return "DONE";
-        case Kill:
-            return "KILL";
-        case Unchecked:
-            return "[ ]";
-        case Started:
-            return "[-]";
-        case Waiting:
-            return "[?]";
-        case Checked:
-            return "[X]";
-        case Okay:
-            return "OKAY";
-        case Yes:
-            return "YES";
-        case No:
-            return "NO";
-        case Head:
-            return "HEAD";
-        default:
-            return "ERROR";
+    case None:
+        return "";
+    case Todo:
+        return "TODO";
+    case Proj:
+        return "PROJ";
+    case Loop:
+        return "LOOP";
+    case Strt:
+        return "STRT";
+    case Wait:
+        return "WAIT";
+    case Hold:
+        return "HOLD";
+    case Idea:
+        return "IDEA";
+    case Done:
+        return "DONE";
+    case Kill:
+        return "KILL";
+    case Unchecked:
+        return "[ ]";
+    case Started:
+        return "[-]";
+    case Waiting:
+        return "[?]";
+    case Checked:
+        return "[X]";
+    case Okay:
+        return "OKAY";
+    case Yes:
+        return "YES";
+    case No:
+        return "NO";
+    case Head:
+        return "HEAD";
+    default:
+        return "ERROR";
     }
 }
 
@@ -176,26 +176,27 @@ NodeType getTypeFromString(char *string) {
 
 bool isFinishedType(NodeType type) {
     switch (type) {
-        case Done:
-        case Kill:
-        case Checked:
-        case Okay:
-        case Yes:
-        case No:
-            return true;
-        default:
-            return false;
+    case Done:
+    case Kill:
+    case Checked:
+    case Okay:
+    case Yes:
+    case No:
+        return true;
+    default:
+        return false;
     }
 }
 
-void printNode(Node* node, int depth) {
-    if (node->type == Head) return;
+void printNode(Node *node, int depth) {
+    if (node->type == Head)
+        return;
 
     int textColor = getDepthColor(depth);
     int offset = 0;
 
     int typeColor = getTypeColor(node->type);
-    char* typeStr = getTypeStr(node->type);
+    char *typeStr = getTypeStr(node->type);
     char bulletChar = getBulletChar(node->type);
 
     windentNTimes(stdscr, depth);
@@ -221,13 +222,13 @@ void printNode(Node* node, int depth) {
 
     if (node->priority > -1) {
         if (node->priority < app.maxPriority / 4) {
-            attrset(COLOR_PAIR(RED+offset));
+            attrset(COLOR_PAIR(RED + offset));
         } else if (node->priority < app.maxPriority / 2) {
-            attrset(COLOR_PAIR(YELLOW+offset));
-        } else if (node->priority < (app.maxPriority*3) / 4) {
-            attrset(COLOR_PAIR(GREEN+offset));
+            attrset(COLOR_PAIR(YELLOW + offset));
+        } else if (node->priority < (app.maxPriority * 3) / 4) {
+            attrset(COLOR_PAIR(GREEN + offset));
         } else {
-            attrset(COLOR_PAIR(MAGENTA+offset));
+            attrset(COLOR_PAIR(MAGENTA + offset));
         }
 
         addstr(" [#");
@@ -246,9 +247,9 @@ void printNode(Node* node, int depth) {
         int numDoneTodo = countDoneTodo(node->child);
 
         if (numAnyTodo == numDoneTodo) {
-            attrset(COLOR_PAIR(GRAY+offset));
+            attrset(COLOR_PAIR(GRAY + offset));
         } else {
-            attrset(COLOR_PAIR(GREEN+offset));
+            attrset(COLOR_PAIR(GREEN + offset));
         }
         printw(" [%d/%d]", numDoneTodo, numAnyTodo);
     }
@@ -261,24 +262,24 @@ void printNode(Node* node, int depth) {
 
     if (node->date != NULL) {
         addch('\n');
-        windentNTimes(stdscr, depth+1);
+        windentNTimes(stdscr, depth + 1);
 
         attrset(COLOR_PAIR(GRAY));
 
         char *dateStr;
         switch (node->dateType) {
-            case Timestamp:
-            case Inactive:
-                break;
-            case Deadline:
-                addstr("DEADLINE: ");
-                break;
-            case Scheduled:
-                addstr("SCHEDULED: ");
-                break;
-            case Closed:
-                addstr("CLOSED: ");
-                break;
+        case Timestamp:
+        case Inactive:
+            break;
+        case Deadline:
+            addstr("DEADLINE: ");
+            break;
+        case Scheduled:
+            addstr("SCHEDULED: ");
+            break;
+        case Closed:
+            addstr("CLOSED: ");
+            break;
         }
 
         attrset(COLOR_PAIR(YELLOW));
@@ -291,14 +292,14 @@ void printNode(Node* node, int depth) {
 
     if (strnlen(node->description, sizeof(node->description)) > 0) {
         addch('\n');
-        windentNTimes(stdscr, depth+1);
+        windentNTimes(stdscr, depth + 1);
         addstr(node->description);
     }
 
     if (strnlen(node->link, sizeof(node->link)) > 0) {
         addch('\n');
-        windentNTimes(stdscr, depth+1);
-        attrset(COLOR_PAIR(BLUE)|A_UNDERLINE);
+        windentNTimes(stdscr, depth + 1);
+        attrset(COLOR_PAIR(BLUE) | A_UNDERLINE);
         addstr(node->link);
         attrset(COLOR_PAIR(0));
     }
@@ -307,16 +308,18 @@ void printNode(Node* node, int depth) {
 }
 
 void printTree(Node *node, int depth) {
-    if (node == NULL) return; // no tree to draw
+    if (node == NULL)
+        return; // no tree to draw
 
     printNode(node, depth);
 
-    printTree(node->child, depth+1);
+    printTree(node->child, depth + 1);
     printTree(node->next, depth);
 }
 
 void printPartialTree(Node *node, int nodesToDraw) {
-    if (node == NULL || nodesToDraw <= 0) return;
+    if (node == NULL || nodesToDraw <= 0)
+        return;
 
     printNode(node, getDepth(node));
 
@@ -325,12 +328,12 @@ void printPartialTree(Node *node, int nodesToDraw) {
     if (strnlen(node->description, sizeof(node->description)) > 0) {
         lines++;
     }
-    
+
     if (node->date != NULL) {
-        lines++; 
+        lines++;
     }
 
-    printPartialTree(goDownVisualOrNull(node), nodesToDraw-lines);
+    printPartialTree(goDownVisualOrNull(node), nodesToDraw - lines);
 }
 
 void freeSubtree(Node *node) {
@@ -358,7 +361,8 @@ void freeSubtree(Node *node) {
 }
 
 void toggleSubtree(Node *subroot) {
-    bool hasSubtree = subroot->child != NULL ||
+    bool hasSubtree =
+        subroot->child != NULL ||
         strnlen(subroot->description, sizeof(subroot->description)) > 0 ||
         subroot->date != NULL;
     if (!hasSubtree)
@@ -370,7 +374,7 @@ void toggleSubtree(Node *subroot) {
 /**
  * goDownVisual except when it goes down from the last node it returns NULL
  */
-Node* goDownVisualOrNull(Node *curr) {
+Node *goDownVisualOrNull(Node *curr) {
     Node *down = goDownVisual(curr);
 
     if (down == curr) {
@@ -380,7 +384,7 @@ Node* goDownVisualOrNull(Node *curr) {
     }
 }
 
-Node* goDownVisual(Node *curr) {
+Node *goDownVisual(Node *curr) {
     if (curr->subTreeIsOpen && curr->child != NULL)
         return curr->child;
     else if (curr->next != NULL)
@@ -398,7 +402,7 @@ Node* goDownVisual(Node *curr) {
     return parent->next;
 }
 
-Node* goUpVisual(Node *curr) {
+Node *goUpVisual(Node *curr) {
     if (curr->prev != NULL && curr->prev->child != NULL &&
         curr->prev->subTreeIsOpen)
         return runDownBack(curr->prev->child);
@@ -410,21 +414,21 @@ Node* goUpVisual(Node *curr) {
     return curr;
 }
 
-Node* goNextLogical(Node *curr) {
+Node *goNextLogical(Node *curr) {
     if (curr->next != NULL)
         return curr->next;
 
     return goDownVisual(curr);
 }
 
-Node* goPrevLogical(Node *curr) {
+Node *goPrevLogical(Node *curr) {
     if (curr->prev != NULL)
         return curr->prev;
 
     return goUpVisual(curr);
 }
 
-Node* gotoParent(Node *curr) {
+Node *gotoParent(Node *curr) {
     if (curr->parent != NULL) {
         return curr->parent;
     }
@@ -478,7 +482,7 @@ int getVisualSize(Node *node) {
     return lines;
 }
 
-int getVisualDistance(Node* node, Node *bottom) {
+int getVisualDistance(Node *node, Node *bottom) {
     if (node == NULL) {
         errorAndExit("top node is below bottom node");
     }
@@ -491,7 +495,8 @@ int getVisualDistance(Node* node, Node *bottom) {
         return 1;
     }
 
-    return getVisualSize(node) + getVisualDistance(goDownVisualOrNull(node), bottom);
+    return getVisualSize(node) +
+           getVisualDistance(goDownVisualOrNull(node), bottom);
 }
 
 bool isAbove(Node *node, Node *other) {
@@ -506,7 +511,7 @@ bool isAbove(Node *node, Node *other) {
     return isAbove(next, other);
 }
 
-Node* riseToStarDepth(int targetDepth, Node *node) {
+Node *riseToStarDepth(int targetDepth, Node *node) {
     if (node == NULL) {
         errorAndExit("Tried to reach depth 0");
     }
@@ -528,9 +533,7 @@ Node* riseToStarDepth(int targetDepth, Node *node) {
  *
  * star depth = depth + 1
  */
-int getStarDepth(Node *node) {
-    return getDepth(node) + 1;
-}
+int getStarDepth(Node *node) { return getDepth(node) + 1; }
 
 int getDepth(Node *node) {
     if (node == NULL)
@@ -583,7 +586,7 @@ void deleteNode(Node *subroot) {
     //      \
     //       *
     if (subroot->prev == NULL && subroot->parent == NULL &&
-            subroot->next != NULL) {
+        subroot->next != NULL) {
         Node *head = app.head;
         Node *next = subroot->next;
 
@@ -603,7 +606,7 @@ void deleteNode(Node *subroot) {
     //      \
     //       *
     else if (subroot->prev == NULL && subroot->parent == NULL &&
-            subroot->next == NULL) {
+             subroot->next == NULL) {
         app.head->next = NULL;
 
         app.curr = NULL;
@@ -619,7 +622,7 @@ void deleteNode(Node *subroot) {
     //          \
     //           *
     else if (subroot->prev != NULL && subroot->parent == NULL &&
-            subroot->next == NULL) {
+             subroot->next == NULL) {
         Node *prev = subroot->prev;
 
         prev->next = NULL;
@@ -635,7 +638,7 @@ void deleteNode(Node *subroot) {
     //    \
     //     *
     else if (subroot->next != NULL && subroot->prev == NULL &&
-            subroot->parent != NULL) {
+             subroot->parent != NULL) {
         Node *parent = subroot->parent;
         Node *next = subroot->next;
 
@@ -654,7 +657,7 @@ void deleteNode(Node *subroot) {
     //    \
     //     *
     else if (subroot->next == NULL && subroot->prev == NULL &&
-            subroot->parent != NULL) {
+             subroot->parent != NULL) {
         Node *parent = subroot->parent;
 
         parent->child = NULL;
@@ -670,7 +673,7 @@ void deleteNode(Node *subroot) {
     //    \   \                 \
     //     *   *                 *
     else if ((subroot->parent == NULL ||
-             (subroot->parent != NULL && subroot->parent->child != subroot)) &&
+              (subroot->parent != NULL && subroot->parent->child != subroot)) &&
              subroot->prev != NULL && subroot->next == NULL) {
         Node *prev = subroot->prev;
 
@@ -701,7 +704,7 @@ void deleteNode(Node *subroot) {
 }
 
 /**
- * *---x        *      
+ * *---x        *
  *      \   ->   \
  *       *        x---*
  *
@@ -731,7 +734,7 @@ void tryPopNodeOut(Node *node) {
     if (child != NULL) {
         node->next = child;
         child->prev = node;
-        (void) runToBackAndMakeParent(child, prev);
+        (void)runToBackAndMakeParent(child, prev);
     } else {
         node->next = NULL;
     }
@@ -851,9 +854,7 @@ void moveNodeUp(Node *node) {
     }
 }
 
-void toggleCounter(Node *node) {
-    node->hasCounter = !node->hasCounter;
-}
+void toggleCounter(Node *node) { node->hasCounter = !node->hasCounter; }
 
 /**
  * Counts the number of nodes with any todo status. Searches current node
@@ -889,26 +890,26 @@ int countDoneTodo(Node *node) {
 
 NodeType cycleNodeType(NodeType type) {
     switch (type) {
-        case Todo:
-            return Strt;
-        case Strt:
-            return Done;
-        case Done:
-            return Todo;
-        case Unchecked:
-            return Started;
-        case Started:
-            return Checked;
-        case Checked:
-            return Unchecked;
-        case Okay:
-            return Yes;
-        case Yes:
-            return No;
-        case No:
-            return Okay;
-        default:
-            break;
+    case Todo:
+        return Strt;
+    case Strt:
+        return Done;
+    case Done:
+        return Todo;
+    case Unchecked:
+        return Started;
+    case Started:
+        return Checked;
+    case Checked:
+        return Unchecked;
+    case Okay:
+        return Yes;
+    case Yes:
+        return No;
+    case No:
+        return Okay;
+    default:
+        break;
     }
 
     return type;

@@ -14,7 +14,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef INPUT_H
@@ -35,6 +35,6 @@ void parseTodoInput();
 void parseDateTypeInput();
 void parseCalendarInput();
 void parsePriorityInput();
-void parseInputInput(char*, unsigned long);
+void parseInputInput(char *, unsigned long);
 
 #endif

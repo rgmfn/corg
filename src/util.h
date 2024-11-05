@@ -14,7 +14,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef UTIL_H
@@ -54,24 +54,24 @@ typedef enum DateType {
     Closed,
 } DateType;
 
-void errorAndExit(char*);
+void errorAndExit(char *);
 void errorAndExitInt(int);
-void errorAndExitf(char*, char*);
-void todo(int, char*);
+void errorAndExitf(char *, char *);
+void todo(int, char *);
 
-char* getMonthFromInt(int);
-char* getWeekdayFromInt(int);
-int getIntFromWeekday(char*);
+char *getMonthFromInt(int);
+char *getWeekdayFromInt(int);
+int getIntFromWeekday(char *);
 struct tm getToday();
 struct tm getFirstOfMonth(struct tm);
 int getDaysInMonth(int, int);
 bool isLeapYear(int);
 
-char* tmToString(struct tm*, DateType);
+char *tmToString(struct tm *, DateType);
 
 char getDateTypeOpenChar(DateType);
 char getDateTypeClosedChar(DateType);
 
-void openLink(char*);
+void openLink(char *);
 
 #endif

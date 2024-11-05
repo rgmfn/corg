@@ -14,7 +14,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef STATE_H
@@ -55,9 +55,9 @@ struct InputState {
 } input;
 
 struct CalendarState {
-     struct tm curr;
-     DateType dateType;
-     // haven't decided if 'curr' should mean current or cursor
+    struct tm curr;
+    DateType dateType;
+    // haven't decided if 'curr' should mean current or cursor
 } calendar;
 
 struct HelpState {

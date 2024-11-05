@@ -14,7 +14,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef WINDOWS_H
@@ -58,15 +58,15 @@ typedef enum AppFocus {
     ErrorWindow,
 } AppFocus;
 
-WINDOW* newCenteredWin(int, int);
+WINDOW *newCenteredWin(int, int);
 
-WINDOW* getTodoWindow();
-WINDOW* getDateTypeWindow();
-WINDOW* getCalendarWindow();
-WINDOW* getInputWindow();
-WINDOW* getHelpWindow();
-WINDOW* getErrorWindow();
-WINDOW* getPriorityWindow();
+WINDOW *getTodoWindow();
+WINDOW *getDateTypeWindow();
+WINDOW *getCalendarWindow();
+WINDOW *getInputWindow();
+WINDOW *getHelpWindow();
+WINDOW *getErrorWindow();
+WINDOW *getPriorityWindow();
 
 void drawDocument();
 void drawPopupWindow();
@@ -76,10 +76,10 @@ void drawCalendarWindow();
 void drawHelpWindow();
 void drawErrorWindow();
 void drawPriorityWindow();
-void drawInputWindow(char*);
+void drawInputWindow(char *);
 void drawTempWindow();
 
-void windentNTimes(WINDOW*, int);
+void windentNTimes(WINDOW *, int);
 
 void openTodoWindow();
 void openCalendarWindow(DateType);
@@ -90,7 +90,7 @@ void openLinkWindow();
 void openFilenameWindow();
 void openPriorityWindow();
 void openHelpWindow();
-void openErrorWindow(const char*);
+void openErrorWindow(const char *);
 
 void closePopupWindow();
 

@@ -14,7 +14,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License along
- * with Corg. If not, see <https://www.gnu.org/licenses/>. 
+ * with Corg. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef NODE_H
@@ -58,7 +58,7 @@ typedef struct Node {
     char name[MAX_NAME_SIZE];
     char description[MAX_DESCRIPTION_SIZE];
     char link[MAX_LINK_SIZE];
-    struct tm* date;
+    struct tm *date;
     DateType dateType;
     int priority; // -1 no priority, 0/A highest, 25/Z lowest
 
@@ -66,56 +66,56 @@ typedef struct Node {
 
     bool subTreeIsOpen;
 
-    struct Node* next;
-    struct Node* prev;
-    struct Node* child;
-    struct Node* parent;
+    struct Node *next;
+    struct Node *prev;
+    struct Node *child;
+    struct Node *parent;
 } Node;
 
-char* getTypeStr(NodeType);
-NodeType getTypeFromString(char*);
+char *getTypeStr(NodeType);
+NodeType getTypeFromString(char *);
 bool isFinishedType(NodeType);
 
-void printNode(Node*, int);
-void printTree(Node*, int);
-void printPartialTree(Node*, int);
+void printNode(Node *, int);
+void printTree(Node *, int);
+void printPartialTree(Node *, int);
 
-void freeSubtree(Node*);
+void freeSubtree(Node *);
 
-void toggleSubtree(Node*);
+void toggleSubtree(Node *);
 
-Node* goDownVisual(Node*);
-Node* goDownVisualOrNull(Node*);
-Node* goUpVisual(Node*);
-Node* goNextLogical(Node*);
-Node* goPrevLogical(Node*);
-Node* gotoParent(Node*);
+Node *goDownVisual(Node *);
+Node *goDownVisualOrNull(Node *);
+Node *goUpVisual(Node *);
+Node *goNextLogical(Node *);
+Node *goPrevLogical(Node *);
+Node *gotoParent(Node *);
 
-void tryScrollUp(Node*);
-void tryScrollDown(Node*);
+void tryScrollUp(Node *);
+void tryScrollDown(Node *);
 
-int getVisualSize(Node*);
-int getVisualDistance(Node*, Node*);
+int getVisualSize(Node *);
+int getVisualDistance(Node *, Node *);
 
-bool isAbove(Node*, Node*);
+bool isAbove(Node *, Node *);
 
-Node* riseToStarDepth(int, Node*);
-int getStarDepth(Node*);
-int getDepth(Node*);
+Node *riseToStarDepth(int, Node *);
+int getStarDepth(Node *);
+int getDepth(Node *);
 
-void createChildNode(Node*);
-void createSiblingNodeAfter(Node*);
-void deleteNode(Node*);
+void createChildNode(Node *);
+void createSiblingNodeAfter(Node *);
+void deleteNode(Node *);
 
-void tryPopNodeOut(Node*);
-void tryPopNodeIn(Node*);
+void tryPopNodeOut(Node *);
+void tryPopNodeIn(Node *);
 
-void moveNodeDown(Node*);
-void moveNodeUp(Node*);
+void moveNodeDown(Node *);
+void moveNodeUp(Node *);
 
-void toggleCounter(Node*);
-int countAnyTodo(Node*);
-int countDoneTodo(Node*);
+void toggleCounter(Node *);
+int countAnyTodo(Node *);
+int countDoneTodo(Node *);
 
 NodeType cycleNodeType(NodeType);
 #endif
