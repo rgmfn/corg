@@ -111,7 +111,7 @@ void parseDocumentInput() {
         moveNodeUp(app.curr);
         break;
     case '\t':
-        toggleSubtree(app.curr);
+        cycleSubtree(app.curr);
         break;
     case 't':
         openTodoWindow();

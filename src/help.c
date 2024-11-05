@@ -53,7 +53,7 @@ void drawHelpPageOne() {
 }
 
 void drawHelpPageTwo() {
-    mvwprintw(app.popupWin, 3, 1, "(TAB) toggleSubtree");
+    mvwprintw(app.popupWin, 3, 1, "(TAB) cycleSubtree");
     mvwprintw(app.popupWin, 4, 1, "(#) toggleCounter");
     mvwprintw(app.popupWin, 5, 1, "(ENTER) cycleNodeType");
     mvwprintw(app.popupWin, 6, 1, "(c) createChildNode");

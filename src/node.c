@@ -255,9 +255,11 @@ void printNode(Node *node, int depth) {
     }
 
     attrset(COLOR_PAIR(0));
-    if (!node->subTreeIsOpen) {
+    if (node->subtreeType == TitleOnly) {
         addstr(" ...\n");
         return;
+    } else if (node->subtreeType == InfoNoSubtree) {
+        addstr(" ...+");
     }
 
     if (node->date != NULL) {
@@ -360,15 +362,34 @@ void freeSubtree(Node *node) {
     free(node);
 }
 
-void toggleSubtree(Node *subroot) {
-    bool hasSubtree =
-        subroot->child != NULL ||
-        strnlen(subroot->description, sizeof(subroot->description)) > 0 ||
-        subroot->date != NULL;
-    if (!hasSubtree)
-        subroot->subTreeIsOpen = true;
-    else if (subroot != NULL)
-        subroot->subTreeIsOpen = !subroot->subTreeIsOpen;
+void cycleSubtree(Node *subroot) {
+    if (subroot == NULL)
+        return;
+
+    SubtreeType newType;
+
+    switch (subroot->subtreeType) {
+    case TitleOnly:
+        newType = InfoNoSubtree;
+        break;
+    case InfoNoSubtree:
+        newType = InfoAndSubtree;
+        break;
+    case InfoAndSubtree:
+        newType = TitleOnly;
+        break;
+    }
+
+    bool hasChildren = subroot->child != NULL;
+    bool hasInfo = getVisualSize(subroot) > 1;
+
+    if (!hasChildren && !hasInfo) {
+        newType = InfoAndSubtree;
+    } else if ((!hasChildren || !hasInfo) && newType == InfoNoSubtree) {
+        newType = InfoAndSubtree;
+    }
+
+    subroot->subtreeType = newType;
 }
 
 /**
@@ -385,7 +406,7 @@ Node *goDownVisualOrNull(Node *curr) {
 }
 
 Node *goDownVisual(Node *curr) {
-    if (curr->subTreeIsOpen && curr->child != NULL)
+    if (curr->subtreeType == InfoAndSubtree && curr->child != NULL)
         return curr->child;
     else if (curr->next != NULL)
         return curr->next;
@@ -404,7 +425,7 @@ Node *goDownVisual(Node *curr) {
 
 Node *goUpVisual(Node *curr) {
     if (curr->prev != NULL && curr->prev->child != NULL &&
-        curr->prev->subTreeIsOpen)
+        curr->prev->subtreeType == InfoAndSubtree)
         return runDownBack(curr->prev->child);
     else if (curr->prev != NULL)
         return curr->prev;
@@ -491,7 +512,7 @@ int getVisualDistance(Node *node, Node *bottom) {
         return 0;
     }
 
-    if (!node->subTreeIsOpen) {
+    if (node->subtreeType != InfoAndSubtree) {
         return 1;
     }
 
@@ -547,7 +568,7 @@ void createChildNode(Node *subroot) {
     child->type = None;
     strncpy(child->name, "", sizeof(child->name));
     strncpy(child->description, "", sizeof(child->description));
-    child->subTreeIsOpen = true;
+    child->subtreeType = InfoAndSubtree;
     child->priority = -1;
 
     if (subroot->child != NULL) {
@@ -565,7 +586,7 @@ void createSiblingNodeAfter(Node *subroot) {
     sibling->type = None;
     strncpy(sibling->name, "", sizeof(sibling->name));
     strncpy(sibling->description, "", sizeof(sibling->description));
-    sibling->subTreeIsOpen = true;
+    sibling->subtreeType = InfoAndSubtree;
     sibling->priority = -1;
 
     if (subroot->next != NULL) {

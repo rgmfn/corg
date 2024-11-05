@@ -211,7 +211,7 @@ Node *loadFromFile(char *filename) {
     if (fp == NULL) {
         Node *next = malloc(sizeof(Node));
         next->type = None;
-        next->subTreeIsOpen = true;
+        next->subtreeType = InfoAndSubtree;
         head->next = next;
         next->priority = -1;
 
@@ -232,7 +232,7 @@ Node *loadFromFile(char *filename) {
 
         if (isMatch(&heading, buffer, rm)) {
             Node *node = malloc(sizeof(Node));
-            node->subTreeIsOpen = true;
+            node->subtreeType = InfoAndSubtree;
             sprintf(node->name, "%.*s", (int)(rm[4].rm_eo - rm[4].rm_so),
                     buffer + rm[4].rm_so);
 

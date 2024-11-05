@@ -45,6 +45,12 @@ typedef enum NodeType {
     No,
 } NodeType;
 
+typedef enum SubtreeType {
+    TitleOnly,      // ...
+    InfoNoSubtree,  // ...+
+    InfoAndSubtree, //
+} SubtreeType;
+
 #define MAX_NAME_SIZE 100
 #define MAX_DESCRIPTION_SIZE 200
 #define MAX_LINK_SIZE 200
@@ -64,7 +70,7 @@ typedef struct Node {
 
     bool hasCounter;
 
-    bool subTreeIsOpen;
+    SubtreeType subtreeType;
 
     struct Node *next;
     struct Node *prev;
@@ -82,7 +88,7 @@ void printPartialTree(Node *, int);
 
 void freeSubtree(Node *);
 
-void toggleSubtree(Node *);
+void cycleSubtree(Node *);
 
 Node *goDownVisual(Node *);
 Node *goDownVisualOrNull(Node *);
