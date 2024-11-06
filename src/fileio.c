@@ -33,13 +33,14 @@
 #define ERRBUFF_SIZE 100
 
 #define HEADING                                                                \
-    "^(\\*+)(?:[[:blank:]]+([[:upper:]]{4}|\\[[X \\?\\-]\\]))?"                \
+    "^((?:[[:blank:]]*-)|(?:\\*+))"                                            \
+    "(?:[[:blank:]]+([[:upper:]]{4}|\\[[X \\?\\-]\\]))?"                       \
     "(?:[[:blank:]]+(\\[\\#[A-Z]\\]))?(?:[[:blank:]]+(.+?))?"                  \
     "(?:[[:blank:]]+(\\[[[:digit:]]+\\/[[:digit:]]+\\]))?\\n$"
 
 /*
  * group 0: whole string
- * group 1: {****}
+ * group 1: {****} or {    -}
  * group 2: {STRT}
  * group 3: {[#C]}
  * group 4: {Get some wings}
@@ -254,13 +255,12 @@ Node *loadFromFile(char *filename) {
                 app.maxPriority = node->priority;
             }
 
-            char starStr[20];
-            /* TODO; // will break past 19 indents */
-            sprintf(starStr, "%.*s", (int)(rm[1].rm_eo - rm[1].rm_so),
-                    buffer + rm[1].rm_so);
-            int nodeDepth = strnlen(starStr, sizeof(starStr));
-            /* int nodeDepth = (int)(rm[1].rm_eo - rm[1].rm_so); */
-            // can I do math instead??
+            int nodeDepth = (int)(rm[1].rm_eo - rm[1].rm_so);
+            bool nodeIsListElem = buffer[rm[1].rm_so] != '*';
+            if (nodeIsListElem) {
+                node->isListElem = true;
+                nodeDepth = (nodeDepth / 2) + 1;
+            }
 
             char counterStr[10];
             sprintf(counterStr, "%.*s", (int)(rm[5].rm_eo - rm[5].rm_so),
@@ -320,9 +320,14 @@ void printSubtreeToFile(Node *node, FILE *fp) {
 
     int depth = getStarDepth(node);
 
-    for (int i = 0; i < depth; i++) {
-        fprintf(fp, "*");
-    };
+    if (node->isListElem) {
+        for (int i = 1; i < depth; i++)
+            fprintf(fp, "  ");
+        fprintf(fp, "-");
+    } else {
+        for (int i = 0; i < depth; i++)
+            fprintf(fp, "*");
+    }
 
     if (node->type != None) {
         fprintf(fp, " %s", getTypeStr(node->type));

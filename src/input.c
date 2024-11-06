@@ -158,7 +158,9 @@ void parseDocumentInput() {
     case '?':
         openHelpWindow();
         break;
-        // only used for help page
+    case '-':
+        toggleListElem(app.curr);
+        break;
     case '0':
         // debug
         break;

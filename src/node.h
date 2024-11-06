@@ -69,6 +69,7 @@ typedef struct Node {
     int priority; // -1 no priority, 0/A highest, 25/Z lowest
 
     bool hasCounter;
+    bool isListElem;
 
     SubtreeType subtreeType;
 
@@ -122,6 +123,8 @@ void moveNodeUp(Node *);
 void toggleCounter(Node *);
 int countAnyTodo(Node *);
 int countDoneTodo(Node *);
+
+void toggleListElem(Node *);
 
 NodeType cycleNodeType(NodeType);
 #endif

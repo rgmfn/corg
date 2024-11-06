@@ -42,13 +42,12 @@ int getDepthColor(int depth) {
     }
 }
 
-char getBulletChar(NodeType type) {
-    // switch (type) {
-    //     default:
-    //         return '*';
-    // }
+char getBulletChar(bool isListElem) {
+    if (isListElem) {
+        return '-';
+    }
 
-    return '*'; // no other types implemented yet
+    return '*';
 }
 
 Node *runDownBack(Node *curr) {
@@ -197,7 +196,7 @@ void printNode(Node *node, int depth) {
 
     int typeColor = getTypeColor(node->type);
     char *typeStr = getTypeStr(node->type);
-    char bulletChar = getBulletChar(node->type);
+    char bulletChar = getBulletChar(node->isListElem);
 
     windentNTimes(stdscr, depth);
 
@@ -907,6 +906,14 @@ int countDoneTodo(Node *node) {
     }
 
     return countDoneTodo(node->next);
+}
+
+void toggleListElem(Node *node) {
+    if (node == NULL) {
+        return;
+    }
+
+    node->isListElem = !node->isListElem;
 }
 
 NodeType cycleNodeType(NodeType type) {
