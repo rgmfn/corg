@@ -32,7 +32,7 @@
 #define INPUT_LINES 3
 #define INPUT_COLS 53
 
-#define HELP_LINES 15
+#define HELP_LINES 17
 #define HELP_COLS 40
 
 #define ERROR_LINES 3

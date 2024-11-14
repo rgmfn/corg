@@ -97,6 +97,18 @@ void parseDocumentInput() {
         app.curr = goNextLogical(app.curr);
         tryScrollDown(app.curr);
         break;
+    case '^':
+        app.curr = gotoTop(app.curr);
+        tryScrollUp(app.curr);
+        break;
+    case 'v':
+        app.curr = gotoBottom(app.curr);
+        tryScrollDown(app.curr);
+        break;
+    case 'V':
+        app.curr = gotoBottomTopLevel(app.curr);
+        tryScrollDown(app.curr);
+        break;
     case 'p':
         app.curr = gotoParent(app.curr);
         tryScrollUp(app.curr);

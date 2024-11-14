@@ -456,6 +456,41 @@ Node *gotoParent(Node *curr) {
     return curr;
 }
 
+Node* gotoTop(Node *node) {
+    Node *prev = node;
+    Node *curr = goPrevLogical(node);
+
+    while (prev != curr) {
+        prev = curr;
+        curr = goPrevLogical(curr);
+    }
+
+    return curr;
+}
+
+Node* gotoBottom(Node *node) {
+    Node *prev = node;
+    Node *curr = goNextLogical(node);
+
+    while (prev != curr) {
+        prev = curr;
+        curr = goNextLogical(curr);
+    }
+
+    return curr;
+}
+
+// Goes to last top level node (last sibling of head)
+Node* gotoBottomTopLevel(Node *node) {
+    Node *curr = app.head;
+
+    while (curr->next != NULL) {
+        curr = curr->next;
+    }
+
+    return curr;
+}
+
 #define SCROLL_OFFSET 4
 
 void tryScrollUp(Node *curr) {

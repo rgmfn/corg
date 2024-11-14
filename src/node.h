@@ -97,6 +97,9 @@ Node *goUpVisual(Node *);
 Node *goNextLogical(Node *);
 Node *goPrevLogical(Node *);
 Node *gotoParent(Node *);
+Node *gotoTop(Node *);
+Node *gotoBottom(Node *);
+Node *gotoBottomTopLevel(Node *);
 
 void tryScrollUp(Node *);
 void tryScrollDown(Node *);

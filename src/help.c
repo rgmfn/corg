@@ -50,6 +50,9 @@ void drawHelpPageOne() {
     mvwprintw(app.popupWin, 9, 1, "(p) gotoParent");
     mvwprintw(app.popupWin, 10, 1, "(J) moveNodeDown");
     mvwprintw(app.popupWin, 11, 1, "(K) moveNodeUp");
+    mvwprintw(app.popupWin, 12, 1, "(^) gotoTop");
+    mvwprintw(app.popupWin, 13, 1, "(v) gotoBottom");
+    mvwprintw(app.popupWin, 14, 1, "(V) gotoBottomTopLevel");
 }
 
 void drawHelpPageTwo() {
